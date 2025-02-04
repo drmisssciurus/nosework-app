@@ -1,0 +1,2 @@
+* настроить eslint
+* подключить react-route(done)

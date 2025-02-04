@@ -1,0 +1,48 @@
+.title {
+  color: #030303;
+  font-size: 34px;
+  font-family: 'Poppins', serif;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 70px;
+}
+
+.about {
+  color: #030303;
+  font-size: 16px;
+  font-family: 'Poppins', serif;
+  text-align: center;
+  margin-top: 39px;
+}
+
+.img {
+  /* width: 258px;
+  height: 258px; */
+  align-content: center;
+  display: block;
+}
+
+.btn {
+  cursor: pointer;
+  width: 300px;
+  height: 56px;
+  border: 0;
+  border-radius: 12px;
+  background-color: #191919;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', serif;
+  font-weight: 500;
+
+  margin-top: 50px;
+}
+
+.text {
+  color: #030303;
+  font-size: 14px;
+  font-family: 'Noto Sans Hebrew', serif;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: right;
+  margin-top: 9px;
+}
