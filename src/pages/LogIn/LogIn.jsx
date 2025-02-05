@@ -14,43 +14,50 @@ function LogIn() {
   }
 
   return (
-    <div className="login-container">
-      <img src={logIn} alt="Login" className={styles.loginImg} />
+    <div className="container">
+      <div className={styles.login}>
+        <img src={logIn} alt="Login" className={styles.loginImg} />
 
-      <p className={styles.title}>NoseWorks</p>
-      <p className={styles.description}>התחבר</p>
+        <p className={styles.title}>NoseWorks</p>
+        <p className={styles.description}>התחבר</p>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.item}>
-          <input
-            className={styles.input}
-            type="email"
-            placeholder="דואר אלקטרוני"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.item}>
+            <input
+              className={styles.input}
+              type="email"
+              placeholder="דואר אלקטרוני"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.item}>
+            <input
+              className={styles.input}
+              type="password"
+              placeholder="סיסמה"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {/* исправить !!! */}
+          <Link to="/mainpage">
+            <button className={styles.btn}>המשך</button>
+          </Link>
+        </form>
+
+        <div className={styles.links}>
+          {/* forgot password */}
+          <Link className={styles.text} to="/forgotpassword">
+            שכחתי סיסמה
+          </Link>
+          {/* new user register */}
+          <Link className={styles.text} to="/register">
+            אין לך חשבון? יצר חשבון
+          </Link>
         </div>
-        <div className={styles.item}>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="סיסמה"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button className={styles.btn}>המשך</button>
-      </form>
-
-      <div className={styles.links}>
-        <Link className={styles.text} to="/">
-          שכחתי סיסמה
-        </Link>
-        <Link className={styles.text} to="/">
-          אין לך חשבון? יצר חשבון
-        </Link>
       </div>
     </div>
   );

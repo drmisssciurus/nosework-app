@@ -1,32 +1,5 @@
-.loginImg {
-  align-content: center;
-  display: block;
-
-  /* margin-top: 30px; */
-}
-
-.login {
+.register {
   margin: auto auto;
-}
-
-.title {
-  color: #030303;
-  font-size: 24px;
-  font-family: 'Poppins';
-  font-weight: 600;
-  text-align: center;
-
-  margin-top: 21px;
-}
-
-.description {
-  color: #030303;
-  font-size: 24px;
-  font-family: 'Noto Sans Hebrew';
-  font-weight: 600;
-  text-align: center;
-
-  margin-top: 21px;
 }
 
 .form {
@@ -71,18 +44,15 @@
   margin-top: 50px;
 }
 
-.links {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.btnBack {
+  cursor: pointer;
+  padding: 5px;
 
-  margin-top: 10px;
-  padding: 0 10px;
-}
-.text {
-  color: #030303;
-  font-size: 14px;
-  font-family: 'Noto Sans Hebrew';
-  font-weight: 400;
-  line-height: 18px;
+  border: 0;
+  background-color: inherit;
+  color: #191919;
+  font-size: 16px;
+  font-weight: 500;
+
+  margin-top: 20px;
 }
