@@ -1,2 +1,4 @@
-* настроить eslint
+* настроить eslint(done)
 * подключить react-route(done)
+* спрайты
+

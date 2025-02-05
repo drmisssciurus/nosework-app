@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  gap: 17px;
+}
+
+.day {
+  text-align: center;
+  border: none;
+}
+
+.weekday {
+  font-size: 12px;
+}
+
+.date {
+  font-size: 12px;
+  padding: 5px;
+  background-color: #d3d3d3;
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+}

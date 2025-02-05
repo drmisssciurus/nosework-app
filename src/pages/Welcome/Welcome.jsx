@@ -17,7 +17,6 @@ function Welcome() {
         <Link to="/login">
           <button className={styles.btn}>התחל</button>
         </Link>
-        <p className={styles.text}>להתחבר</p>
       </div>
     </div>
   );

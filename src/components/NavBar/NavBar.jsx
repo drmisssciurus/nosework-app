@@ -6,6 +6,7 @@ function NavBar() {
     <nav className={styles.nav}>
       <ul className={styles.wrapper}>
         <li className={styles.item}>
+          {/* исправить на спрайты?? */}
           <NavLink to="/mainpage">
             <svg
               xmlns="http://www.w3.org/2000/svg"
