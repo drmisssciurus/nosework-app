@@ -40,6 +40,11 @@ input:focus {
   background-color: #fff;
 }
 
+p,
+span {
+  margin: 0;
+}
+
 a {
   margin: 0;
   text-decoration: none;

@@ -37,6 +37,7 @@ export default [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ], // Изменяем на предупреждение, игнорируем переменные, начинающиеся с _
+      'react/prop-types': 'off',
     },
   },
 ];

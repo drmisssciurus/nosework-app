@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { format, startOfWeek, addDays } from 'date-fns';
 import NavBar from '../../components/NavBar/NavBar';
 import Calendar from '../../components/Calendar/Calendar';
 import logo from '../../assets/logo-dog.png';
 import styles from './MainPage.module.css';
+import SessionsList from '../../components/SessionsList/SessionsList';
+import { Link } from 'react-router-dom';
 
 const today = new Date().toLocaleDateString('he-IL', {
   day: 'numeric',
@@ -11,8 +12,31 @@ const today = new Date().toLocaleDateString('he-IL', {
   year: 'numeric',
 });
 
+const dummyData = [
+  {
+    id: 1,
+    name: 'טאץ',
+    session: 15,
+    count: 2.506,
+    status: true,
+    button: 'ראה נתונים',
+  },
+  {
+    id: 2,
+
+    name: 'פומה',
+    session: 15,
+    count: 2.506,
+    status: true,
+    button: 'ראה נתונים',
+  },
+];
+
 function MainPage() {
   const [userName, setUserName] = useState('אוריאל');
+  const [sessions, setSessions] = useState(dummyData);
+  console.log(sessions);
+
   return (
     <div className="container">
       <div className={styles.mainpage}>
@@ -28,11 +52,13 @@ function MainPage() {
 
         <Calendar />
         <main>
-          <p>האימונים שלי</p>
-          <ul>
-            <li>1</li>
-            <li>2</li>
-          </ul>
+          <p className={styles.title}>האימונים שלי</p>
+
+          <SessionsList sessions={sessions} />
+
+          <Link to="/">
+            <button className={styles.btn}>צור תוכנית אימון</button>
+          </Link>
         </main>
 
         <NavBar />
