@@ -1,9 +1,7 @@
-.mainpage {
-  margin: auto auto;
-}
-
 .header {
   display: flex;
+
+  margin-bottom: 20px;
 }
 
 .text {
@@ -20,6 +18,10 @@
   font-weight: 700;
   line-height: 24px;
   text-align: right;
+
+  margin-bottom: 40px;
+
+  border-bottom: 1px solid #d3d3d3;
 }
 
 .btn {
@@ -34,5 +36,6 @@
   font-family: 'Noto Sans Hebrew', serif;
   font-weight: 500;
 
-  margin-top: 50px;
+  margin-top: 20px;
+  margin-bottom: 70px;
 }

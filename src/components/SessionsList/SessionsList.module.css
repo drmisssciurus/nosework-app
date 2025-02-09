@@ -1,52 +1,5 @@
-.namewrapper {
+.wrapper {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-}
-.name {
-  color: #030303;
-  font-size: 16px;
-  font-family: 'Noto Sans Hebrew';
-  font-weight: 500;
-  line-height: 22px;
-  text-align: right;
-}
-
-.count {
-  cursor: pointer;
-  top: 319px;
-  left: 205px;
-  width: 147px;
-  height: 20px;
-  padding: 0px 8px;
-  border: 0;
-  box-sizing: border-box;
-  border-radius: 12px;
-  background-color: #d3d3d3;
-  color: #fff;
-  font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
-  font-weight: 500;
-  line-height: 16px;
-  outline: none;
-}
-
-.button {
-  cursor: pointer;
-  top: 319px;
-  left: 48px;
-  width: 147px;
-  height: 20px;
-  padding: 0px 8px;
-  border: 0;
-  box-sizing: border-box;
-  border-radius: 12px;
-  background-color: #191919;
-  color: #ffffff;
-  font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
-  font-weight: 500;
-  line-height: 16px;
-  outline: none;
+  flex-direction: column;
+  gap: 20px;
 }

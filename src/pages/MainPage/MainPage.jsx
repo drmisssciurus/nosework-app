@@ -27,7 +27,34 @@ const dummyData = [
     name: 'פומה',
     session: 15,
     count: 2.506,
-    status: true,
+    status: false,
+    button: 'ראה נתונים',
+  },
+  {
+    id: 3,
+
+    name: 'פומה',
+    session: 15,
+    count: 2.506,
+    status: false,
+    button: 'ראה נתונים',
+  },
+  {
+    id: 4,
+
+    name: 'פומה',
+    session: 15,
+    count: 2.506,
+    status: false,
+    button: 'ראה נתונים',
+  },
+  {
+    id: 5,
+
+    name: 'פומה',
+    session: 15,
+    count: 2.506,
+    status: false,
     button: 'ראה נתונים',
   },
 ];

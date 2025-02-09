@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
-  gap: 17px;
+
+  margin-bottom: 47px;
 }
 
 .day {
