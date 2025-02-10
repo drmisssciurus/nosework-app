@@ -40,22 +40,21 @@
 
 .wrapper {
   display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .count {
-  cursor: pointer;
-  top: 319px;
-  left: 205px;
-  width: 147px;
-  height: 20px;
   padding: 0px 8px;
+  width: 50%;
   border: 0;
   box-sizing: border-box;
   border-radius: 12px;
-  background-color: #d3d3d3;
-  color: #fff;
+  background-color: var(--color-gray);
+  color: var(--color-white);
   font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 16px;
   outline: none;
@@ -63,18 +62,15 @@
 
 .button {
   cursor: pointer;
-  top: 319px;
-  left: 48px;
-  width: 147px;
-  height: 20px;
   padding: 0px 8px;
+  width: 50%;
   border: 0;
   box-sizing: border-box;
   border-radius: 12px;
-  background-color: #191919;
-  color: #ffffff;
+  background-color: var(--color-black);
+  color: var(--color-white);
   font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 16px;
   outline: none;

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './NewSession.module.css';
+import NavBar from '../../components/NavBar/NavBar';
 
 function NewSession() {
   const navigate = useNavigate();
@@ -73,17 +74,22 @@ function NewSession() {
         <p className={styles.sessionsubtitle}>
           מספר מעודכן אוטומטית לפי הכלב המתאמן
         </p>
+
         <form action="" className={styles.form}>
           <div className={styles.itemwrapper}>
             <label className={styles.label} htmlFor="">
-              day
+              תאריך
             </label>
-
-            <input className={styles.item} type="text" placeholder="day" />
-            <p>DD/MM/YYYY : פורמט</p>
+            <input
+              className={styles.iteminput}
+              type="text"
+              placeholder="היום"
+            />
+            <p className={styles.date}>DD/MM/YYYY : פורמט</p>
           </div>
-          <div className={styles.itemwrapper}>
-            <label htmlFor="">dog list</label>
+
+          <div className={styles.selectwrapper}>
+            <label className={styles.label}>שם הכלב</label>
 
             <select className={styles.item} name="dog name" id="">
               <option value="">dog1</option>
@@ -91,8 +97,11 @@ function NewSession() {
               <option value="">dog3</option>
             </select>
           </div>
-          <div className={styles.itemwrapper}>
-            <label htmlFor="">trainer list</label>
+
+          <div className={styles.selectwrapper}>
+            <label className={styles.label} htmlFor="">
+              שם מאמן
+            </label>
 
             <select className={styles.item} name="trainer name" id="">
               <option value="">trainer1</option>
@@ -100,16 +109,21 @@ function NewSession() {
               <option value="">trainer3</option>
             </select>
           </div>
-          <div className={styles.itemwrapper}>
-            <label htmlFor="">number of trials</label>
+
+          <div className={styles.selectwrapper}>
+            <label className={styles.label} htmlFor="">
+              מספר שליחות
+            </label>
             <select className={styles.item} name="number of trials" id="">
               <option value="">1</option>
               <option value="">2</option>
               <option value="">3</option>
             </select>
           </div>
-          <div className={styles.itemwrapper}>
-            <label htmlFor="">somth</label>
+          <div className={styles.selectwrapper}>
+            <label className={styles.label} htmlFor="">
+              סוגי מכולות
+            </label>
 
             <select className={styles.item} name="x" id="">
               <option value="">1</option>
@@ -117,12 +131,15 @@ function NewSession() {
               <option value="">3</option>
             </select>
           </div>
-          <div className={styles.itemwrapper}>
+
+          <div className={styles.checkbox}>
+            <label className={styles.label}>X קיימת שליחה</label>
             <input type="checkbox" />
           </div>
         </form>
-        <button className={styles.button}>submit</button>
+        <button className={styles.button}>ערוך תוכנית אימון</button>
       </div>
+      <NavBar />
     </div>
   );
 }

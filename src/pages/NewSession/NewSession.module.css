@@ -1,7 +1,15 @@
 .titlewrapper {
   display: flex;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  padding-inline: 30px;
+  padding-block: 7px;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--color-white);
+  box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.1);
 }
 
 .btnBack {
@@ -24,6 +32,8 @@
   font-family: 'Noto Sans Hebrew';
   font-weight: 500;
   text-align: right;
+
+  margin-top: 50px;
 }
 
 .sessionsubtitle {
@@ -36,15 +46,18 @@
   display: flex;
   flex-direction: column;
   align-items: end;
+  gap: 10px;
 }
 
-.item {
+.iteminput {
+  width: 100%;
   padding: 0px 8px;
-  border: 1px solid #d2d2d7;
+  border: 1px solid var(--color-gray);
   box-sizing: border-box;
   border-radius: 12px;
-  background-color: #fbfbfb;
-  color: #191919;
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+
   font-size: 16px;
   font-family: 'Noto Sans Hebrew';
   line-height: 43px;
@@ -53,14 +66,114 @@
 }
 
 .itemwrapper {
+  position: relative;
   text-align: right;
+  width: 100%;
 }
 
 .label {
-  color: #030303;
+  color: var(--color-black);
+
   font-size: 14px;
   font-family: 'Noto Sans Hebrew';
   font-weight: 500;
   line-height: 20px;
   text-align: right;
+}
+
+.date {
+  color: var(--color-black);
+  font-size: 12px;
+  font-family: 'Noto Sans Hebrew';
+  line-height: 16px;
+  text-align: right;
+}
+
+.item {
+  width: 100%;
+  padding: 0px 8px;
+  border: 1px solid var(--color-gray);
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  line-height: 43px;
+  text-align: right;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.selectwrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+}
+
+.selectwrapper::after {
+  content: '⌄';
+  font-size: 14px;
+  color: var(--color-black);
+
+  position: absolute;
+  top: 45px;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.selectwrapper select {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.checkbox input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.25px solid rgba(210, 210, 215, 1);
+  background-color: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+
+/* Добавляем галочку при выборе */
+.checkbox input[type='checkbox']:checked::after {
+  content: '✔'; /* Галочка */
+  font-size: 14px;
+  color: var(--color-black);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  cursor: pointer;
+  width: 300px;
+  height: 56px;
+  border: 0;
+  border-radius: 12px;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', serif;
+  font-weight: 500;
+
+  margin-top: 20px;
+  margin-bottom: 70px;
 }

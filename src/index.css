@@ -3,7 +3,9 @@
 
 :root {
   --color-black: #030303;
-  /* --color-brand--2: #00c46a; */
+  --color-white: #ffffff;
+  --color-gray: #d3d3d3;
+  --color-light-gray: #fbfbfb;
 
   /* --color-dark--0: #242a2e;
   --color-dark--1: #2d3439;
@@ -51,6 +53,12 @@ textarea {
 input:focus {
   outline: none;
   background-color: #fff;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 p,
