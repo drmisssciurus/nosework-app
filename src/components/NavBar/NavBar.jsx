@@ -62,7 +62,7 @@ function NavBar() {
           </NavLink>
         </li>
         <li className={styles.item}>
-          <NavLink to="/newsession">
+          <NavLink to="/create_session">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 23 28"

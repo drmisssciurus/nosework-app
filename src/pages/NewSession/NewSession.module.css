@@ -1,0 +1,66 @@
+.titlewrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btnBack {
+  cursor: pointer;
+  padding: 5px;
+  border: 0;
+  background-color: inherit;
+  font-size: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 700;
+  text-align: right;
+}
+
+.sessionname {
+  font-size: 15px;
+  font-family: 'Noto Sans Hebrew';
+  font-weight: 500;
+  text-align: right;
+}
+
+.sessionsubtitle {
+  font-size: 12px;
+  font-family: 'Noto Sans Hebrew';
+  text-align: right;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.item {
+  padding: 0px 8px;
+  border: 1px solid #d2d2d7;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: #fbfbfb;
+  color: #191919;
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew';
+  line-height: 43px;
+  text-align: right;
+  outline: none;
+}
+
+.itemwrapper {
+  text-align: right;
+}
+
+.label {
+  color: #030303;
+  font-size: 14px;
+  font-family: 'Noto Sans Hebrew';
+  font-weight: 500;
+  line-height: 20px;
+  text-align: right;
+}

@@ -66,7 +66,7 @@ function MainPage() {
 
   return (
     <div className="container">
-      <div className={styles.mainpage}>
+      <div>
         <header className={styles.header}>
           <div className={styles.logo}>
             <img src={logo} alt="logo" />
