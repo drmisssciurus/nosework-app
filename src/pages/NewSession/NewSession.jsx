@@ -1,8 +1,11 @@
 import styles from './NewSession.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
+import { useState } from 'react';
 
 function NewSession() {
+  const [trials, setTrials] = useState(10);
+  console.log(trials);
   return (
     <div className="container">
       <div>
@@ -51,10 +54,18 @@ function NewSession() {
             <label className={styles.label} htmlFor="">
               מספר שליחות
             </label>
-            <select className={styles.item} name="number of trials" id="">
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
+            <select
+              className={styles.item}
+              name="number of trials"
+              id=""
+              defaultValue="10"
+              onChange={(e) => setTrials(Number(e.target.value))}
+            >
+              {Array.from({ length: 20 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
             </select>
           </div>
           <div className={styles.selectwrapper}>

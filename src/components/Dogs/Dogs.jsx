@@ -16,7 +16,7 @@ function Dogs() {
       </li>
 
       <li className={styles.item}>
-        <div>
+        <div className={styles.imageContainer}>
           <img src={dogImage} alt="" />
         </div>
         <div>

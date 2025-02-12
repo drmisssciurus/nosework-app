@@ -8,8 +8,25 @@ import PageNotFound from './pages/PageNotFound';
 import DogsList from './pages/DogsList/DogsList';
 import NewSession from './pages/NewSession/NewSession';
 import Analysis from './pages/Analysis/Analysis';
+import { useEffect } from 'react';
 
 function App() {
+  useEffect(function () {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/User/1');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
