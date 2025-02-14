@@ -9,6 +9,7 @@ import DogsList from './pages/DogsList/DogsList';
 import NewSession from './pages/NewSession/NewSession';
 import Analysis from './pages/Analysis/Analysis';
 import { useEffect } from 'react';
+import AddDog from './pages/AddDog/AddDog';
 
 function App() {
   useEffect(function () {
@@ -38,6 +39,7 @@ function App() {
         <Route path="create_session" element={<NewSession />} />
         <Route path="analysis" element={<Analysis />} />
         <Route path="dogs" element={<DogsList />} />
+        <Route path="add_dog" element={<AddDog />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

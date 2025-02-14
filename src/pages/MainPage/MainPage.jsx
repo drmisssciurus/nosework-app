@@ -83,7 +83,7 @@ function MainPage() {
 
           <SessionsList sessions={sessions} />
 
-          <Link to="/">
+          <Link to="/create_session">
             <button className={styles.btn}>צור תוכנית אימון</button>
           </Link>
         </main>

@@ -3,6 +3,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
 import Dogs from '../../components/Dogs/Dogs';
 import styles from './DogsList.module.css';
+import { Link } from 'react-router-dom';
 
 function DogsList() {
   return (
@@ -15,7 +16,9 @@ function DogsList() {
             <Dogs />
           </ul>
         </div>
-        <button className={styles.button}>הוספת כלב חדש</button>
+        <Link to="/add_dog">
+          <button className={styles.button}>הוספת כלב חדש</button>
+        </Link>
 
         <NavBar />
       </div>
