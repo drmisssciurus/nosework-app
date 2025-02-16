@@ -6,10 +6,12 @@ import PageNotFound from './pages/PageNotFound';
 import DogsList from './pages/DogsList/DogsList';
 import NewSession from './pages/NewSession/NewSession';
 import Analysis from './pages/Analysis/Analysis';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import AddDog from './pages/AddDog/AddDog';
+import TrainingPlan from './pages/TrainingPlan/TrainingPlan';
 
 function App() {
+  const [trials, setTrials] = useState(10);
   // useEffect(function () {
   //   const fetchData = async () => {
   //     try {
@@ -32,7 +34,14 @@ function App() {
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
         <Route path="mainpage" element={<MainPage />} />
-        <Route path="create_session" element={<NewSession />} />
+        <Route
+          path="create_session"
+          element={<NewSession setTrials={setTrials} />}
+        />
+        <Route
+          path="training_plan"
+          element={<TrainingPlan trials={trials} />}
+        />
         <Route path="analysis" element={<Analysis />} />
         <Route path="dogs" element={<DogsList />} />
         <Route path="add_dog" element={<AddDog />} />

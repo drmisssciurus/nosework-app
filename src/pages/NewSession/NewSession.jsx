@@ -2,10 +2,9 @@ import styles from './NewSession.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function NewSession() {
-  const [trials, setTrials] = useState(10);
-  console.log(trials);
+function NewSession({ setTrials }) {
   return (
     <div className="container">
       <div>
@@ -85,7 +84,9 @@ function NewSession() {
             <input type="checkbox" />
           </div>
         </form>
-        <button className={styles.button}>ערוך תוכנית אימון</button>
+        <Link to="/training_plan">
+          <button className={styles.button}>ערוך תוכנית אימון</button>
+        </Link>
       </div>
       <NavBar />
     </div>
