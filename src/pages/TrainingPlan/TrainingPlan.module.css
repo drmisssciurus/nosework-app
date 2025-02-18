@@ -1,18 +1,16 @@
 .containerNewSession {
-  min-height: 100vh;
   display: flex;
+  gap: 20px;
   flex-direction: column;
-  width: 375px;
-  padding: 20px;
-  margin: 0 auto;
-
-  margin-top: 50px;
 }
 
 .containers {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 90%;
+  padding-inline: 20px;
+  margin-top: 60px;
 }
 
 .target {
@@ -28,7 +26,6 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 50px;
 }
 
 .trial {
@@ -66,7 +63,7 @@
   appearance: none;
   cursor: pointer;
   width: 100%;
-  padding: 0px 20px;
+  padding: 5px 0px;
   border-radius: 8px;
   font-size: 14px;
   text-align: center;
@@ -74,11 +71,17 @@
 
 .arrow {
   position: absolute;
-  right: 9px;
-  top: -4px;
+  right: 7px;
+  top: 1px;
   font-size: 14px;
   color: var(--color-black);
   pointer-events: none;
+}
+
+.buttonWrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }
 
 .button {

@@ -3,3 +3,12 @@
 * спрайты
 * настроить нав бар чтобы иконки были серыми
 
+{
+  "email": "test@gmail.com",
+  "password": "!DSAewq321"
+}
+
+test4@test.com
+12345qwertA!
+
+{email: 'test4@test.com', password: '12345qwertA!'}

@@ -26,46 +26,50 @@ function TrainingPlan({ trials }) {
   };
 
   return (
-    <div className={styles.containerNewSession}>
-      <Header>יצירת תוכנית אימון</Header>
-      <div className={styles.containers}>
-        <p className={styles.target}>סניפר 3</p>
-        <p className={styles.target}>סניפר 2</p>
-        <p className={styles.target}>סניפר 1</p>
+    // <div className={styles.containerNewSession}>
+    <div className="container">
+      <div className={styles.containerNewSession}>
+        <Header>יצירת תוכנית אימון</Header>
+        <div className={styles.containers}>
+          <p className={styles.target}>סניפר 3</p>
+          <p className={styles.target}>סניפר 2</p>
+          <p className={styles.target}>סניפר 1</p>
+        </div>
+        <div className={styles.wrapper}>
+          {Array.from({ length: trials }, (_, index) => (
+            <div key={index} className={styles.trial}>
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className={styles.selectWrapper}>
+                  <select
+                    className={styles.item}
+                    value={selectedValues[index][i]}
+                    onChange={(event) => handleChange(index, i, event)}
+                    style={{
+                      backgroundColor:
+                        backgroundColors[selectedValues[index][i]] ||
+                        '#00000014',
+                    }}
+                  >
+                    <option value="" disabled></option>
+                    {arrX.map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                  <span className={styles.arrow}>⌄</span>
+                </div>
+              ))}
+              <h3 className={styles.number}>{index + 1}</h3>
+            </div>
+          ))}
+        </div>
+        <div className={styles.buttonWrapper}>
+          <button className={styles.button}>המשך</button>
+          <button className={styles.button}>מילוי רנדומלי</button>
+        </div>
+        <NavBar />
       </div>
-      <div className={styles.wrapper}>
-        {Array.from({ length: trials }, (_, index) => (
-          <div key={index} className={styles.trial}>
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className={styles.selectWrapper}>
-                <select
-                  className={styles.item}
-                  value={selectedValues[index][i]}
-                  onChange={(event) => handleChange(index, i, event)}
-                  style={{
-                    backgroundColor:
-                      backgroundColors[selectedValues[index][i]] || 'white',
-                  }}
-                >
-                  <option value="" disabled></option>
-                  {arrX.map((value) => (
-                    <option key={value} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-                <span className={styles.arrow}>⌄</span>
-              </div>
-            ))}
-            <h3 className={styles.number}>{index + 1}</h3>
-          </div>
-        ))}
-      </div>
-      <div>
-        <button className={styles.button}>המשך</button>
-        <button className={styles.button}>מילוי רנדומלי</button>
-      </div>
-      <NavBar />
     </div>
   );
 }

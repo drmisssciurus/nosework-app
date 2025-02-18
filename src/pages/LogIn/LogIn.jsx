@@ -9,6 +9,7 @@ import logIn from '../../assets/login.png';
 import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
 import styles from './LogIn.module.css';
+import { validateEmail } from '../../utils/utils';
 
 Modal.setAppElement('#root');
 
@@ -23,24 +24,24 @@ function LogIn() {
 
   const navigate = useNavigate();
 
-  function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
   async function handleSubmit(event) {
-    console.log('Отправляем email:', email);
-    console.log('Отправляем пароль:', password);
-
     event.preventDefault();
     setError('');
 
-    if (!isValidEmail(email)) {
-      setError('Некорректный email.');
+    const emailError = validateEmail(email);
+    if (emailError) {
+      setError(emailError);
       return;
     }
 
+    //delete
+    console.log('Отправляем email:', email);
+    //delete
+    console.log('Отправляем пароль:', password);
+
     try {
       const requestBody = JSON.stringify({ email, password });
+      //delete
       console.log('Отправка запроса:', requestBody);
 
       const response = await fetch('/api/User/Login', {
@@ -48,7 +49,7 @@ function LogIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: requestBody,
       });
 
       if (!response.ok) {
@@ -58,7 +59,17 @@ function LogIn() {
         );
       }
 
-      const data = await response.json();
+      //Check if there is a string in responce
+      const contentType = response.headers.get('content-type');
+      let data;
+
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        data = { message: await response.text() };
+      }
+
+      //delete
       console.log('Успешный вход:', data);
 
       if (data.token) {
@@ -67,8 +78,8 @@ function LogIn() {
 
       navigate('/mainpage');
     } catch (err) {
-      console.error('Ошибка при запросе:', err);
-      setError('Ошибка сервера. Попробуйте позже.');
+      console.error('Error while requesting:', err);
+      setError('Server error. Try again later.');
     }
   }
 
@@ -107,7 +118,7 @@ function LogIn() {
             >
               <img
                 src={showPassword ? openEyeIcon : closedEyeIcon}
-                alt="Показать пароль"
+                alt="Show password"
               />
             </button>
           </div>
