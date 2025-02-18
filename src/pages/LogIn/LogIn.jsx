@@ -74,6 +74,11 @@ function LogIn() {
 
       if (data.token) {
         localStorage.setItem('token', data.token);
+        console.log('Saved token:', localStorage.getItem('token'));
+        navigate('/mainpage');
+        window.location.reload(); // Принудительно обновляем приложение
+      } else {
+        console.error('Ошибка: токен не найден в ответе');
       }
 
       navigate('/mainpage');

@@ -1,10 +1,19 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 function ProtectedRoute() {
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
-  //delete
-  console.log(token);
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem('token'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  console.log('Checking token in ProtectedRoute:', token);
 
   return token ? <Outlet /> : <Navigate to="/login" replace />;
 }

@@ -12,6 +12,7 @@ import NewSession from './pages/NewSession/NewSession';
 import Analysis from './pages/Analysis/Analysis';
 import AddDog from './pages/AddDog/AddDog';
 import TrainingPlan from './pages/TrainingPlan/TrainingPlan';
+import Trials from './pages/Trials/Trials';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -22,6 +23,7 @@ function App() {
         {/* This pages for all users */}
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
+        <Route path="trials" element={<Trials />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>

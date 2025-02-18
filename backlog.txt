@@ -12,3 +12,11 @@ test4@test.com
 12345qwertA!
 
 {email: 'test4@test.com', password: '12345qwertA!'}
+
+{
+  "email": "ms.sciurus@gmail.com",
+  "password": "SecurePassword123!"
+}
+
+ms.sciurus@gmail.com
+SecurePassword123!
