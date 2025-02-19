@@ -1,13 +1,18 @@
 import { useState } from 'react';
+import { validateEmail, validatePassword } from '../../utils/utils';
+
 import styles from './Register.module.css';
 import arrowBack from '../../assets/icons/icon-arrow-left.svg';
-import { validateEmail, validatePassword } from '../../utils/utils';
+import openEyeIcon from '../../assets/icons/open-eye.svg';
+import closedEyeIcon from '../../assets/icons/close-eye.svg';
 
 function Register({ closeModal }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -61,10 +66,17 @@ function Register({ closeModal }) {
         throw new Error(data?.message || 'Ошибка регистрации');
       }
 
-      setMessage('Регистрация успешна!');
+      // if (data?.token) {
+      //   localStorage.setItem('token', data.token);
+      //   console.log('Token saved:', data.token);
+      // } else {
+      //   console.log('there is no token');
+      // }
+
+      setMessage('Registration sucsess!');
       closeModal();
     } catch (error) {
-      console.error('Ошибка регистрации:', error);
+      console.error('Registration error:', error);
       setMessage(error.message);
     }
   }
@@ -88,25 +100,45 @@ function Register({ closeModal }) {
             required
           />
         </div>
-        <div className={styles.item}>
+        <div className={styles.item} style={{ position: 'relative' }}>
           <input
             className={styles.input}
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="סיסמה"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <button
+            type="button"
+            className={styles.watchPassword}
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            <img
+              src={showPassword ? openEyeIcon : closedEyeIcon}
+              alt="Show password"
+            />
+          </button>
         </div>
-        <div className={styles.item}>
+        <div className={styles.item} style={{ position: 'relative' }}>
           <input
             className={styles.input}
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="אמת סיסמה"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+          <button
+            type="button"
+            className={styles.watchPassword}
+            onClick={() => setShowSecondPassword(!showSecondPassword)}
+          >
+            <img
+              src={showSecondPassword ? openEyeIcon : closedEyeIcon}
+              alt="Show password"
+            />
+          </button>
         </div>
         {message && <p className={styles.message}>{message}</p>}
         <button className={styles.btn} type="submit">

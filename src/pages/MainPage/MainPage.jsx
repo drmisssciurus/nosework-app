@@ -63,7 +63,7 @@ function MainPage() {
   const [userName, setUserName] = useState('אוריאל');
   const [sessions, setSessions] = useState(dummyData);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); ////
 
   //delete
   console.log(sessions);

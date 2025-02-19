@@ -1,9 +1,10 @@
+import Footer from '../../components/Footer/Footer';
 import styles from './Trials.module.css';
 
 function Trials() {
   return (
     <div className="container">
-      <div>
+      <div className={styles.pageContainer}>
         <header className={styles.header}>
           <h1 className={styles.trialNumber}>שליחה #1</h1>
         </header>
@@ -21,10 +22,22 @@ function Trials() {
             <p>שלילי</p>
           </div>
         </div>
-        <div>video container</div>
+        <div className={styles.videoContainer}>
+          <h2 className={styles.videoTitle}>העלאה או הקלטה של סרטון</h2>
+          <div className={styles.btnContainer}>
+            <button className={styles.btnVideo}>העלאה</button>
+            <button className={styles.btnVideo}>הקלטה</button>
+          </div>
+        </div>
         <div className={styles.wrapper}>
-          <label htmlFor="">label for input</label>
-          <input className={styles.input} type="text" placeholder="text" />
+          <label className={styles.inputLabel} htmlFor="">
+            סוג ריח מטרה
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="שם הריח פה"
+          />
         </div>
         <div className={styles.checkboxes}>
           <p>checkboxes</p>
@@ -49,8 +62,8 @@ function Trials() {
         </div>
         <button className={styles.btn}>next session</button>
         <button className={styles.btn}>return to main page</button>
-        <footer>NoseWorks - שפרו את האימונים שלכם</footer>
       </div>
+      <Footer />
     </div>
   );
 }

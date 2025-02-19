@@ -17,6 +17,8 @@ test4@test.com
   "email": "ms.sciurus@gmail.com",
   "password": "SecurePassword123!"
 }
-
+levinad992@gmail.com
 ms.sciurus@gmail.com
 SecurePassword123!
+
+"PostgresConnection": "Host=localhost;Database=NoseWorks;Username=postgres;Password=1111"
