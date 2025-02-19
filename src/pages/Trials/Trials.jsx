@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import styles from './Trials.module.css';
 
@@ -26,7 +27,9 @@ function Trials() {
           <h2 className={styles.videoTitle}>העלאה או הקלטה של סרטון</h2>
           <div className={styles.btnContainer}>
             <button className={styles.btnVideo}>העלאה</button>
-            <button className={styles.btnVideo}>הקלטה</button>
+            <Link to="/video_recording" className={styles.btnVideo}>
+              הקלטה
+            </Link>
           </div>
         </div>
         <div className={styles.wrapper}>
@@ -40,28 +43,30 @@ function Trials() {
           />
         </div>
         <div className={styles.checkboxes}>
-          <p>checkboxes</p>
+          <p className={styles.checkbLabel}>הסימון הסופי</p>
           <div className={styles.checkbWrapper}>
             <div className={styles.item}>
-              <p>item</p>
-              <input type="checkbox" />
+              <p className={styles.itemName}>סניפר 1</p>
+              <input type="radio" name="finalChoise" />
             </div>
             <div className={styles.item}>
-              <p>item</p>
-              <input type="checkbox" />
+              <p className={styles.itemName}>סניפר 2</p>
+              <input type="radio" name="finalChoise" />
             </div>
             <div className={styles.item}>
-              <p>item</p>
-              <input type="checkbox" />
+              <p className={styles.itemName}>סניפר 3</p>
+              <input type="radio" name="finalChoise" />
             </div>
             <div className={styles.item}>
-              <p>item</p>
-              <input type="checkbox" />
+              <p className={styles.itemName}>אין בחירה</p>
+              <input type="radio" name="finalChoise" />
             </div>
           </div>
         </div>
-        <button className={styles.btn}>next session</button>
-        <button className={styles.btn}>return to main page</button>
+        <div className={styles.btnContainer}>
+          <button className={styles.btn}>שליחה הבאה</button>
+          <button className={styles.btn}>חזרה למסך הבית</button>
+        </div>
       </div>
       <Footer />
     </div>
