@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+import styles from './VideoRecording.module.css';
+import Footer from '../../components/Footer/Footer';
+
 const VideoRecorder = () => {
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
@@ -97,49 +100,65 @@ const VideoRecorder = () => {
   };
 
   return (
-    <div>
-      <h1>VideoDemo Recorder</h1>
-
-      {devices.length > 0 && (
-        <div>
-          <label htmlFor="device">Select camera:</label>
-          <select
-            id="device"
-            onChange={handleDeviceChange}
-            value={selectedDevice}
-          >
-            {devices.map((device) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label || `Камера ${device.deviceId}`}
-              </option>
-            ))}
-          </select>
+    <div className="container">
+      <div className={styles.videoRecorder}>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>Record Trial</h1>
+          <p className={styles.instruction}>
+            Choose your camera and then press the button - start. When you
+            finish recording trial press stop button.
+          </p>
         </div>
-      )}
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        style={{ width: '100%', maxHeight: '400px', backgroundColor: 'black' }}
-      />
-
-      <div>
-        {!isRecording ? (
-          <button onClick={startRecording}>Start recording</button>
-        ) : (
-          <button onClick={stopRecording}>Stop recording</button>
+        {devices.length > 0 && (
+          <div className={styles.selectCameraContainer}>
+            <label className={styles.chooseCameraLbl} htmlFor="device">
+              Select preferred camera:
+            </label>
+            <select
+              className={styles.select}
+              id="device"
+              onChange={handleDeviceChange}
+              value={selectedDevice}
+            >
+              {devices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label || `Камера ${device.deviceId}`}
+                </option>
+              ))}
+            </select>
+          </div>
         )}
-      </div>
 
-      {videoBlob && (
-        <div>
-          <a href={URL.createObjectURL(videoBlob)} download="video.webm">
-            Download video
-          </a>
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          className={styles.videoWindow}
+        />
+
+        <div className={styles.btnsContainer}>
+          {!isRecording ? (
+            <button className={styles.btnStart} onClick={startRecording}>
+              Start recording
+            </button>
+          ) : (
+            <button className={styles.btnStop} onClick={stopRecording}>
+              Stop recording
+            </button>
+          )}
         </div>
-      )}
+
+        {videoBlob && (
+          <div>
+            <a href={URL.createObjectURL(videoBlob)} download="video.webm">
+              Download video
+            </a>
+          </div>
+        )}
+        <Footer />
+      </div>
     </div>
   );
 };

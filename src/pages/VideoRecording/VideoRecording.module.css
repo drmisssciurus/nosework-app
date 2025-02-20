@@ -1,0 +1,91 @@
+.videoRecorder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.titleContainer {
+  width: 100%;
+
+  background-color: var(--color-bgGray);
+  padding: 15px 15px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-family: 'Poppins', serif;
+  font-weight: 500;
+  text-align: center;
+  font-size: 24px;
+}
+
+.instruction {
+  font-family: 'Poppins', serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 12px;
+}
+
+.selectCameraContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-bgGray);
+  padding: 10px 10px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chooseCameraLbl {
+  font-family: 'Poppins', serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 18px;
+}
+
+.select {
+  cursor: pointer;
+  padding: 0px 8px;
+  border: 1px solid var(--color-gray);
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: #fbfbfb;
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew';
+  line-height: 43px;
+  text-align: right;
+}
+
+.videoWindow {
+  width: 100%;
+  max-height: 400px;
+  background-color: var(--color-black);
+}
+
+.btnsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnStart {
+  background-color: green;
+  border: none;
+  border-radius: 12px;
+  color: var(--color-white);
+  padding: 15px 15px;
+}
+
+.btnStop {
+  background-color: red;
+  border: none;
+  border-radius: 12px;
+  color: var(--color-white);
+  padding: 15px 15px;
+}
