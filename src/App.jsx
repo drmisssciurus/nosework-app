@@ -14,6 +14,7 @@ import AddDog from './pages/AddDog/AddDog';
 import TrainingPlan from './pages/TrainingPlan/TrainingPlan';
 import Trials from './pages/Trials/Trials';
 import VideoRecorder from './pages/VideoRecording/VideoRecording';
+import EndSession from './pages/EndSession/EndSession';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -26,6 +27,7 @@ function App() {
         <Route path="login" element={<LogIn />} />
         <Route path="trials" element={<Trials />} />
         <Route path="video_recording" element={<VideoRecorder />} />
+        <Route path="end_session" element={<EndSession />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>
