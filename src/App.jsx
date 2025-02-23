@@ -34,7 +34,7 @@ function App() {
           <Route path="mainpage" element={<MainPage />} />
           <Route
             path="create_session"
-            element={<NewSession setTrials={setTrials} />}
+            element={<NewSession setTrials={setTrials} trials={trials} />}
           />
           <Route
             path="training_plan"
