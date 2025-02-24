@@ -29,6 +29,13 @@ function Trials() {
     empty: '#ff9500',
   };
 
+  const choicesMapping = {
+    'סניפר 1': 1,
+    'סניפר 2': 2,
+    'סניפר 3': 3,
+    'אין בחירה': 0,
+  };
+
   async function handleSubmit() {
     if (!currentTrial || trainingId === null) {
       console.error('Ошибка: trainingId не найден или trial отсутствует');
@@ -43,7 +50,7 @@ function Trials() {
 
     const payload = {
       id: 0,
-      trainingId: trainingId,
+      trainingId: currentTrial.sendNumber,
       selectedLocation,
       targetScent: targetScent.trim() === '' ? '' : targetScent,
       result: 'completed',
@@ -141,15 +148,18 @@ function Trials() {
         <div className={styles.checkboxes}>
           <p className={styles.checkbLabel}>הסימון הסופי</p>
           <div className={styles.checkbWrapper}>
-            {['סניפר 1', 'סניפר 2', 'סניפר 3', 'אין בחירה'].map((name, i) => (
-              <div className={styles.item} key={i}>
+            {Object.entries(choicesMapping).map(([name, value]) => (
+              <div className={styles.item} key={value}>
                 <p className={styles.itemName}>{name}</p>
                 <input
                   type="radio"
                   name="finalChoice"
-                  value={i}
-                  checked={selectedLocation === i}
-                  onChange={() => setSelectedLocation(i)}
+                  value={value}
+                  checked={selectedLocation === value}
+                  onChange={() => {
+                    setSelectedLocation(value);
+                    console.log('Selected choice:', value);
+                  }}
                 />
               </div>
             ))}

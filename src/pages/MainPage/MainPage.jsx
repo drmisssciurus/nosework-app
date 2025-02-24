@@ -30,33 +30,6 @@ const dummyData = [
     status: false,
     button: 'ראה נתונים',
   },
-  {
-    id: 3,
-
-    name: 'פומה',
-    session: 15,
-    count: 2.506,
-    status: false,
-    button: 'ראה נתונים',
-  },
-  {
-    id: 4,
-
-    name: 'פומה',
-    session: 15,
-    count: 2.506,
-    status: false,
-    button: 'ראה נתונים',
-  },
-  {
-    id: 5,
-
-    name: 'פומה',
-    session: 15,
-    count: 2.506,
-    status: false,
-    button: 'ראה נתונים',
-  },
 ];
 
 function MainPage() {
@@ -79,7 +52,7 @@ function MainPage() {
 
   return (
     <div className="container">
-      <div>
+      <div className={styles.mainPage}>
         <header className={styles.header}>
           <div className={styles.logo}>
             <img src={logo} alt="logo" />
@@ -96,12 +69,18 @@ function MainPage() {
 
           <SessionsList sessions={sessions} />
 
-          <Link to="/create_session">
-            <button className={styles.btn}>צור תוכנית אימון</button>
-          </Link>
-          <button className={styles.btn} onClick={handleLogout}>
-            התנתק
-          </button>
+          <div className={styles.btnWrapper}>
+            <button
+              className={styles.btn}
+              onClick={() => navigate('/create_session')}
+            >
+              צור תוכנית אימון
+            </button>
+
+            <button className={styles.btnLogout} onClick={handleLogout}>
+              התנתק
+            </button>
+          </div>
         </main>
 
         <NavBar />
