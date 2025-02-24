@@ -60,18 +60,9 @@ const dummyData = [
 ];
 
 function MainPage() {
-  const [userName, setUserName] = useState('אוריאל');
   const [sessions, setSessions] = useState(dummyData);
 
-  const navigate = useNavigate(); ////
-
-  //delete
-  console.log(sessions);
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem('token');
-  //   navigate('/login');
-  // };
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
