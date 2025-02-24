@@ -1,28 +1,55 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import styles from './Trials.module.css';
 
 function Trials() {
+  const location = useLocation();
+  const { trainingData } = location.state || { trainingData: [] };
+  console.log(trainingData);
+
+  const containersColors = {
+    positive: '#22c55e',
+    negative: '#ff3b30',
+    empty: '#ff9500',
+  };
+
   return (
     <div className="container">
       <div className={styles.pageContainer}>
         <header className={styles.header}>
-          <h1 className={styles.trialNumber}>שליחה #1</h1>
+          <h1 className={styles.trialNumber}>{`שליחה #${
+            trainingData.length > 0 ? trainingData[0].sendNumber : '?'
+          }`}</h1>
         </header>
         <div className={styles.containers}>
-          <div className={styles.container}>
-            <p className={styles.boxName}>סניפר 1</p>
-            <p>חיובי</p>
-          </div>
-          <div className={styles.container}>
-            <p className={styles.boxName}>סניפר 2</p>
-            <p>ביקורת</p>
-          </div>
-          <div className={styles.container}>
-            <p className={styles.boxName}>סניפר 3</p>
-            <p>שלילי</p>
-          </div>
+          {trainingData.length > 0 &&
+            [3, 2, 1].map((containerIndex) => {
+              const trial = trainingData[0];
+              let color = containersColors.empty;
+              if (trial.positiveLocation === containerIndex)
+                color = containersColors.positive;
+              if (trial.negativeLocation === containerIndex)
+                color = containersColors.negative;
+
+              return (
+                <div
+                  key={containerIndex}
+                  className={styles.container}
+                  style={{ color }}
+                >
+                  <p className={styles.boxName}>{`סניפר ${containerIndex}`}</p>
+                  <p>
+                    {trial.positiveLocation === containerIndex
+                      ? 'חיובי'
+                      : trial.negativeLocation === containerIndex
+                      ? 'שלילי'
+                      : 'ביקורת'}
+                  </p>
+                </div>
+              );
+            })}
         </div>
+
         <div className={styles.videoContainer}>
           <h2 className={styles.videoTitle}>העלאה או הקלטה של סרטון</h2>
           <div className={styles.btnContainer}>
@@ -45,22 +72,12 @@ function Trials() {
         <div className={styles.checkboxes}>
           <p className={styles.checkbLabel}>הסימון הסופי</p>
           <div className={styles.checkbWrapper}>
-            <div className={styles.item}>
-              <p className={styles.itemName}>סניפר 1</p>
-              <input type="radio" name="finalChoise" />
-            </div>
-            <div className={styles.item}>
-              <p className={styles.itemName}>סניפר 2</p>
-              <input type="radio" name="finalChoise" />
-            </div>
-            <div className={styles.item}>
-              <p className={styles.itemName}>סניפר 3</p>
-              <input type="radio" name="finalChoise" />
-            </div>
-            <div className={styles.item}>
-              <p className={styles.itemName}>אין בחירה</p>
-              <input type="radio" name="finalChoise" />
-            </div>
+            {['סניפר 1', 'סניפר 2', 'סניפר 3', 'אין בחירה'].map((name, i) => (
+              <div className={styles.item} key={i}>
+                <p className={styles.itemName}>{name}</p>
+                <input type="radio" name="finalChoise" />
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles.btnContainer}>

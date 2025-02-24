@@ -94,7 +94,7 @@ function MainPage() {
             <img src={logo} alt="logo" />
           </div>
           <div>
-            <h2 className={styles.text}>שלום, {userName}</h2>
+            <h2 className={styles.text}>שלום,</h2>
             <h2 className={styles.text}>היום,{today}</h2>
           </div>
         </header>

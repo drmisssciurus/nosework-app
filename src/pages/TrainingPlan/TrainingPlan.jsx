@@ -11,20 +11,12 @@ function TrainingPlan() {
 
   const { sessionId, containerType, trials } = location.state || {};
 
-  const fixedSessionId = 3;
-
-  // const arrX = ['חיובי', 'ביקורת', 'שלילי'];
-  // const backgroundColors = {
-  //   חיובי: '#c3f2cb',
-  //   ביקורת: '#ffdcaa',
-  //   שלילי: '#ffb9c6',
-  // };
-
-  const arrX = containerType === 2 ? ['1', '2'] : ['1', '2', '3'];
+  const arrX =
+    containerType === 0 ? ['חיובי', 'ביקורת'] : ['שלילי', 'חיובי', 'ביקורת'];
   const backgroundColors = {
-    1: '#c3f2cb',
-    2: '#ffdcaa',
-    3: '#ffb9c6',
+    חיובי: '#c3f2cb',
+    ביקורת: '#ffdcaa',
+    שלילי: '#ffb9c6',
   };
 
   // Состояние для хранения выбранных значений
@@ -40,21 +32,55 @@ function TrainingPlan() {
   };
 
   //рандомное заполнение
-  const fillRandomly = () => {
-    const randomValues = Array.from({ length: trials }, () => {
-      const filledRow = Array(3).fill('');
-      const usedIndexes = new Set();
-      arrX.forEach((value) => {
-        let randomIndex;
-        do {
-          randomIndex = Math.floor(Math.random() * 3);
-        } while (usedIndexes.has(randomIndex));
-        usedIndexes.add(randomIndex);
-        filledRow[randomIndex] = value;
+  const fillRandomly = async (sessionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Ошибка: отсутствует токен авторизации');
+        return;
+      }
+
+      const response = await fetch(`/api/TrainingProgram/Random/${sessionId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
-      return filledRow;
-    });
-    setSelectedValues(randomValues);
+
+      if (!response.ok) {
+        throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Ответ API:', data);
+
+      // Преобразуем ответ в нужный формат
+      const transformedData = data.map((item) => {
+        let row = Array(3).fill(''); // Создаем пустую строку из 3 элементов
+
+        // Корректируем индексы, чтобы они были в диапазоне 0-2
+        const posIndex = item.positiveLocation - 1; // Уменьшаем на 1
+        const negIndex = item.negativeLocation - 1; // Уменьшаем на 1
+
+        // Проверяем, что индекс в допустимых пределах (0, 1, 2)
+        if (posIndex >= 0 && posIndex < 3) {
+          row[posIndex] = 'חיובי'; // Или "X", если ты хочешь оставить символы
+        }
+        if (negIndex >= 0 && negIndex < 3) {
+          row[negIndex] = 'שלילי'; // Или "O"
+        }
+
+        row = row.map((value) => (value === '' ? 'ביקורת' : value));
+
+        return row;
+      });
+
+      console.log('Преобразованные данные:', transformedData);
+      setSelectedValues(transformedData);
+    } catch (error) {
+      console.error('Ошибка при получении случайных значений:', error);
+    }
   };
 
   const handleSubmit = async () => {
@@ -64,9 +90,13 @@ function TrainingPlan() {
     const trainingData = selectedValues.map((trial, index) => ({
       id: 0, // Временно 0, пока сервер не вернёт ID
       sendNumber: Math.min(index + 1, trials), // Ограничение по количеству отправок
-      positiveLocation: trial.includes('1') ? trial.indexOf('1') + 1 : 0,
-      negativeLocation: trial.includes('2') ? trial.indexOf('2') + 1 : 0,
-      sessionId: fixedSessionId,
+      positiveLocation: trial.includes('חיובי')
+        ? 2 - trial.indexOf('חיובי') + 1
+        : 0,
+      negativeLocation: trial.includes('שלילי')
+        ? 2 - trial.indexOf('שלילי') + 1
+        : 0,
+      sessionId: sessionId || 0,
     }));
 
     console.log(
@@ -90,15 +120,15 @@ function TrainingPlan() {
         throw new Error(`Ошибка при отправке данных: ${response.status}`);
       }
       alert('Данные успешно сохранены!');
-      navigate('/trials');
+      navigate('/trials', { state: { trainingData } });
     } catch (error) {
       console.error('Ошибка при запросе:', error);
       alert(error.message);
     }
   };
+  console.log('Текущее состояние selectedValues:', selectedValues);
 
   return (
-    // <div className={styles.containerNewSession}>
     <div className="container">
       <div className={styles.containerNewSession}>
         <Header>יצירת תוכנית אימון</Header>
@@ -114,16 +144,16 @@ function TrainingPlan() {
                 <div key={i} className={styles.selectWrapper}>
                   <select
                     className={styles.item}
-                    value={selectedValues[index][i]}
+                    value={selectedValues[index][2 - i]}
                     onChange={(event) => handleChange(index, i, event)}
                     style={{
                       backgroundColor:
-                        backgroundColors[selectedValues[index][i]] ||
+                        backgroundColors[selectedValues[index][2 - i]] ||
                         '#00000014',
                     }}
                   >
                     <option value="" disabled></option>
-                    {arrX.map((value) => (
+                    {arrX.reverse().map((value) => (
                       <option key={value} value={value}>
                         {value}
                       </option>
@@ -140,7 +170,10 @@ function TrainingPlan() {
           <button className={styles.button} onClick={handleSubmit}>
             המשך
           </button>
-          <button className={styles.button} onClick={fillRandomly}>
+          <button
+            className={styles.button}
+            onClick={() => fillRandomly(sessionId)}
+          >
             מילוי רנדומלי
           </button>
         </div>

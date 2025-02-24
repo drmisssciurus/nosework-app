@@ -39,6 +39,7 @@
 }
 
 .boxName {
+  color: var(--color-black);
   font-size: 14px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 700;

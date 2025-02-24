@@ -63,7 +63,7 @@ function NewSession({ setTrials, trials }) {
 
       navigate('/training_plan', {
         state: {
-          sessionId: 3, //change it later
+          sessionId: responseData.id || 0, //change it later
           containerType: Number(containerType),
           trials: trials,
         },
@@ -145,15 +145,14 @@ function NewSession({ setTrials, trials }) {
             <label className={styles.label} htmlFor="">
               סוגי מכולות
             </label>
-
+            {/* smells variants: 1- smell and empty, 2 - smell, empty, negative */}
             <select
               className={styles.item}
               value={containerType}
               onChange={(e) => setContainerType(Number(e.target.value))}
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
+              <option value="0">חיובי-ביקורת</option>
+              <option value="1">חיובי-שלילי-ביקורת</option>
             </select>
           </div>
 

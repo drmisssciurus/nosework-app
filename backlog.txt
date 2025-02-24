@@ -22,3 +22,8 @@ ms.sciurus@gmail.com
 SecurePassword123!
 
 "PostgresConnection": "Host=localhost;Database=NoseWorks;Username=postgres;Password=1111"
+
+string postgresUser = "postgres";
+string postgresPassword = "1111";
+string postgresHost = "localhost"; // Adjust if needed
+string postgresDatabase = "NoseWorks"; // Adjust to match your DB name
