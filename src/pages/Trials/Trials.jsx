@@ -2,6 +2,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import styles from './Trials.module.css';
 import { useEffect, useState } from 'react';
+import VideoUpload from '../../components/VideoUpload/VideoUpload';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function Trials() {
   const location = useLocation();
@@ -10,6 +14,9 @@ function Trials() {
   const [trainingData, setTrainingData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [targetScent, setTargetScent] = useState('');
+  const [uploadedVideo, setUploadedVideo] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const trainingId =
     location.state?.trainingId ||
@@ -71,6 +78,10 @@ function Trials() {
     'current trial',
     currentTrial ? currentTrial.sendNumber : 'No trial data'
   );
+
+  function handleUploadVideo(videoFile) {
+    setUploadedVideo(videoFile);
+  }
 
   async function handleSubmit() {
     if (!currentTrial) {
@@ -159,7 +170,13 @@ function Trials() {
         <div className={styles.videoContainer}>
           <h2 className={styles.videoTitle}>העלאה או הקלטה של סרטון</h2>
           <div className={styles.btnContainer}>
-            <button className={styles.btnVideo}>העלאה</button>
+            <button
+              className={styles.btnVideo}
+              onClick={() => setIsModalOpen(true)}
+            >
+              העלאה
+            </button>
+
             <Link to="/video_recording" className={styles.btnVideo}>
               הקלטה
             </Link>
@@ -208,6 +225,17 @@ function Trials() {
         </div>
       </div>
       <Footer />
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        className={styles.modal}
+        overlayClassName={styles.overlay}
+      >
+        <VideoUpload
+          closeModal={() => setIsModalOpen(false)}
+          onUpload={handleUploadVideo}
+        />
+      </Modal>
     </div>
   );
 }

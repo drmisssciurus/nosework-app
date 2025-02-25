@@ -1,0 +1,83 @@
+.modalOverlay {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.title {
+  font-size: 24px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btnClose {
+  cursor: pointer;
+  padding: 5px;
+
+  border: 0;
+  background-color: inherit;
+  color: #191919;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  font-size: 16px;
+  background-color: var(--color-gray);
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.input::file-selector-button {
+  padding: 8px 12px;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btnUpload {
+  display: inline-block;
+  padding: 12px 20px;
+  font-size: 16px;
+  color: var(--color-white);
+  font-family: 'Noto Sans Hebrew', sans-serif;
+
+  background-color: var(--color-black);
+
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btnUpload:disabled {
+  background-color: var(--color-bgGray);
+  color: var(--color-black);
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
