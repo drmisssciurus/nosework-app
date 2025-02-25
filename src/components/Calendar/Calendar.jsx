@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format, startOfWeek, addDays } from 'date-fns';
+import { format, startOfWeek, addDays, isToday } from 'date-fns';
 import styles from './Calendar.module.css';
 
 const hebrewDays = ['ב', 'ג', 'ד', 'ה', 'ו', 'ש', 'א'];
@@ -19,7 +19,7 @@ const Calendar = () => {
         {weekDays.map((day, index) => (
           <div key={index} className={styles.day}>
             <span className={styles.weekday}>{hebrewDays[index]}</span>
-            <div className={styles.date}>
+            <div className={`${isToday(day) ? styles.today : styles.date}`}>
               <span>{format(day, 'd')}</span>
             </div>
           </div>

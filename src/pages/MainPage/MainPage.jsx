@@ -47,7 +47,7 @@ function MainPage() {
     localStorage.removeItem('token');
     console.log('Token removed:', localStorage.getItem('token')); // Должно быть null
     navigate('/login');
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

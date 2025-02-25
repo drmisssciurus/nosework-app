@@ -14,6 +14,8 @@ import { validateEmail } from '../../utils/utils';
 Modal.setAppElement('#root');
 
 function LogIn() {
+  console.log('Компонент LogIn ререндерился!');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -59,7 +61,6 @@ function LogIn() {
         );
       }
 
-      //Check if there is a string in responce
       const contentType = response.headers.get('content-type');
       let data;
 
@@ -76,7 +77,7 @@ function LogIn() {
         localStorage.setItem('token', data.token);
         console.log('Saved token:', localStorage.getItem('token'));
         navigate('/mainpage');
-        window.location.reload(); // Принудительно обновляем приложение
+        // window.location.reload(); // Принудительно обновляем приложение
       } else {
         console.error('Ошибка: токен не найден в ответе');
       }
