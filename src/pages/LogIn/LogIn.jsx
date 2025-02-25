@@ -10,10 +10,12 @@ import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
 import styles from './LogIn.module.css';
 import { validateEmail } from '../../utils/utils';
+import Button from '../../components/Button/Button';
 
 Modal.setAppElement('#root');
 
 function LogIn() {
+  //delete
   console.log('Компонент LogIn ререндерился!');
 
   const [email, setEmail] = useState('');
@@ -98,42 +100,43 @@ function LogIn() {
         <p className={styles.description}>התחבר</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.item}>
-            <input
-              className={styles.input}
-              type="email"
-              placeholder="דואר אלקטרוני"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.item} style={{ position: 'relative' }}>
-            <input
-              className={styles.input}
-              type={showPassword ? 'text' : 'password'}
-              placeholder="סיסמה"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              className={styles.watchPassword}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              <img
-                src={showPassword ? openEyeIcon : closedEyeIcon}
-                alt="Show password"
+          <div className={styles.inputsContainer}>
+            <div className={styles.item}>
+              <input
+                className={styles.input}
+                type="email"
+                name="email"
+                placeholder="דואר אלקטרוני"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-            </button>
+            </div>
+            <div className={styles.item} style={{ position: 'relative' }}>
+              <input
+                className={`${styles.input} ${password ? styles.invalid : ''}`}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="סיסמה"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className={styles.watchPassword}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <img
+                  src={showPassword ? openEyeIcon : closedEyeIcon}
+                  alt="Show password"
+                />
+              </button>
+            </div>
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <button type="submit" className={styles.btn}>
-            המשך
-          </button>
+          <Button type="submit">המשך</Button>
         </form>
 
         <div className={styles.links}>

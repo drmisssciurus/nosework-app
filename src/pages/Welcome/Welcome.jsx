@@ -1,6 +1,7 @@
 import styles from './Welcome.module.css';
 import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
+import Button from '../../components/Button/Button';
 
 function Welcome() {
   return (
@@ -15,7 +16,7 @@ function Welcome() {
           <img className={styles.img} src={logo} />
         </div>
         <Link to="/login">
-          <button className={styles.btn}>התחל</button>
+          <Button>התחל</Button>
         </Link>
       </div>
     </div>
