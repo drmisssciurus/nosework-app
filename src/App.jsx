@@ -25,9 +25,6 @@ function App() {
         {/* This pages for all users */}
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
-        <Route path="trials" element={<Trials />} />
-        <Route path="video_recording" element={<VideoRecorder />} />
-        <Route path="end_session" element={<EndSession />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>
@@ -40,6 +37,9 @@ function App() {
             path="training_plan"
             element={<TrainingPlan trials={trials} />}
           />
+          <Route path="trials" element={<Trials />} />
+          <Route path="video_recording" element={<VideoRecorder />} />
+          <Route path="end_session" element={<EndSession />} />
           <Route path="analysis" element={<Analysis />} />
           <Route path="dogs" element={<DogsList />} />
           <Route path="add_dog" element={<AddDog />} />

@@ -7,21 +7,17 @@ function Trials() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const trainingData = location.state?.trainingData || [];
-  const trainingId = trainingData.length > 0 ? trainingData[0].sessionId : null; // Используем sessionId как trainingId
-
-  //delete
-  console.log('my data', trainingData);
-  //delete
-  useEffect(() => {
-    console.log('Location state:', location.state); // Логирование для отладки
-  }, [location.state]);
-
+  const [trainingData, setTrainingData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [targetScent, setTargetScent] = useState('');
 
-  const currentTrial = trainingData.length > 0 ? trainingData[0] : null;
-  console.log('current trial', currentTrial.sendNumber);
+  const trainingId =
+    location.state?.trainingId ||
+    location.state?.trainingData?.[0]?.sessionId ||
+    null;
+
+  //delete
+  console.log('ID from training plan', trainingId);
 
   const containersColors = {
     positive: '#22c55e',
@@ -36,21 +32,61 @@ function Trials() {
     'אין בחירה': 0,
   };
 
+  useEffect(() => {
+    async function fetchTrainingData() {
+      if (!trainingId) return;
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('There in no token');
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/TrainingProgram/BySession/${trainingId}`,
+          {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Fetching error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        console.log('I get this data:', data);
+        setTrainingData(data);
+      } catch (error) {
+        console.error('Error fetching training data: ', error);
+      }
+    }
+    fetchTrainingData();
+  }, [trainingId]);
+
+  const currentTrial = trainingData.length > 0 ? trainingData[0] : null;
+  console.log(
+    'current trial',
+    currentTrial ? currentTrial.sendNumber : 'No trial data'
+  );
+
   async function handleSubmit() {
-    if (!currentTrial || trainingId === null) {
-      console.error('Ошибка: trainingId не найден или trial отсутствует');
+    if (!currentTrial) {
+      console.error('Error: there is no trial!');
       return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('There is no token');
+      console.error('Error: There is no token');
       return;
     }
 
     const payload = {
       id: 0,
-      trainingId: currentTrial.sendNumber,
+      trainingId: currentTrial.id,
       selectedLocation,
       targetScent: targetScent.trim() === '' ? '' : targetScent,
       result: 'completed',
@@ -75,11 +111,8 @@ function Trials() {
       console.log('Data send: ', payload);
 
       const updatedTrials = trainingData.slice(1);
-      if (updatedTrials.length > 0) {
-        navigate('/trials', {
-          state: { trainingData: updatedTrials, trainingId: trainingId },
-        });
-      } else {
+      setTrainingData(updatedTrials);
+      if (updatedTrials.length === 0) {
         navigate('/end_session');
       }
     } catch (error) {

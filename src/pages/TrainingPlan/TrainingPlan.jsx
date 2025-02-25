@@ -53,6 +53,8 @@ function TrainingPlan() {
       }
 
       const data = await response.json();
+
+      //delete
       console.log('Ответ API:', data);
 
       // Преобразуем ответ в нужный формат
@@ -75,7 +77,7 @@ function TrainingPlan() {
 
         return row;
       });
-
+      //delete
       console.log('Преобразованные данные:', transformedData);
       setSelectedValues(transformedData);
     } catch (error) {
@@ -99,6 +101,7 @@ function TrainingPlan() {
       sessionId: sessionId || 0,
     }));
 
+    //delete
     console.log(
       'Отправляемые данные на сервер:',
       JSON.stringify(trainingData, null, 2)
@@ -126,6 +129,8 @@ function TrainingPlan() {
       alert(error.message);
     }
   };
+
+  //delete
   console.log('Текущее состояние selectedValues:', selectedValues);
 
   return (
