@@ -1,30 +1,21 @@
 import styles from './Dogs.module.css';
 import dogImage from '../../assets/dogs/dog_1.png';
 
-function Dogs() {
+function Dogs({ dogs }) {
   return (
     <>
-      <li className={styles.item}>
-        <div className={styles.imageContainer}>
-          <img src={dogImage} alt="" />
-        </div>
-        <div>
-          <p className={`${styles.text} ${styles.name}`}>dog name</p>
-          <p className={`${styles.text} ${styles.breed}`}>dog breed</p>
-          <p className={`${styles.text} ${styles.age}`}>dog age</p>
-        </div>
-      </li>
-
-      <li className={styles.item}>
-        <div className={styles.imageContainer}>
-          <img src={dogImage} alt="" />
-        </div>
-        <div>
-          <p className={`${styles.text} ${styles.name}`}>dog name</p>
-          <p className={`${styles.text} ${styles.breed}`}>dog breed</p>
-          <p className={`${styles.text} ${styles.age}`}>dog age</p>
-        </div>
-      </li>
+      {dogs.map(({ id, name, breed, age }) => (
+        <li key={id} className={styles.item}>
+          <div className={styles.imageContainer}>
+            <img src={dogImage} alt="" />
+          </div>
+          <div>
+            <p className={`${styles.text} ${styles.name}`}>{name}</p>
+            <p className={`${styles.text} ${styles.breed}`}>{breed}</p>
+            <p className={`${styles.text} ${styles.age}`}>{age}</p>
+          </div>
+        </li>
+      ))}
     </>
   );
 }
