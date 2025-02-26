@@ -43,19 +43,6 @@
   outline: none;
 }
 
-.btn {
-  cursor: pointer;
-  width: 100%;
-  height: 56px;
-  border: 0;
-  border-radius: 12px;
-  background-color: #191919;
-  color: #ffffff;
-  font-size: 16px;
-  font-family: 'Noto Sans Hebrew', serif;
-  font-weight: 500;
-}
-
 .btnClose {
   cursor: pointer;
   padding: 5px;

@@ -183,25 +183,6 @@
   display: flex;
 }
 
-.btn {
-  cursor: pointer;
-  top: 563px;
-  left: 16px;
-  width: 165px;
-  height: 36px;
-  padding: 0px 8px;
-  border: 0;
-  box-sizing: border-box;
-  border-radius: 12px;
-  background-color: #191919;
-  color: #ffffff;
-  font-size: 14px;
-  font-family: 'Open Sans';
-  font-weight: 500;
-  line-height: 16px;
-  outline: none;
-}
-
 .modal {
   position: absolute;
   top: 50%;

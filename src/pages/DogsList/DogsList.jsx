@@ -1,11 +1,13 @@
 import NavBar from '../../components/NavBar/NavBar';
-// import styles from './DogsList.module.css';
 import Header from '../../components/Header/Header';
 import Dogs from '../../components/Dogs/Dogs';
+import Button from '../../components/Button/Button';
 import styles from './DogsList.module.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function DogsList() {
+  const navigate = useNavigate();
+
   return (
     <div className="container">
       <div className={styles.content}>
@@ -16,9 +18,10 @@ function DogsList() {
             <Dogs />
           </ul>
         </div>
-        <Link to="/add_dog">
-          <button className={styles.button}>הוספת כלב חדש</button>
-        </Link>
+
+        <Button className={styles.btnDog} onClick={() => navigate('/add_dog')}>
+          הוספת כלב חדש
+        </Button>
 
         <NavBar />
       </div>

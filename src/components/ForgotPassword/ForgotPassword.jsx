@@ -1,6 +1,7 @@
 import styles from './ForgotPassword.module.css';
 import arrowBack from '../../assets/icons/icon-arrow-left.svg';
 import { useState } from 'react';
+import Button from '../Button/Button';
 
 function ForgotPassword({ closeModal }) {
   const [step, setStep] = useState(1);
@@ -13,7 +14,9 @@ function ForgotPassword({ closeModal }) {
   async function handleForgotPassword(e) {
     e.preventDefault();
 
+    //delete
     console.log('Отправка запроса на восстановление пароля...');
+    //delete
     console.log('Отправляем email:', email);
 
     try {
@@ -30,7 +33,7 @@ function ForgotPassword({ closeModal }) {
       setMessage('Check your email, a password reset link has been sent.');
       setStep(2);
     } catch (error) {
-      console.error('Ошибка в handleForgotPassword:', error);
+      console.error('Error in handleForgotPassword:', error);
 
       setMessage(error.message);
     }
@@ -40,7 +43,9 @@ function ForgotPassword({ closeModal }) {
   async function handleResetPassword(e) {
     e.preventDefault();
 
+    //delete
     console.log('Отправка нового пароля...');
+    //delete
     console.log('Email:', email, 'Token:', token, 'Password:', password);
 
     try {
@@ -55,14 +60,14 @@ function ForgotPassword({ closeModal }) {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Ошибка при сбросе пароля: ${response.status} - ${errorText}`
+          `Error resetting password: ${response.status} - ${errorText}`
         );
       }
 
       setMessage('Password successfully changed!');
       setStep(1);
     } catch (error) {
-      console.error('Ошибка в handleResetPassword:', error);
+      console.error('Error in handleResetPassword:', error);
       setMessage(error.message);
     }
   }
@@ -89,9 +94,7 @@ function ForgotPassword({ closeModal }) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button className={styles.btn} type="submit">
-            שלח
-          </button>
+          <Button type="submit">שלח</Button>
         </form>
       ) : (
         <form className={styles.form} onSubmit={handleResetPassword}>
@@ -111,9 +114,7 @@ function ForgotPassword({ closeModal }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className={styles.btn} type="submit">
-            אפס סיסמה
-          </button>
+          <Button type="submit">אפס סיסמה</Button>
         </form>
       )}
 

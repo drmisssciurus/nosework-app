@@ -4,13 +4,14 @@ import Modal from 'react-modal';
 
 import ForgotPassword from '../../components/ForgotPassword/ForgotPassword';
 import Register from '../../components/Register/Register';
+import Button from '../../components/Button/Button';
 
 import logIn from '../../assets/login.png';
 import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
+
 import styles from './LogIn.module.css';
 import { validateEmail } from '../../utils/utils';
-import Button from '../../components/Button/Button';
 
 Modal.setAppElement('#root');
 
@@ -59,7 +60,7 @@ function LogIn() {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Ошибка входа: ${errorText || 'Проверьте почту и пароль.'}`
+          `Login error: ${errorText || 'Check your email and password.'}`
         );
       }
 
@@ -81,7 +82,7 @@ function LogIn() {
         navigate('/mainpage');
         // window.location.reload(); // Принудительно обновляем приложение
       } else {
-        console.error('Ошибка: токен не найден в ответе');
+        console.error('Error: Token not found in response');
       }
 
       navigate('/mainpage');

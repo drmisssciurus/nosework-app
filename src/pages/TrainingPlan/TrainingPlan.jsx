@@ -4,6 +4,7 @@ import NavBar from '../../components/NavBar/NavBar';
 
 import styles from './TrainingPlan.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Button from '../../components/Button/Button';
 
 function TrainingPlan() {
   const location = useLocation();
@@ -36,7 +37,7 @@ function TrainingPlan() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error('Ошибка: отсутствует токен авторизации');
+        console.error('Error: Missing authorization token');
         return;
       }
 
@@ -49,7 +50,7 @@ function TrainingPlan() {
       });
 
       if (!response.ok) {
-        throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+        throw new Error(`Error loading data: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -81,11 +82,12 @@ function TrainingPlan() {
       console.log('Преобразованные данные:', transformedData);
       setSelectedValues(transformedData);
     } catch (error) {
-      console.error('Ошибка при получении случайных значений:', error);
+      console.error('Error getting random values:', error);
     }
   };
 
   const handleSubmit = async () => {
+    //delete
     console.log('sessionId перед отправкой:', sessionId);
     console.log('trials перед отправкой:', trials);
 
@@ -120,12 +122,12 @@ function TrainingPlan() {
       });
 
       if (!response.ok) {
-        throw new Error(`Ошибка при отправке данных: ${response.status}`);
+        throw new Error(`Error sending data: ${response.status}`);
       }
-      alert('Данные успешно сохранены!');
+      alert('Data saved successfully!'); //for testing
       navigate('/trials', { state: { trainingData } });
     } catch (error) {
-      console.error('Ошибка при запросе:', error);
+      console.error('Error while requesting:', error);
       alert(error.message);
     }
   };
@@ -172,15 +174,15 @@ function TrainingPlan() {
           ))}
         </div>
         <div className={styles.buttonWrapper}>
-          <button className={styles.button} onClick={handleSubmit}>
+          <Button className={styles.btnStart} onClick={handleSubmit}>
             המשך
-          </button>
-          <button
-            className={styles.button}
+          </Button>
+          <Button
+            className={styles.btnRandom}
             onClick={() => fillRandomly(sessionId)}
           >
             מילוי רנדומלי
-          </button>
+          </Button>
         </div>
         <NavBar />
       </div>

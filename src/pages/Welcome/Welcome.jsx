@@ -15,7 +15,7 @@ function Welcome() {
           </p>
           <img className={styles.img} src={logo} />
         </div>
-        <Link to="/login">
+        <Link to="/login" className={styles.btn}>
           <Button>התחל</Button>
         </Link>
       </div>

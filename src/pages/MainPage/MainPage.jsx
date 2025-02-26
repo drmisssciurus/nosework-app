@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import NavBar from '../../components/NavBar/NavBar';
 import Calendar from '../../components/Calendar/Calendar';
+import SessionsList from '../../components/SessionsList/SessionsList';
+import Button from '../../components/Button/Button';
+
 import logo from '../../assets/logo-dog.png';
 import styles from './MainPage.module.css';
-import SessionsList from '../../components/SessionsList/SessionsList';
-import { Link, useNavigate } from 'react-router-dom';
 
 const today = new Date().toLocaleDateString('he-IL', {
   day: 'numeric',
@@ -23,7 +26,6 @@ const dummyData = [
   },
   {
     id: 2,
-
     name: 'פומה',
     session: 15,
     count: 2.506,
@@ -39,13 +41,13 @@ function MainPage() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/User/Logout', { method: 'POST' }); // Если сервер требует разлогин
+      await fetch('/api/User/Logout', { method: 'POST' });
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
+      console.error('Error while exiting:', error);
     }
 
     localStorage.removeItem('token');
-    console.log('Token removed:', localStorage.getItem('token')); // Должно быть null
+    console.log('Token removed:', localStorage.getItem('token'));
     navigate('/login');
     // window.location.reload();
   };
@@ -70,16 +72,16 @@ function MainPage() {
           <SessionsList sessions={sessions} />
 
           <div className={styles.btnWrapper}>
-            <button
+            <Button
               className={styles.btn}
               onClick={() => navigate('/create_session')}
             >
               צור תוכנית אימון
-            </button>
+            </Button>
 
-            <button className={styles.btnLogout} onClick={handleLogout}>
+            <Button className={styles.btnLogout} onClick={handleLogout}>
               התנתק
-            </button>
+            </Button>
           </div>
         </main>
 

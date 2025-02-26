@@ -14,17 +14,8 @@
   margin-top: 50px;
 }
 
-.button {
-  cursor: pointer;
-  padding: 10px 51px;
-  border: 0;
-  border-radius: 12px;
-  background-color: var(--color-black);
-  color: var(--color-white);
-  font-size: 16px;
-  font-family: 'Noto Sans Hebrew', serif;
-  font-weight: 500;
-
+.btnDog {
+  width: 70%;
   margin-top: 30px;
   margin-bottom: 70px;
 }

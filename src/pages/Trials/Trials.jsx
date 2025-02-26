@@ -4,6 +4,7 @@ import styles from './Trials.module.css';
 import { useEffect, useState } from 'react';
 import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Modal from 'react-modal';
+import Button from '../../components/Button/Button';
 
 Modal.setAppElement('#root');
 
@@ -216,12 +217,12 @@ function Trials() {
           </div>
         </div>
         <div className={styles.btnContainer}>
-          <button className={styles.btn} onClick={handleSubmit}>
+          <Button className={styles.btn} onClick={handleSubmit}>
             שליחה הבאה
-          </button>
-          <button className={styles.btn} onClick={() => navigate('/mainpage')}>
+          </Button>
+          <Button className={styles.btn} onClick={() => navigate('/mainpage')}>
             חזרה למסך הבית
-          </button>
+          </Button>
         </div>
       </div>
       <Footer />

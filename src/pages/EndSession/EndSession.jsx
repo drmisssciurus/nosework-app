@@ -4,6 +4,7 @@ import styles from './EndSession.module.css';
 
 import logoDog from '../../assets/success-dog.png';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button/Button';
 
 function EndSession() {
   const navigate = useNavigate();
@@ -23,10 +24,10 @@ function EndSession() {
           </div>
         </div>
         <div className={styles.btnWrapper}>
-          <button className={styles.btn} onClick={() => navigate('/mainpage')}>
+          <Button className={styles.btn} onClick={() => navigate('/mainpage')}>
             חזרה למסך הבית
-          </button>
-          <button className={styles.btn}>הצגת האימון</button>
+          </Button>
+          <Button className={styles.btn}>הצגת האימון</Button>
         </div>
       </div>
       <Footer />

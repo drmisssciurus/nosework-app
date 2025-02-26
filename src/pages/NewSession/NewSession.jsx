@@ -2,7 +2,8 @@ import styles from './NewSession.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button/Button';
 
 function NewSession({ setTrials, trials }) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -76,7 +77,7 @@ function NewSession({ setTrials, trials }) {
 
   return (
     <div className="container">
-      <div>
+      <div className={styles.newSession}>
         <Header>הוספת אימון חדש</Header>
         <p className={styles.sessionname}>אימון מספר 19</p>
         <p className={styles.sessionsubtitle}>
@@ -164,9 +165,9 @@ function NewSession({ setTrials, trials }) {
               onChange={(e) => setSendX(e.target.checked)}
             />
           </div>
-          <button type="submit" className={styles.button}>
+          <Button type="submit" className={styles.btnNewSession}>
             שמור אימון
-          </button>
+          </Button>
         </form>
       </div>
       <NavBar />

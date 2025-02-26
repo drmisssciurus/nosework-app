@@ -5,6 +5,7 @@ import styles from './Register.module.css';
 import arrowBack from '../../assets/icons/icon-arrow-left.svg';
 import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
+import Button from '../Button/Button';
 
 function Register({ closeModal }) {
   const [email, setEmail] = useState('');
@@ -55,15 +56,15 @@ function Register({ closeModal }) {
       try {
         data = await response.json();
       } catch (jsonError) {
-        console.error('Ошибка парсинга JSON:', jsonError);
-        throw new Error('Некорректный ответ сервера');
+        console.error('JSON parsing error:', jsonError);
+        throw new Error('Incorrect server response');
       }
 
       //delete
       console.log('Ответ от сервера:', data);
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Ошибка регистрации');
+        throw new Error(data?.message || 'Registration error');
       }
 
       // if (data?.token) {
@@ -141,9 +142,7 @@ function Register({ closeModal }) {
           </button>
         </div>
         {message && <p className={styles.message}>{message}</p>}
-        <button className={styles.btn} type="submit">
-          הירשמו
-        </button>
+        <Button type="submit">הירשמו</Button>
       </form>
     </div>
   );
