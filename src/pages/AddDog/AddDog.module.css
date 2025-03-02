@@ -85,3 +85,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.btn {
+  width: 60%;
+  padding: 10px 0;
+  margin-top: 20px;
+}

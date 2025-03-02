@@ -1,20 +1,93 @@
 import styles from './NewSession.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 
 function NewSession({ setTrials, trials }) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [dogId, setDogId] = useState('');
+  const [dogs, setDogs] = useState([]);
   const [trainer, setTrainer] = useState('');
+  const [trainers, setTrainers] = useState([]);
+  const [newTrainer, setNewTrainer] = useState('');
+  const [isAddingTrainer, setIsAddingTrainer] = useState(false);
   const [containerType, setContainerType] = useState('');
-  const [sendX, setSendX] = useState(false);
+  const [trialX, setTrialX] = useState(false);
   const [finalResults, setFinalResults] = useState([]);
   const [dPrimeScore, setDPrimeScore] = useState(0);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    fetch('/api/Trainer', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Тренеры:', data);
+        setTrainers(data);
+      })
+      .catch((err) => console.error('Error to upload trainers: ', err));
+
+    fetch('/api/Dog', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Dogs: ', data);
+        setDogs(data);
+      })
+      .catch((err) => console.error('Error to upload dogs: ', err));
+  }, []);
+
+  function handleTrainerChange(e) {
+    const value = e.target.value;
+    if (value === 'add_new') {
+      setIsAddingTrainer(true);
+      setTrainer('');
+    } else {
+      setIsAddingTrainer(false);
+      setTrainer(value);
+    }
+  }
+
+  function handleAddTrainer() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Error: There is no token');
+      return;
+    }
+
+    if (newTrainer.trim()) {
+      fetch('/api/Trainer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newTrainer),
+      })
+        .then(() => {
+          setTrainers([...trainers, newTrainer]);
+          setTrainer(newTrainer);
+          setNewTrainer('');
+          setIsAddingTrainer(false);
+        })
+        .catch((err) => console.error('Error adding trainer:', err));
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,15 +97,16 @@ function NewSession({ setTrials, trials }) {
       dogId: Number(dogId),
       trainer,
       date: new Date().toISOString(),
-      numberOfSends: trials,
+      numberOfTrials: trials,
       containerType: Number(containerType),
-      sendX,
+      trialX,
       finalResults,
       dPrimeScore: Number(dPrimeScore),
     };
 
     //delete
     console.log('Отправляемые данные на сервер:', sessionData);
+    console.log('trialX перед отправкой:', trialX);
 
     const token = localStorage.getItem('token');
 
@@ -104,9 +178,11 @@ function NewSession({ setTrials, trials }) {
               value={dogId}
               onChange={(e) => setDogId(e.target.value)}
             >
-              <option value="1">dog1</option>
-              <option value="2">dog2</option>
-              <option value="3">dog3</option>
+              {dogs.map((dog) => (
+                <option key={dog.id} value={dog.id}>
+                  {dog.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -118,12 +194,30 @@ function NewSession({ setTrials, trials }) {
             <select
               className={styles.item}
               value={trainer}
-              onChange={(e) => setTrainer(e.target.value)}
+              onChange={handleTrainerChange}
             >
-              <option value="1">trainer1</option>
-              <option value="2">trainer2</option>
-              <option value="3">trainer3</option>
+              <option value="">choose trainer</option>
+              {trainers.map((trainer, index) => (
+                <option key={index} value={trainer}>
+                  {trainer}
+                </option>
+              ))}
+              <option value="add_new">Add trainer</option>
             </select>
+            {isAddingTrainer && (
+              <div className={styles.addTrainer}>
+                <input
+                  className={styles.item}
+                  type="text"
+                  value={newTrainer}
+                  onChange={(e) => setNewTrainer(e.target.value)}
+                  placeholder="new trainer name"
+                />
+                <Button type="button" onClick={handleAddTrainer}>
+                  add trainer
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className={styles.selectwrapper}>
@@ -161,8 +255,8 @@ function NewSession({ setTrials, trials }) {
             <label className={styles.label}>X קיימת שליחה</label>
             <input
               type="checkbox"
-              checked={sendX}
-              onChange={(e) => setSendX(e.target.checked)}
+              checked={trialX}
+              onChange={(e) => setTrialX(e.target.checked)}
             />
           </div>
           <Button type="submit" className={styles.btnNewSession}>

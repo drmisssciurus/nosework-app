@@ -14,19 +14,42 @@ export function validatePassword(password) {
 
 export function formatDate(dateString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('ru-RU', options);
+  return new Date(dateString).toLocaleDateString('en-EN', options);
 }
+
+// export function calculateAge(dateOfBirth) {
+//   const birthDate = new Date(dateOfBirth);
+//   const today = new Date();
+//   let age = today.getFullYear() - birthDate.getFullYear();
+//   const monthDiff = today.getMonth() - birthDate.getMonth();
+//   if (
+//     monthDiff < 0 ||
+//     (monthDiff === 0 && today.getDate() < birthDate.getDate())
+//   ) {
+//     age--;
+//   }
+//   return age;
+// }
 
 export function calculateAge(dateOfBirth) {
   const birthDate = new Date(dateOfBirth);
   const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    age--;
+
+  const yearsDiff = today.getFullYear() - birthDate.getFullYear();
+  const monthsDiff = today.getMonth() - birthDate.getMonth();
+
+  return yearsDiff * 12 + monthsDiff;
+}
+
+export function formatDogAge(ageInMonths) {
+  const years = Math.floor(ageInMonths / 12);
+  const months = ageInMonths % 12;
+
+  if (years > 0 && months > 0) {
+    return `גיל: ${years} שנים ו-${months} חודשים`;
+  } else if (years > 0) {
+    return `גיל: ${years} שנים`;
+  } else {
+    return `גיל: ${months} חודשים`;
   }
-  return age;
 }

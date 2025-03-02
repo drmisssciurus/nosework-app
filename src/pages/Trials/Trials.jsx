@@ -107,7 +107,7 @@ function Trials() {
     console.log('Отправляемые данные:', JSON.stringify(payload, null, 2));
 
     try {
-      const response = await fetch('/api/Send', {
+      const response = await fetch('/api/Trial', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
