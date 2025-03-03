@@ -93,7 +93,7 @@ function TrainingPlan() {
 
     const trainingData = selectedValues.map((trial, index) => ({
       id: 0, // Временно 0, пока сервер не вернёт ID
-      sendNumber: Math.min(index + 1, trials), // Ограничение по количеству отправок
+      trialNumber: Math.min(index + 1, trials), // Ограничение по количеству отправок
       positiveLocation: trial.includes('חיובי')
         ? 2 - trial.indexOf('חיובי') + 1
         : 0,

@@ -16,6 +16,17 @@ function Trials() {
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [targetScent, setTargetScent] = useState('');
   const [uploadedVideo, setUploadedVideo] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(
+    parseInt(localStorage.getItem('currentIndex')) || 0
+  );
+  const [dogName, setDogName] = useState('');
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLastTrial, setIsLastTrial] = useState(false);
+  const [modalBackground, setModalBackground] = useState('');
+
+  console.log('uploadedVideo:', uploadedVideo);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,6 +52,57 @@ function Trials() {
   };
 
   useEffect(() => {
+    async function fetchDogName() {
+      if (!trainingId) return;
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('There in no token');
+        return;
+      }
+
+      try {
+        const sessionResponse = await fetch(`/api/Session/${trainingId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!sessionResponse.ok) {
+          throw new Error(
+            `Fetching session error: ${sessionResponse.statusText}`
+          );
+        }
+
+        const sessionData = await sessionResponse.json();
+        const dogId = sessionData.dogId;
+
+        const dogResponse = await fetch(`/api/Dog/${dogId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!dogResponse.ok) {
+          throw new Error(`Fetching dog error: ${dogResponse.statusText}`);
+        }
+
+        const dogData = await dogResponse.json();
+        setDogName(dogData.name);
+      } catch (error) {
+        console.error('Error fetching dog name: ', error);
+      }
+    }
+    fetchDogName();
+  }, [trainingId]);
+
+  console.log('dog name:', dogName);
+
+  useEffect(() => {
     async function fetchTrainingData() {
       if (!trainingId) return;
 
@@ -55,18 +117,20 @@ function Trials() {
           `/api/TrainingProgram/BySession/${trainingId}`,
           {
             method: 'GET',
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         if (!response.ok) {
           throw new Error(`Fetching error: ${response.statusText}`);
         }
-
         const data = await response.json();
-
-        console.log('I get this data:', data);
         setTrainingData(data);
+        const savedIndex = parseInt(localStorage.getItem('currentIndex')) || 0;
+        setCurrentIndex(savedIndex < data.length ? savedIndex : 0);
       } catch (error) {
         console.error('Error fetching training data: ', error);
       }
@@ -74,14 +138,84 @@ function Trials() {
     fetchTrainingData();
   }, [trainingId]);
 
-  const currentTrial = trainingData.length > 0 ? trainingData[0] : null;
-  console.log(
-    'current trial',
-    currentTrial ? currentTrial.sendNumber : 'No trial data'
-  );
+  useEffect(() => {
+    if (currentIndex >= trainingData.length) {
+      console.warn(
+        'currentIndex вышел за границы trainingData, сбрасываем в 0'
+      );
+      setCurrentIndex(0);
+      localStorage.setItem('currentIndex', 0);
+    }
+  }, [currentIndex, trainingData]);
+
+  const currentTrial = trainingData[currentIndex] || null;
 
   function handleUploadVideo(videoFile) {
     setUploadedVideo(videoFile);
+  }
+
+  async function handleVideoSubmit() {
+    if (!uploadedVideo) {
+      console.error('Error: No video file selected!');
+      return;
+    }
+
+    if (!trainingId) {
+      console.error('Error: No valid trainingId available!');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Error: No authentication token found!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4'); // Указываем имя файла
+
+    const uploadUrl = `/api/VideoUpload/${trainingId}`;
+    console.log('Uploading video to:', uploadUrl);
+    console.log('Using trainingId:', trainingId);
+
+    try {
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // НЕ указываем Content-Type (он устанавливается автоматически для FormData)
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response Headers:', response.headers);
+        throw new Error(`Video upload failed: ${response.status} ${errorText}`);
+      }
+
+      console.log('Video successfully uploaded');
+    } catch (error) {
+      console.error('Error uploading video:', error);
+    }
+  }
+
+  function closeModal() {
+    console.log('Закрываем модальное окно с результатом');
+    setModalOpen(false);
+
+    setTimeout(() => {
+      if (isLastTrial) {
+        console.log('Последний трайл, готовимся к переходу...');
+        localStorage.removeItem('currentIndex');
+        navigate('/end_session');
+      } else {
+        const updatedIndex = currentIndex + 1;
+        console.log(`Обновляем currentIndex: ${updatedIndex}`);
+        setCurrentIndex(updatedIndex);
+        localStorage.setItem('currentIndex', updatedIndex);
+      }
+    }, 300);
   }
 
   async function handleSubmit() {
@@ -122,23 +256,56 @@ function Trials() {
 
       console.log('Data send: ', payload);
 
-      const updatedTrials = trainingData.slice(1);
-      setTrainingData(updatedTrials);
-      if (updatedTrials.length === 0) {
-        navigate('/end_session');
+      const responseData = await response.json();
+      console.log('responseData:', responseData);
+
+      const resultMessages = {
+        H: '✅ Dog HIT!',
+        M: '❌ Dog Miss :(',
+        FA: '⚠️ Dog Fail :(',
+        CR: 'Dog Dog Dog!',
+      };
+
+      const resultColors = {
+        H: '#22c55e', // Зеленый - HIT
+        M: '#ff9500', // Красный - MISS
+        FA: '#ff3b30',
+        CR: '#ff4',
+      };
+
+      if (responseData.result in resultMessages) {
+        setModalMessage(resultMessages[responseData.result] || '');
+        setModalBackground(resultColors[responseData.result] || '');
+        setModalOpen(true);
+        setIsLastTrial(currentIndex + 1 >= trainingData.length);
+      }
+
+      if (uploadedVideo) {
+        await handleVideoSubmit();
       }
     } catch (error) {
       console.error('Error: ', error);
     }
   }
 
+  useEffect(() => {
+    if (!modalOpen && isLastTrial) {
+      console.log('Модалка с результатом закрыта, переходим на /end_session');
+      navigate('/end_session');
+    }
+  }, [modalOpen, isLastTrial, navigate]);
+
   return (
     <div className="container">
       <div className={styles.pageContainer}>
         <header className={styles.header}>
-          <h1 className={styles.trialNumber}>{`שליחה #${
-            currentTrial ? currentTrial.sendNumber : '?'
-          }`}</h1>
+          <h1 className={styles.trialNumber}>
+            {`שליחה #(${trainingData.length})${
+              currentTrial ? currentTrial.trialNumber : '?'
+            }`}
+          </h1>
+
+          <h1 className={styles.trialNumber}>{`${dogName} :כלב`}</h1>
         </header>
         <div className={styles.containers}>
           {currentTrial &&
@@ -236,6 +403,15 @@ function Trials() {
           closeModal={() => setIsModalOpen(false)}
           onUpload={handleUploadVideo}
         />
+      </Modal>
+      <Modal
+        className={styles.modal}
+        style={{ content: { backgroundColor: modalBackground } }}
+        isOpen={modalOpen}
+        onRequestClose={closeModal}
+      >
+        <h2>{modalMessage}</h2>
+        <Button onClick={closeModal}>ОК</Button>
       </Modal>
     </div>
   );
