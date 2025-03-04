@@ -89,6 +89,7 @@ function ForgotPassword({ closeModal }) {
           <input
             className={styles.input}
             type="email"
+            name="email"
             placeholder="דואר אלקטרוני"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

@@ -178,6 +178,7 @@ function NewSession({ setTrials, trials }) {
               value={dogId}
               onChange={(e) => setDogId(e.target.value)}
             >
+              <option value="">בחר כלב</option>
               {dogs.map((dog) => (
                 <option key={dog.id} value={dog.id}>
                   {dog.name}
@@ -196,13 +197,13 @@ function NewSession({ setTrials, trials }) {
               value={trainer}
               onChange={handleTrainerChange}
             >
-              <option value="">choose trainer</option>
+              <option value="">לבחור מאמן</option>
               {trainers.map((trainer, index) => (
                 <option key={index} value={trainer}>
                   {trainer}
                 </option>
               ))}
-              <option value="add_new">Add trainer</option>
+              <option value="add_new">הוסף מאמן</option>
             </select>
             {isAddingTrainer && (
               <div className={styles.addTrainer}>

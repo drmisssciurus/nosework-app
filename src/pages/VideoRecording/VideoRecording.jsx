@@ -2,12 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import styles from './VideoRecording.module.css';
 import Footer from '../../components/Footer/Footer';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const VideoRecorder = () => {
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [videoBlob, setVideoBlob] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const trialId = searchParams.get('id');
+  const trialIndex = searchParams.get('index');
+
+  console.log('training ID on videorecording page', trialId);
 
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -99,6 +110,46 @@ const VideoRecorder = () => {
     setSelectedDevice(event.target.value);
   };
 
+  const uploadVideo = async () => {
+    if (!videoBlob || !trialId) return;
+
+    setUploading(true);
+    if (trialIndex !== null) {
+      console.log(`Saving lastTrialIndex: ${trialIndex}`);
+      localStorage.setItem('lastTrialIndex', trialIndex);
+    }
+    const formData = new FormData();
+    formData.append('file', videoBlob, 'video.webm');
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/VideoUpload/${trialId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload video');
+      }
+
+      setUploadSuccess(true);
+      console.log('Video uploaded successfully');
+      setTimeout(() => {
+        setUploadSuccess(false);
+        localStorage.setItem('lastTrialId', trialId);
+
+        navigate(-1);
+      }, 2000);
+    } catch (error) {
+      console.error('Error uploading video:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="container">
       <div className={styles.videoRecorder}>
@@ -150,13 +201,17 @@ const VideoRecorder = () => {
           )}
         </div>
 
-        {videoBlob && (
+        {videoBlob && !uploading && (
           <div>
-            <a href={URL.createObjectURL(videoBlob)} download="video.webm">
-              Download video
-            </a>
+            <button onClick={uploadVideo} className={styles.btnUpload}>
+              Upload video
+            </button>
           </div>
         )}
+
+        {uploading && <p>Uploading video...</p>}
+        {uploadSuccess && <p>Video uploaded successfully!</p>}
+
         <Footer />
       </div>
     </div>

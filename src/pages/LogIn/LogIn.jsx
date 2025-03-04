@@ -16,9 +16,6 @@ import { validateEmail } from '../../utils/utils';
 Modal.setAppElement('#root');
 
 function LogIn() {
-  //delete
-  console.log('Компонент LogIn ререндерился!');
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -39,15 +36,8 @@ function LogIn() {
       return;
     }
 
-    //delete
-    console.log('Отправляем email:', email);
-    //delete
-    console.log('Отправляем пароль:', password);
-
     try {
       const requestBody = JSON.stringify({ email, password });
-      //delete
-      console.log('Отправка запроса:', requestBody);
 
       const response = await fetch('/api/User/Login', {
         method: 'POST',
@@ -73,14 +63,10 @@ function LogIn() {
         data = { message: await response.text() };
       }
 
-      //delete
-      console.log('Успешный вход:', data);
-
       if (data.token) {
         localStorage.setItem('token', data.token);
         console.log('Saved token:', localStorage.getItem('token'));
         navigate('/mainpage');
-        // window.location.reload(); // Принудительно обновляем приложение
       } else {
         console.error('Error: Token not found in response');
       }
@@ -96,10 +82,8 @@ function LogIn() {
     <div className="container">
       <div className={styles.login}>
         <img src={logIn} alt="Login" className={styles.loginImg} />
-
         <p className={styles.title}>NoseWorks</p>
         <p className={styles.description}>התחבר</p>
-
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputsContainer}>
             <div className={styles.item}>
@@ -139,7 +123,6 @@ function LogIn() {
 
           <Button type="submit">המשך</Button>
         </form>
-
         <div className={styles.links}>
           <button
             className={styles.text}
