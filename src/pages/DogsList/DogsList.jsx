@@ -29,6 +29,7 @@ function DogsList() {
           throw new Error('Error data loading');
         }
         const data = await response.json();
+
         const formattedDogs = data.map((dog) => ({
           ...dog,
           age: calculateAge(dog.dateOfBirth),

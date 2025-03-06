@@ -1,14 +1,13 @@
 import styles from './Dogs.module.css';
-import dogImage from '../../assets/dogs/dog_1.png';
 import { formatDogAge } from '../../utils/utils';
 
 function Dogs({ dogs }) {
   return (
     <>
-      {dogs.map(({ id, name, breed, age }) => (
+      {dogs.map(({ id, name, breed, age, imageUrl }) => (
         <li key={id} className={styles.item}>
           <div className={styles.imageContainer}>
-            <img src={dogImage} alt="" />
+            <img className={styles.image} src={imageUrl} alt="" />
           </div>
           <div>
             <p className={`${styles.text} ${styles.name}`}>{name}</p>

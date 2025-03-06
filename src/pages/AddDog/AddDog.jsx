@@ -26,7 +26,11 @@ function AddDog() {
   const openModal = () => setIsModalOpen(true);
 
   function handleUploadPhoto(image) {
-    setUploadedPhoto(image);
+    if (image instanceof File) {
+      setUploadedPhoto(image);
+    } else {
+      console.error('Uploaded photo is not a File object:', image);
+    }
   }
 
   async function handleSubmit(e) {
@@ -42,10 +46,10 @@ function AddDog() {
     }
 
     const dogData = {
-      id: 0,
       name: dogName,
       breed: dogBreed,
       dateOfBirth: new Date(dogBirth).toISOString(),
+      imageUrl: '',
     };
 
     try {
@@ -53,15 +57,37 @@ function AddDog() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(dogData),
       });
 
       if (!response.ok) {
-        throw new Error('Error sending data');
+        const errorMessage = await response.text();
+        throw new Error(`Error creating dog: ${errorMessage}`);
       }
 
+      const createdDog = await response.json();
+      const dogId = createdDog.id;
+
+      if (uploadedPhoto && dogId) {
+        const formData = new FormData();
+        formData.append('file', uploadedPhoto);
+
+        const uploadResponse = await fetch(`/api/Dog/uploadImage/${dogId}`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          const uploadError = await uploadResponse.text();
+          throw new Error(`Error uploading photo: ${uploadError}`);
+        }
+      }
       setDogName('');
       setDogBreed('');
       setDogBirth('');
@@ -114,6 +140,7 @@ function AddDog() {
             <input
               className={styles.iteminput}
               type="date"
+              lang="he"
               id="dogBirth"
               value={dogBirth}
               onChange={(e) => setDogBirth(e.target.value)}
@@ -130,7 +157,9 @@ function AddDog() {
               העלאה
               <Icons name="upload" />
             </button>
-            {uploadedPhoto && <p>Фото загружено!</p>}
+            {uploadedPhoto && (
+              <p style={{ textAlign: 'center' }}>התמונה הועלתה!</p>
+            )}
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <Button className={styles.btn} type="submit" disabled={loading}>

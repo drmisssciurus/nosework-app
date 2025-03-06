@@ -20,19 +20,16 @@ function TrainingPlan() {
     שלילי: '#ffb9c6',
   };
 
-  // Состояние для хранения выбранных значений
   const [selectedValues, setSelectedValues] = useState(
     Array.from({ length: trials }, () => Array(3).fill(''))
   );
 
-  // Обработчик изменения
   const handleChange = (trialIndex, selectIndex, event) => {
     const newValues = [...selectedValues];
     newValues[trialIndex][selectIndex] = event.target.value;
     setSelectedValues(newValues);
   };
 
-  //рандомное заполнение
   const fillRandomly = async (sessionId) => {
     try {
       const token = localStorage.getItem('token');
@@ -58,20 +55,17 @@ function TrainingPlan() {
       //delete
       console.log('Ответ API:', data);
 
-      // Преобразуем ответ в нужный формат
       const transformedData = data.map((item) => {
-        let row = Array(3).fill(''); // Создаем пустую строку из 3 элементов
+        let row = Array(3).fill('');
 
-        // Корректируем индексы, чтобы они были в диапазоне 0-2
-        const posIndex = item.positiveLocation - 1; // Уменьшаем на 1
-        const negIndex = item.negativeLocation - 1; // Уменьшаем на 1
+        const posIndex = item.positiveLocation - 1;
+        const negIndex = item.negativeLocation - 1;
 
-        // Проверяем, что индекс в допустимых пределах (0, 1, 2)
         if (posIndex >= 0 && posIndex < 3) {
-          row[posIndex] = 'חיובי'; // Или "X", если ты хочешь оставить символы
+          row[posIndex] = 'חיובי';
         }
         if (negIndex >= 0 && negIndex < 3) {
-          row[negIndex] = 'שלילי'; // Или "O"
+          row[negIndex] = 'שלילי';
         }
 
         row = row.map((value) => (value === '' ? 'ביקורת' : value));
@@ -91,17 +85,25 @@ function TrainingPlan() {
     console.log('sessionId перед отправкой:', sessionId);
     console.log('trials перед отправкой:', trials);
 
-    const trainingData = selectedValues.map((trial, index) => ({
-      id: 0, // Временно 0, пока сервер не вернёт ID
-      trialNumber: Math.min(index + 1, trials), // Ограничение по количеству отправок
-      positiveLocation: trial.includes('חיובי')
-        ? 2 - trial.indexOf('חיובי') + 1
-        : 0,
-      negativeLocation: trial.includes('שלילי')
-        ? 2 - trial.indexOf('שלילי') + 1
-        : 0,
-      sessionId: sessionId || 0,
-    }));
+    const trainingData = selectedValues.map((trial, index) => {
+      const mappedIndexes = {
+        0: 1,
+        1: 2,
+        2: 3,
+      };
+
+      return {
+        id: 0,
+        trialNumber: Math.min(index + 1, trials),
+        positiveLocation: trial.includes('חיובי')
+          ? mappedIndexes[trial.indexOf('חיובי')] // Преобразуем индекс
+          : 0,
+        negativeLocation: trial.includes('שלילי')
+          ? mappedIndexes[trial.indexOf('שלילי')] // Преобразуем индекс
+          : 0,
+        sessionId: sessionId || 0,
+      };
+    });
 
     //delete
     console.log(
@@ -147,32 +149,40 @@ function TrainingPlan() {
         <div className={styles.wrapper}>
           {Array.from({ length: trials }, (_, index) => (
             <div key={index} className={styles.trial}>
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className={styles.selectWrapper}>
-                  <select
-                    className={styles.item}
-                    value={selectedValues[index][2 - i]}
-                    onChange={(event) => handleChange(index, i, event)}
-                    style={{
-                      backgroundColor:
-                        backgroundColors[selectedValues[index][2 - i]] ||
-                        '#00000014',
-                    }}
-                  >
-                    <option value="" disabled></option>
-                    {arrX.reverse().map((value) => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
-                  <span className={styles.arrow}>⌄</span>
-                </div>
-              ))}
+              {[...Array(3)].map((_, i, arr) => {
+                const reversedIndex = arr.length - 1 - i; // Разворачиваем порядок select
+
+                return (
+                  <div key={reversedIndex} className={styles.selectWrapper}>
+                    <select
+                      className={styles.item}
+                      value={selectedValues[index][reversedIndex]} // Используем перевернутый индекс
+                      onChange={(event) =>
+                        handleChange(index, reversedIndex, event)
+                      } // Передаем корректный индекс
+                      style={{
+                        backgroundColor:
+                          backgroundColors[
+                            selectedValues[index][reversedIndex]
+                          ] || '#00000014',
+                      }}
+                    >
+                      <option value="" disabled></option>
+                      {arrX.map((value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                    <span className={styles.arrow}>⌄</span>
+                  </div>
+                );
+              })}
               <h3 className={styles.number}>{index + 1}</h3>
             </div>
           ))}
         </div>
+
         <div className={styles.buttonWrapper}>
           <Button className={styles.btnStart} onClick={handleSubmit}>
             המשך

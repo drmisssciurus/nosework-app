@@ -29,10 +29,15 @@ function Trials() {
   const currentTrial =
     trainingData.length > 0 ? trainingData[currentTrialIndex] : null;
 
+  console.log('currentTrial: ', currentTrial);
+  console.log('currentTrialIndex: ', currentTrialIndex);
+
   const trainingId =
     location.state?.trainingId ||
     location.state?.trainingData?.[0]?.sessionId ||
     null;
+
+  console.log('trainingId: ', trainingId);
 
   const containersColors = {
     positive: '#22c55e',
@@ -48,7 +53,14 @@ function Trials() {
   };
 
   useEffect(() => {
+    return () => {
+      localStorage.removeItem('currentTrialIndex');
+    };
+  }, []);
+
+  useEffect(() => {
     const savedIndex = localStorage.getItem('currentTrialIndex');
+    console.log('сохраненный индекс в юзэффект: ', savedIndex);
     if (savedIndex !== null) {
       setCurrentTrialIndex(Number(savedIndex)); // Восстанавливаем индекс
     }
@@ -114,6 +126,8 @@ function Trials() {
           }
         );
 
+        console.log('fetchTrainingData response: ', response);
+
         if (!response.ok)
           throw new Error(`Fetching error: ${response.statusText}`);
         const data = await response.json();
@@ -131,9 +145,7 @@ function Trials() {
   }
 
   async function handleVideoSubmit() {
-    if (!uploadedVideo) return;
-
-    if (!currentTrial || !currentTrial.id) return;
+    if (!uploadedVideo || !currentTrial || !currentTrial.id) return;
 
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -141,24 +153,33 @@ function Trials() {
     const formData = new FormData();
     formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4');
 
-    try {
-      const response = await fetch(`/api/VideoUpload/${currentTrial.id}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+    console.log('handleVideoSubmit formData: ', formData);
+    console.log('handleVideoSubmit currentTrial: ', currentTrial);
 
-      console.log('Server response:', response);
+    try {
+      const response = await fetch(
+        `/api/Trial/uploadVideo/${currentTrial.sessionId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      console.log(' handleVideoSubmit Server response:', response);
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error loading video:', errorText);
         throw new Error(`Error loading video: ${response.status} ${errorText}`);
       }
-      //delete
-      console.log('Видео успешно загружено!');
+
+      const responseData = await response.json();
+      console.log('Видео успешно загружено:', responseData);
+
+      return responseData.videoUrl;
     } catch (error) {
       console.error('Error loading video:', error);
     }
@@ -188,12 +209,22 @@ function Trials() {
       return;
     }
 
+    let videoUrl = 'string';
+
+    if (uploadedVideo) {
+      videoUrl = await handleVideoSubmit();
+      if (!videoUrl) {
+        console.error('Error loading video, sending cancelled');
+      }
+    }
+
     const payload = {
       id: 0,
       trainingId: currentTrial.id,
       selectedLocation,
       targetScent: targetScent.trim() === '' ? '' : targetScent,
       result: 'completed',
+      videoUrl,
     };
 
     //delete
@@ -235,10 +266,6 @@ function Trials() {
         setModalMessage(resultMessages[responseData.result] || '');
         setModalBackground(resultColors[responseData.result] || '');
         setModalOpen(true);
-      }
-
-      if (uploadedVideo) {
-        await handleVideoSubmit();
       }
     } catch (error) {
       console.error('Error:', error);
