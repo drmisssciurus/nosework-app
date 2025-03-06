@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import styles from './Trials.module.css';
 import { useEffect, useState } from 'react';
@@ -14,10 +14,14 @@ function Trials() {
 
   const [trainingData, setTrainingData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(0);
+
+  const [trialData, setTrialData] = useState([]);
+
   const [targetScent, setTargetScent] = useState('');
   const [uploadedVideo, setUploadedVideo] = useState(null);
   const [uploadedVideoName, setUploadedVideoName] = useState('');
   const [dogName, setDogName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -31,6 +35,7 @@ function Trials() {
 
   console.log('currentTrial: ', currentTrial);
   console.log('currentTrialIndex: ', currentTrialIndex);
+  console.log('trainingData: ', trainingData);
 
   const trainingId =
     location.state?.trainingId ||
@@ -60,9 +65,8 @@ function Trials() {
 
   useEffect(() => {
     const savedIndex = localStorage.getItem('currentTrialIndex');
-    console.log('сохраненный индекс в юзэффект: ', savedIndex);
     if (savedIndex !== null) {
-      setCurrentTrialIndex(Number(savedIndex)); // Восстанавливаем индекс
+      setCurrentTrialIndex(Number(savedIndex));
     }
   }, []);
 
@@ -74,7 +78,6 @@ function Trials() {
       if (!token) return;
 
       try {
-        console.log('Запрашиваем имя собаки...');
         const sessionResponse = await fetch(`/api/Session/${trainingId}`, {
           method: 'GET',
           headers: {
@@ -101,7 +104,7 @@ function Trials() {
         const dogData = await dogResponse.json();
         setDogName(dogData.name);
       } catch (error) {
-        console.error('Ошибка при получении имени собаки:', error);
+        console.error('Error getting dog name:', error);
       }
     }
 
@@ -139,13 +142,71 @@ function Trials() {
     fetchTrainingData();
   }, [trainingId]);
 
+  useEffect(() => {
+    async function fetchTrials() {
+      if (!trainingId || trainingData.length === 0) {
+        console.log(
+          '❌ fetchTrials did not start, trainingId:',
+          trainingId,
+          'trainingData.length:',
+          trainingData.length
+        );
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch(`/api/Trial`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok)
+          throw new Error(`Fetching error: ${response.statusText}`);
+        const trials = await response.json();
+
+        const matchedTrials = trainingData.map((trial, index) => {
+          const matchedTrial = trials.find(
+            (t) => t.trainingId === trainingId && t.trialNumber === index + 1
+          );
+          return matchedTrial ? { ...trial, id: matchedTrial.id } : trial;
+        });
+
+        setTrialData(matchedTrials);
+      } catch (error) {
+        console.error('Error fetching trials:', error);
+      }
+    }
+    fetchTrials();
+  }, [trainingId, trainingData]);
+
   function handleUploadVideo(videoFile) {
     setUploadedVideo(videoFile);
     setUploadedVideoName(videoFile.name);
   }
 
-  async function handleVideoSubmit() {
-    if (!uploadedVideo || !currentTrial || !currentTrial.id) return;
+  async function handleVideoSubmit(trialId) {
+    if (!uploadedVideo) {
+      console.error('Error: No uploaded video');
+      return;
+    }
+
+    if (!trialId) {
+      console.error('Error: No valid trialId for video upload');
+      return;
+    }
+
+    //duration of sending video START
+    console.log(
+      '🚀 [START] Sending video for TrialId: ',
+      trialId,
+      new Date().toISOString()
+    );
 
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -153,22 +214,22 @@ function Trials() {
     const formData = new FormData();
     formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4');
 
-    console.log('handleVideoSubmit formData: ', formData);
-    console.log('handleVideoSubmit currentTrial: ', currentTrial);
-
     try {
-      const response = await fetch(
-        `/api/Trial/uploadVideo/${currentTrial.sessionId}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      const start = performance.now();
+      const response = await fetch(`/api/Trial/uploadVideo/${trialId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
-      console.log(' handleVideoSubmit Server response:', response);
+      //duration of sending video DONE
+      const duration = performance.now() - start;
+      console.log(
+        `✅ [DONE] Sending video took ${duration.toFixed(2)} ms`,
+        new Date().toISOString()
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -177,7 +238,7 @@ function Trials() {
       }
 
       const responseData = await response.json();
-      console.log('Видео успешно загружено:', responseData);
+      console.log('Video uploaded successfully:', responseData);
 
       return responseData.videoUrl;
     } catch (error) {
@@ -209,14 +270,9 @@ function Trials() {
       return;
     }
 
-    let videoUrl = 'string';
+    setIsLoading(true);
 
-    if (uploadedVideo) {
-      videoUrl = await handleVideoSubmit();
-      if (!videoUrl) {
-        console.error('Error loading video, sending cancelled');
-      }
-    }
+    let videoUrl = 'string';
 
     const payload = {
       id: 0,
@@ -226,9 +282,6 @@ function Trials() {
       result: 'completed',
       videoUrl,
     };
-
-    //delete
-    console.log('Отправляемые данные:', JSON.stringify(payload, null, 2));
 
     try {
       const response = await fetch('/api/Trial', {
@@ -245,8 +298,13 @@ function Trials() {
       }
 
       console.log('Data sent:', payload);
-
       const responseData = await response.json();
+
+      const newTrialId = responseData.id;
+
+      if (uploadedVideo && newTrialId) {
+        videoUrl = await handleVideoSubmit(newTrialId);
+      }
 
       const resultMessages = {
         H: '✅ כל הכבוד',
@@ -267,6 +325,8 @@ function Trials() {
         setModalBackground(resultColors[responseData.result] || '');
         setModalOpen(true);
       }
+
+      setIsLoading(false);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -279,8 +339,6 @@ function Trials() {
           <h1 className={styles.trialNumber}>
             {`שליחה #(${currentTrialIndex + 1}/${trainingData.length})`}
           </h1>
-
-          {/* <h1 className={styles.trialNumber}>{`${dogName} :כלב`}</h1> */}
           <h1 className={styles.trialNumber}>
             {dogName ? `${dogName} :כלב` : 'טוען...'}
           </h1>
@@ -406,8 +464,14 @@ function Trials() {
         onRequestClose={closeModal}
       >
         <h2>{modalMessage}</h2>
-        <Button onClick={closeModal}>ОК</Button>
+        <Button onClick={closeModal}>בסדר</Button>
       </Modal>
+
+      {isLoading && (
+        <div className={styles.loaderOverlay}>
+          <div className={styles.loader}></div>
+        </div>
+      )}
     </div>
   );
 }
