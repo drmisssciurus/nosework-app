@@ -1,25 +1,44 @@
+import { useNavigate } from 'react-router-dom';
 import styles from './SessionItem.module.css';
 
 function SessionItem({ session }) {
+  const navigate = useNavigate();
+  if (!session) {
+    return null;
+  }
+
   console.log(session);
+  const { dogName, id, status, dPrime } = session;
+
   return (
     <li className={styles.itemwrapper}>
       <div className={styles.namewrapper}>
         <p className={styles.name}>
-          {session.name}: אימון {session.session}
+          {dogName || 'Unknown'}: אימון {id}
         </p>
         <span
           className={`${styles['status-icon']} ${
-            session.status ? styles.ready : styles.inprocess
+            status === 'Completed' ? styles.ready : styles.inprocess
           }`}
         ></span>
       </div>
 
       <div className={styles.wrapper}>
-        <button className={styles.button}>{session.button}</button>
-        <button className={styles.count} disabled>
-          ד-פריים {session.count}
-        </button>
+        {status === 'InProgress' ? (
+          <button className={styles.buttonInProg}>המשך אימון</button>
+        ) : (
+          <button
+            className={styles.button}
+            onClick={() => navigate(`/session_overview/${id}`)}
+          >
+            ראה נתונים
+          </button>
+        )}
+        {dPrime === 0 ? (
+          <p className={styles.dPrimeInProg}>אימון בתהליך</p>
+        ) : (
+          <p className={styles.dPrime}>ד-פריים {dPrime.toFixed(3) ?? '—'}</p>
+        )}
       </div>
     </li>
   );

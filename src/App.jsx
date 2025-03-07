@@ -41,7 +41,10 @@ function App() {
           <Route path="trials" element={<Trials />} />
           <Route path="video_recording" element={<VideoRecorder />} />
           <Route path="end_session" element={<EndSession />} />
-          <Route path="session_overview" element={<SessionOverview />} />
+          <Route
+            path="session_overview/:sessionId"
+            element={<SessionOverview />}
+          />
           <Route path="analysis" element={<Analysis />} />
           <Route path="dogs" element={<DogsList />} />
           <Route path="add_dog" element={<AddDog />} />

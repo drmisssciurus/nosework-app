@@ -30,7 +30,6 @@
 }
 
 .name {
-  color: #030303;
   font-size: 16px;
   font-family: 'Noto Sans Hebrew';
   font-weight: 500;
@@ -45,24 +44,35 @@
   justify-content: flex-end;
 }
 
-.count {
-  padding: 0px 8px;
+.dPrime {
+  padding: 2px 8px;
+  text-align: center;
   width: 50%;
-  border: 0;
-  box-sizing: border-box;
   border-radius: 12px;
   background-color: var(--color-gray);
+  color: var(--color-black);
+  font-size: 12px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.dPrimeInProg {
+  padding: 2px 8px;
+  text-align: center;
+  width: 50%;
+  border-radius: 12px;
+  background-color: var(--color-black);
   color: var(--color-white);
   font-size: 12px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 16px;
-  outline: none;
 }
 
 .button {
   cursor: pointer;
-  padding: 0px 8px;
+  padding: 2px 8px;
   width: 50%;
   border: 0;
   box-sizing: border-box;
@@ -71,6 +81,22 @@
   color: var(--color-white);
   font-size: 12px;
   font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  line-height: 16px;
+  outline: none;
+}
+
+.buttonInProg {
+  cursor: pointer;
+  padding: 0px 8px;
+  width: 50%;
+  border: 2px solid var(--color-red);
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: var(--color-gray);
+
+  font-size: 12px;
+  font-family: 'Noto Sans Hebrew';
   font-weight: 500;
   line-height: 16px;
   outline: none;

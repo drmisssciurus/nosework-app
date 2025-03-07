@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import NavBar from '../../components/NavBar/NavBar';
@@ -15,29 +15,82 @@ const today = new Date().toLocaleDateString('he-IL', {
   year: 'numeric',
 });
 
-const dummyData = [
-  {
-    id: 1,
-    name: 'טאץ',
-    session: 15,
-    count: 2.506,
-    status: true,
-    button: 'ראה נתונים',
-  },
-  {
-    id: 2,
-    name: 'פומה',
-    session: 15,
-    count: 2.506,
-    status: false,
-    button: 'ראה נתונים',
-  },
-];
-
 function MainPage() {
-  const [sessions, setSessions] = useState(dummyData);
-
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/Session', {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) throw new Error('Failed to fetch sessions');
+
+        const sessionsData = await response.json();
+
+        // Загружаем статус и имя собаки для каждой сессии
+        const updatedSessions = await Promise.all(
+          sessionsData.map(async (session) => {
+            try {
+              const [statusResponse, dogResponse, dPrimeResponse] =
+                await Promise.all([
+                  fetch(`/api/Session/status/${session.id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }),
+                  fetch(`/api/Dog/${session.dogId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }),
+                  fetch(`/api/Session/dprime/${session.id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }),
+                ]);
+
+              if (!statusResponse.ok || !dogResponse.ok || !dPrimeResponse.ok) {
+                throw new Error('Failed to fetch session details');
+              }
+
+              const { status } = await statusResponse.json();
+              const { name: dogName } = await dogResponse.json();
+              const { dPrime } = await dPrimeResponse.json();
+
+              console.log(dPrimeResponse);
+              console.log('dPrimeScore', dPrime);
+
+              return { ...session, status, dogName, dPrime };
+            } catch (error) {
+              console.error(
+                `Error fetching details for session ${session.id}:`,
+                error
+              );
+              return {
+                ...session,
+                status: 'InProgress',
+                dogName: 'Unknown',
+                dPrimeScore: null,
+              };
+            }
+          })
+        );
+
+        setSessions(updatedSessions);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSessions();
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
@@ -49,7 +102,6 @@ function MainPage() {
     localStorage.removeItem('token');
     console.log('Token removed:', localStorage.getItem('token'));
     navigate('/login');
-    // window.location.reload();
   };
 
   return (
@@ -69,7 +121,11 @@ function MainPage() {
         <main>
           <p className={styles.title}>האימונים שלי</p>
 
-          <SessionsList sessions={sessions} />
+          {loading ? (
+            <div className={styles.loader}>טוען נתונים...</div>
+          ) : (
+            <SessionsList sessions={sessions} />
+          )}
 
           <div className={styles.btnWrapper}>
             <Button

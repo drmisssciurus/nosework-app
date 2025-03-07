@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react';
 import styles from './SessionsList.module.css';
 import SessionItem from '../SessionItem/SessionItem';
 
