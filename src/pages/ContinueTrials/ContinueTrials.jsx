@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
-import styles from './Trials.module.css';
+import styles from './ContinueTrials.module.css';
 import { useEffect, useState } from 'react';
 import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Modal from 'react-modal';
@@ -8,7 +8,7 @@ import Button from '../../components/Button/Button';
 
 Modal.setAppElement('#root');
 
-function Trials() {
+function ContinueTrials() {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,21 +29,16 @@ function Trials() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
-  const currentTrial =
-    trainingData.length > 0 ? trainingData[currentTrialIndex] : null;
+  const [currentTrialIndex, setCurrentTrialIndex] = useState(
+    location.state?.nextTrialNumber ? location.state.nextTrialNumber - 1 : 0
+  );
+  const trainingId = location.state?.sessionId || null;
 
-  console.log('currentTrial: ', currentTrial);
   console.log('currentTrialIndex: ', currentTrialIndex);
   console.log('trainingData: ', trainingData);
 
-  const trainingId =
-    location.state?.trainingId ||
-    location.state?.trainingData?.[0]?.sessionId ||
-    null;
-
   console.log('trainingId: ', trainingId);
-
+  const currentTrial = trainingData[currentTrialIndex] || {};
   const containersColors = {
     positive: '#22c55e',
     negative: '#ff3b30',
@@ -196,11 +191,6 @@ function Trials() {
       return;
     }
 
-    if (!trialId) {
-      console.error('Error: No valid trialId for video upload');
-      return;
-    }
-
     //duration of sending video START
     console.log(
       '🚀 [START] Sending video for TrialId: ',
@@ -262,8 +252,9 @@ function Trials() {
   }
 
   async function handleSubmit() {
-    if (!currentTrial) {
-      console.error('Error: there is no trial!');
+    console.log('hndle submit started');
+    if (!trainingData.length) {
+      console.error('Error: No training data available');
       return;
     }
 
@@ -274,17 +265,18 @@ function Trials() {
     }
 
     setIsLoading(true);
-
-    let videoUrl = 'string';
+    let videoUrl = await handleVideoSubmit(trainingId);
+    console.log('handleSubmit trainingId', trainingId);
 
     const payload = {
       id: 0,
       trainingId: currentTrial.id,
       selectedLocation,
-      targetScent: targetScent.trim() === '' ? '' : targetScent,
+      targetScent: targetScent.trim() || '',
       result: 'completed',
-      videoUrl,
+      videoUrl: videoUrl || '',
     };
+
     console.log('payload', payload);
 
     try {
@@ -297,18 +289,13 @@ function Trials() {
         body: JSON.stringify(payload),
       });
 
+      console.log('handleSubmit response', response);
+
       if (!response.ok) {
         throw new Error(`Sending error: ${response.statusText}`);
       }
 
-      console.log('Data sent:', payload);
       const responseData = await response.json();
-
-      const newTrialId = responseData.id;
-
-      if (uploadedVideo && newTrialId) {
-        videoUrl = await handleVideoSubmit(newTrialId);
-      }
 
       const resultMessages = {
         H: '✅ כל הכבוד',
@@ -348,7 +335,7 @@ function Trials() {
           </h1>
         </header>
         <div className={styles.containers}>
-          {currentTrial &&
+          {trainingData &&
             [3, 2, 1].map((containerIndex) => {
               let color = containersColors.empty;
               if (currentTrial.positiveLocation === containerIndex)
@@ -480,4 +467,4 @@ function Trials() {
   );
 }
 
-export default Trials;
+export default ContinueTrials;

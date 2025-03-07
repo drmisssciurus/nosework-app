@@ -16,6 +16,7 @@ import Trials from './pages/Trials/Trials';
 import VideoRecorder from './pages/VideoRecording/VideoRecording';
 import EndSession from './pages/EndSession/EndSession';
 import SessionOverview from './pages/SessionOverview/SessionOverview';
+import ContinueTrials from './pages/ContinueTrials/ContinueTrials';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -39,6 +40,7 @@ function App() {
             element={<TrainingPlan trials={trials} />}
           />
           <Route path="trials" element={<Trials />} />
+          <Route path="continue_trials" element={<ContinueTrials />} />
           <Route path="video_recording" element={<VideoRecorder />} />
           <Route path="end_session" element={<EndSession />} />
           <Route

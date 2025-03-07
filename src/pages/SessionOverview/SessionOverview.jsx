@@ -8,21 +8,28 @@ import { useEffect, useState } from 'react';
 
 function SessionOverview() {
   const { sessionId } = useParams();
-  const [sessionData, setSessionData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [sessionData, setSessionData] = useState(null);
   const [dogName, setDogName] = useState(null);
   const [DPrimeScore, setDPrimeScore] = useState(null);
-  console.log(sessionData);
-  console.log(dogName);
-  console.log(DPrimeScore);
+  const [trials, setTrials] = useState([]);
+
+  const resultColors = {
+    H: '#22c55e', // Зелёный
+    M: '#ff9500', // Оранжевый
+    FA: '#ff3b30', // Красный
+    CR: '#ff4', // Жёлтый (но странный код, может, нужен другой?)
+  };
 
   useEffect(() => {
     const fetchSessionData = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
+      setIsLoading(true);
+
       try {
-        // Получаем данные сессии
         const response = await fetch(`/api/Session/${sessionId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -32,28 +39,39 @@ function SessionOverview() {
         const session = await response.json();
         setSessionData(session);
 
-        const [dogResponse, dPrimeResponse] = await Promise.all([
-          fetch(`/api/Dog/${session.dogId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`/api/Session/dprime/${session.id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+        const [dogResponse, dPrimeResponse, trialsResponse] = await Promise.all(
+          [
+            fetch(`/api/Dog/${session.dogId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            fetch(`/api/Session/dprime/${session.id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            fetch(`/api/Trial/bySession/${session.id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+          ]
+        );
 
-        if (!dogResponse.ok || !dPrimeResponse.ok) {
-          throw new Error('Failed to fetch dog name or dPrimeScore');
+        if (dogResponse.ok) {
+          const dogData = await dogResponse.json();
+          setDogName(dogData.name);
         }
 
-        const { name: fetchedDogName } = await dogResponse.json();
-        setDogName(fetchedDogName);
+        if (dPrimeResponse.ok) {
+          const dPrimeData = await dPrimeResponse.json();
+          setDPrimeScore(dPrimeData.dPrime);
+        }
 
-        const { dPrime: fetchedDPrimeScore } = await dPrimeResponse.json();
-        setDPrimeScore(fetchedDPrimeScore);
+        if (trialsResponse.ok) {
+          const trialsData = await trialsResponse.json();
+          setTrials(trialsData);
+        }
       } catch (error) {
         console.error('Error fetching session data:', error);
       } finally {
         setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -73,6 +91,13 @@ function SessionOverview() {
   return (
     <div className="container">
       <Header>סקירת אימון</Header>
+
+      {isLoading && (
+        <div className={styles.loaderOverlay}>
+          <div className={styles.loader}></div>
+        </div>
+      )}
+
       <div className={styles.container}>
         <div className={styles.sessionOverviewPanel}>
           <div className={styles.infoContainer}>
@@ -88,23 +113,40 @@ function SessionOverview() {
             </div>
           </div>
           <div className={styles.dprimeWrapper}>
-            <p className={styles.dprime}>{DPrimeScore}</p>
+            <p className={styles.dprime}>{DPrimeScore?.toFixed(3)}</p>
             <p className={styles.dprimeTitle}>די פריים</p>
           </div>
         </div>
 
-        <div className={styles.trialOverview}>
-          <div className={styles.videoContainer}>
-            <video className={styles.video} src="#"></video>
-          </div>
-          <div className={styles.trialInfoContainer}>
-            <p className={styles.trialNumber}>שליחה</p>
-            <div className={styles.resultWrapper}>
-              <p>res</p>
-              <p className={styles.result}>תוצאה</p>
-            </div>
-            <Button className={styles.trialBtn}>הצג ניתוח</Button>
-          </div>
+        {/* Trials */}
+        <div className={styles.trialWrapper}>
+          {trials.length > 0 ? (
+            trials.map((trial, index) => (
+              <div key={trial.id} className={styles.trialOverview}>
+                <div className={styles.videoContainer}>
+                  <video
+                    className={styles.video}
+                    src={trial.videoUrl || '#'}
+                    controls
+                  ></video>
+                </div>
+                <div className={styles.trialInfoContainer}>
+                  <p className={styles.trialNumber}>שליחה {index + 1}</p>
+                  <div className={styles.resultWrapper}>
+                    <p style={{ color: resultColors[trial.result] || 'black' }}>
+                      {trial.result || '—'}
+                    </p>
+                    <p className={styles.result}>תוצאה</p>
+                  </div>
+                  <Button className={styles.trialBtn} disabled>
+                    הצג ניתוח
+                  </Button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className={styles.noTrials}>אין שליחות זמינות</p>
+          )}
         </div>
       </div>
       <NavBar />

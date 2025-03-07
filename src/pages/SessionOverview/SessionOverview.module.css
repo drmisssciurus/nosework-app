@@ -57,6 +57,13 @@
   line-height: 28px;
 }
 
+.trialWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 70px;
+}
+
 .trialOverview {
   padding: 10px 20px;
   display: flex;
@@ -110,5 +117,5 @@
 
 .trialBtn {
   border-radius: 16px;
-  padding: 9px 8px;
+  padding: 7px 6px;
 }

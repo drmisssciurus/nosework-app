@@ -37,7 +37,6 @@ function MainPage() {
 
         const sessionsData = await response.json();
 
-        // Загружаем статус и имя собаки для каждой сессии
         const updatedSessions = await Promise.all(
           sessionsData.map(async (session) => {
             try {
@@ -61,9 +60,6 @@ function MainPage() {
               const { status } = await statusResponse.json();
               const { name: dogName } = await dogResponse.json();
               const { dPrime } = await dPrimeResponse.json();
-
-              console.log(dPrimeResponse);
-              console.log('dPrimeScore', dPrime);
 
               return { ...session, status, dogName, dPrime };
             } catch (error) {

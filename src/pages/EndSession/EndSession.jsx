@@ -3,11 +3,17 @@ import Footer from '../../components/Footer/Footer';
 import styles from './EndSession.module.css';
 
 import logoDog from '../../assets/success-dog.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 
 function EndSession() {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log('Полученные данные в EndSession:', location.state);
+  const trainingId = location.state?.trainingId || null;
+  console.log('trainingId в EndSession:', trainingId);
+
+  console.log('trainingId', trainingId);
   return (
     <div className="container">
       <header className={styles.header}>
@@ -27,7 +33,12 @@ function EndSession() {
           <Button className={styles.btn} onClick={() => navigate('/mainpage')}>
             חזרה למסך הבית
           </Button>
-          <Button className={styles.btn}>הצגת האימון</Button>
+          <Button
+            className={styles.btn}
+            onClick={() => navigate(`/session_overview/${trainingId}`)}
+          >
+            הצגת האימון
+          </Button>
         </div>
       </div>
       <Footer />
