@@ -20,6 +20,7 @@ test4@test.com
 levinad992@gmail.com
 ms.sciurus@gmail.com
 SecurePassword123!
+SecurePassword123!111
 
 "PostgresConnection": "Host=localhost;Database=NoseWorks;Username=postgres;Password=1111"
 
@@ -27,3 +28,15 @@ string postgresUser = "postgres";
 string postgresPassword = "1111";
 string postgresHost = "localhost"; // Adjust if needed
 string postgresDatabase = "NoseWorks"; // Adjust to match your DB name
+
+
+postprod corrections:
+
+--при регистрации добавить юзеру какие символы должен содержать пароль (done)
+--кнопка логотипчика ведет на главную страницу (done)
+--(наверное стоит сделать как то так что если пользователь авторизован то лог ин его приветствует и мб добавить кнопку выхода (обсудить))(done)
+--имя пользователя с приветствием - ну решать это как то надо пользователь не привязывается к базе тк он не указывает имя при регистрации кого я должна приветствовать? почту? мы либо делаем это либо не делаем (обсудить)
+--где контейнеры наполняются почему то то что должно быть зеленым отражается красным - выяснить в чем проблема (только контейнер тип 0)(done)
+--когда видео загружено менять тайтл видео контейнера - попросить сообщение (done)
+--загрузка видео на фоне (узнать как это сделать) (done)
+--шрифт на модалке (done)

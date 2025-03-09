@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './MainPage.module.css';
 
 import NavBar from '../../components/NavBar/NavBar';
 import Calendar from '../../components/Calendar/Calendar';
@@ -7,7 +8,6 @@ import SessionsList from '../../components/SessionsList/SessionsList';
 import Button from '../../components/Button/Button';
 
 import logo from '../../assets/logo-dog.png';
-import styles from './MainPage.module.css';
 
 const today = new Date().toLocaleDateString('he-IL', {
   day: 'numeric',
@@ -96,6 +96,7 @@ function MainPage() {
     }
 
     localStorage.removeItem('token');
+    //delete
     console.log('Token removed:', localStorage.getItem('token'));
     navigate('/login');
   };

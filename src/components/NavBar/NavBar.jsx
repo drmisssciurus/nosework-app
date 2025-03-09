@@ -7,7 +7,6 @@ function NavBar() {
     <nav className={styles.nav}>
       <ul className={styles.wrapper}>
         <li className={styles.item}>
-          {/* исправить на спрайты?? */}
           <NavLink
             to="/mainpage"
             className={({ isActive }) => (isActive ? styles.active : '')}

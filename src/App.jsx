@@ -17,6 +17,7 @@ import VideoRecorder from './pages/VideoRecording/VideoRecording';
 import EndSession from './pages/EndSession/EndSession';
 import SessionOverview from './pages/SessionOverview/SessionOverview';
 import ContinueTrials from './pages/ContinueTrials/ContinueTrials';
+import ResetPassword from './components/ResetPassword/ResetPassword';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -27,6 +28,7 @@ function App() {
         {/* This pages for all users */}
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
+        <Route path="reset_password" element={<ResetPassword />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>

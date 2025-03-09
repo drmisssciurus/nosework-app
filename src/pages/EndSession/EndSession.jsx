@@ -1,19 +1,22 @@
-import Footer from '../../components/Footer/Footer';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import styles from './EndSession.module.css';
-
 import logoDog from '../../assets/success-dog.png';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import Footer from '../../components/Footer/Footer';
 import Button from '../../components/Button/Button';
 
 function EndSession() {
   const navigate = useNavigate();
   const location = useLocation();
+  //delete
   console.log('Полученные данные в EndSession:', location.state);
   const trainingId = location.state?.trainingId || null;
+  //delete
   console.log('trainingId в EndSession:', trainingId);
-
+//delete
   console.log('trainingId', trainingId);
+  
   return (
     <div className="container">
       <header className={styles.header}>

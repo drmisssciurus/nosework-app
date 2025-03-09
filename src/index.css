@@ -10,6 +10,8 @@
   --color-borGray: #e5e7eb;
   --color-bgGray: #f8f8f8;
   --color-red: #ff3b30;
+  --color-green: #22c55e;
+  --color-orange: #ff9500;
 }
 
 * {
@@ -31,6 +33,7 @@ html {
 body {
   margin: 0 auto;
   font-family: 'Poppins', serif;
+  font-size: 12px;
   color: var(--color-black);
   font-weight: 400;
   line-height: 1.6;

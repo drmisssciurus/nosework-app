@@ -9,6 +9,8 @@ export function validatePassword(password) {
     return 'The password must contain at least one capital letter.';
   if (!/[0-9]/.test(password))
     return 'The password must contain at least one number.';
+  if (!/[^a-zA-Z0-9]/.test(password))
+    return 'Passwords must have at least one non-alphanumeric character.';
   return null;
 }
 

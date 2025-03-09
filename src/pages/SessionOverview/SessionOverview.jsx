@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import styles from './SessionOverview.module.css';
+
 import Button from '../../components/Button/Button';
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
-
-import styles from './SessionOverview.module.css';
-import { useEffect, useState } from 'react';
 
 function SessionOverview() {
   const { sessionId } = useParams();
@@ -16,10 +17,10 @@ function SessionOverview() {
   const [trials, setTrials] = useState([]);
 
   const resultColors = {
-    H: '#22c55e', // Зелёный
-    M: '#ff9500', // Оранжевый
-    FA: '#ff3b30', // Красный
-    CR: '#ff4', // Жёлтый (но странный код, может, нужен другой?)
+    H: '#22c55e',
+    M: '#ff3b30',
+    FA: '#ff3b30',
+    CR: '#22c55e',
   };
 
   useEffect(() => {
@@ -133,7 +134,10 @@ function SessionOverview() {
                 <div className={styles.trialInfoContainer}>
                   <p className={styles.trialNumber}>שליחה {index + 1}</p>
                   <div className={styles.resultWrapper}>
-                    <p style={{ color: resultColors[trial.result] || 'black' }}>
+                    <p
+                      className={styles.resultResult}
+                      style={{ color: resultColors[trial.result] || 'black' }}
+                    >
                       {trial.result || '—'}
                     </p>
                     <p className={styles.result}>תוצאה</p>

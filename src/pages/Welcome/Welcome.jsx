@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import styles from './Welcome.module.css';
 import logo from '../../assets/logo.png';
-import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 
 function Welcome() {

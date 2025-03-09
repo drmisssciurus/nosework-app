@@ -55,7 +55,7 @@
   border: 1px solid var(--color-gray);
   box-sizing: border-box;
   border-radius: 12px;
-  background-color: #fbfbfb;
+  background-color: var(--color-light-gray);
   font-size: 16px;
   font-family: 'Noto Sans Hebrew';
   line-height: 43px;

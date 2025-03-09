@@ -1,8 +1,8 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './NewSession.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 
 function NewSession({ setTrials, trials }) {
@@ -32,6 +32,7 @@ function NewSession({ setTrials, trials }) {
     })
       .then((res) => res.json())
       .then((data) => {
+      //delete
         console.log('Тренеры:', data);
         setTrainers(data);
       })
@@ -46,6 +47,7 @@ function NewSession({ setTrials, trials }) {
     })
       .then((res) => res.json())
       .then((data) => {
+      //delete
         console.log('Dogs: ', data);
         setDogs(data);
       })
@@ -106,12 +108,12 @@ function NewSession({ setTrials, trials }) {
 
     //delete
     console.log('Отправляемые данные на сервер:', sessionData);
+    //delete
     console.log('trialX перед отправкой:', trialX);
 
     const token = localStorage.getItem('token');
 
     //delete
-
     console.log('Отправляемый токен:', token);
 
     try {
@@ -134,6 +136,7 @@ function NewSession({ setTrials, trials }) {
       const responseData = await response.json();
       //delete
       console.log('Ответ от сервера:', responseData);
+      //delete
       console.log('containerType перед навигацией:', containerType);
 
       navigate('/training_plan', {

@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: #f8f8f8;
+  background-color: var(--color-bgGray);
   border-radius: 12px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -45,6 +45,11 @@
   font-weight: 700;
 }
 
+.contentName {
+  font-size: 14px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+}
+
 .videoContainer {
   display: flex;
   flex-direction: column;
@@ -57,6 +62,13 @@
 
 .videoTitle {
   font-size: 18px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  text-align: center;
+}
+
+.videoFileName {
+  font-size: 16px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   text-align: center;
@@ -89,7 +101,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #e5e7eb;
+  background-color: var(--color-borGray);
   border-radius: 12px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -102,11 +114,11 @@
 }
 
 .input {
-  border: 1px solid #d2d2d7;
+  border: 1px solid var(--color-gray);
   box-sizing: border-box;
   padding-block: 5px;
   border-radius: 12px;
-  background-color: #fbfbfb;
+  background-color: var(--color-light-gray);
   font-size: 16px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   text-align: center;
@@ -159,9 +171,8 @@
   display: inline-block;
 }
 
-/* Добавляем галочку при выборе */
 .item input[type='radio']:checked::after {
-  content: '✔'; /* Галочка */
+  content: '✔';
   font-size: 14px;
   color: var(--color-black);
   position: absolute;
@@ -171,7 +182,7 @@
 }
 
 .itemName {
-  color: #030303;
+  color: var(--color-black);
   font-size: 14px;
   font-family: 'Noto Sans Hebrew';
   font-weight: 500;
@@ -195,6 +206,14 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+.modalTitle {
+  font-size: 20px;
+  text-align: center;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -213,17 +232,17 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Затемнённый фон */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Поверх всего */
+  z-index: 9999;
 }
 
 .loader {
   width: 50px;
   height: 50px;
-  border: 5px solid #fff;
+  border: 5px solid var(--color-white);
   border-top: 5px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;

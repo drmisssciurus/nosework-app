@@ -163,7 +163,7 @@ function AddDog() {
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <Button className={styles.btn} type="submit" disabled={loading}>
-            {loading ? 'מוֹסִיף...' : 'הוסף'}
+            {loading ? 'מוסיף...' : 'הוסף'}
           </Button>
         </form>
         <NavBar />

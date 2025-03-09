@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Footer from '../../components/Footer/Footer';
-import styles from './Trials.module.css';
 import { useEffect, useState } from 'react';
-import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Modal from 'react-modal';
+
+import styles from './Trials.module.css';
+
+import Footer from '../../components/Footer/Footer';
+import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Button from '../../components/Button/Button';
 
 Modal.setAppElement('#root');
@@ -32,16 +34,18 @@ function Trials() {
   const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
   const currentTrial =
     trainingData.length > 0 ? trainingData[currentTrialIndex] : null;
-
+  //delete
   console.log('currentTrial: ', currentTrial);
+  //delete
   console.log('currentTrialIndex: ', currentTrialIndex);
+  //delete
   console.log('trainingData: ', trainingData);
 
   const trainingId =
     location.state?.trainingId ||
     location.state?.trainingData?.[0]?.sessionId ||
     null;
-
+  //delete
   console.log('trainingId: ', trainingId);
 
   const containersColors = {
@@ -128,7 +132,7 @@ function Trials() {
             },
           }
         );
-
+        //delete
         console.log('fetchTrainingData response: ', response);
 
         if (!response.ok)
@@ -145,6 +149,7 @@ function Trials() {
   useEffect(() => {
     async function fetchTrials() {
       if (!trainingId || trainingData.length === 0) {
+        //delete
         console.log(
           '❌ fetchTrials did not start, trainingId:',
           trainingId,
@@ -202,11 +207,11 @@ function Trials() {
     }
 
     //duration of sending video START
-    console.log(
-      '🚀 [START] Sending video for TrialId: ',
-      trialId,
-      new Date().toISOString()
-    );
+    // console.log(
+    //   '🚀 [START] Sending video for TrialId: ',
+    //   trialId,
+    //   new Date().toISOString()
+    // );
 
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -215,7 +220,7 @@ function Trials() {
     formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4');
 
     try {
-      const start = performance.now();
+      // const start = performance.now();
       const response = await fetch(`/api/Trial/uploadVideo/${trialId}`, {
         method: 'POST',
         headers: {
@@ -225,11 +230,11 @@ function Trials() {
       });
 
       //duration of sending video DONE
-      const duration = performance.now() - start;
-      console.log(
-        `✅ [DONE] Sending video took ${duration.toFixed(2)} ms`,
-        new Date().toISOString()
-      );
+      // const duration = performance.now() - start;
+      // console.log(
+      //   `✅ [DONE] Sending video took ${duration.toFixed(2)} ms`,
+      //   new Date().toISOString()
+      // );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -238,6 +243,7 @@ function Trials() {
       }
 
       const responseData = await response.json();
+      //delete
       console.log('Video uploaded successfully:', responseData);
 
       return responseData.videoUrl;
@@ -254,6 +260,7 @@ function Trials() {
       localStorage.setItem('currentTrialIndex', nextIndex);
       setUploadedVideoName('');
     } else {
+      //delete
       console.log('Отправляем trainingId:', trainingId);
       navigate('/end_session', {
         state: { trainingId },
@@ -285,6 +292,7 @@ function Trials() {
       result: 'completed',
       videoUrl,
     };
+    //delete
     console.log('payload', payload);
 
     try {
@@ -300,7 +308,7 @@ function Trials() {
       if (!response.ok) {
         throw new Error(`Sending error: ${response.statusText}`);
       }
-
+      //delete
       console.log('Data sent:', payload);
       const responseData = await response.json();
 
@@ -319,9 +327,9 @@ function Trials() {
 
       const resultColors = {
         H: '#22c55e',
-        M: '#ff9500',
+        M: '#ff3b30',
         FA: '#ff3b30',
-        CR: '#ff4',
+        CR: '#22c55e',
       };
 
       if (responseData.result in resultMessages) {
@@ -362,7 +370,7 @@ function Trials() {
                   style={{ color }}
                 >
                   <p className={styles.boxName}>{`סניפר ${containerIndex}`}</p>
-                  <p>
+                  <p className={styles.contentName}>
                     {currentTrial.positiveLocation === containerIndex
                       ? 'חיובי'
                       : currentTrial.negativeLocation === containerIndex
@@ -374,7 +382,9 @@ function Trials() {
             })}
         </div>
         <div className={styles.videoContainer}>
-          <h2 className={styles.videoTitle}>העלאה או הקלטה של סרטון</h2>
+          <h2 className={styles.videoTitle}>
+            {uploadedVideo ? 'הסרטון הועלה בהצלחה' : 'העלאה או הקלטה של סרטון'}
+          </h2>
           <div className={styles.btnContainer}>
             {uploadedVideoName ? (
               <p
@@ -467,8 +477,12 @@ function Trials() {
         isOpen={modalOpen}
         onRequestClose={closeModal}
       >
-        <h2>{modalMessage}</h2>
-        <Button onClick={closeModal}>בסדר</Button>
+        <p className={styles.modalTitle}>{modalMessage}</p>
+        <Button onClick={closeModal}>
+          {currentTrialIndex < trainingData.length - 1
+            ? 'שליחה הבאה'
+            : 'סיים אימון'}
+        </Button>
       </Modal>
 
       {isLoading && (

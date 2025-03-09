@@ -22,7 +22,7 @@
 
   border: 0;
   background-color: inherit;
-  color: #191919;
+  color: var(--color-black);
   font-size: 16px;
   font-weight: 500;
 }

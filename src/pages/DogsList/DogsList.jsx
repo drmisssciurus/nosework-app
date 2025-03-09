@@ -1,11 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { calculateAge, formatDate } from '../../utils/utils';
+import styles from './DogsList.module.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
 import Dogs from '../../components/Dogs/Dogs';
 import Button from '../../components/Button/Button';
-import styles from './DogsList.module.css';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { calculateAge, formatDate } from '../../utils/utils';
 
 function DogsList() {
   const navigate = useNavigate();

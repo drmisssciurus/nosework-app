@@ -12,7 +12,7 @@ function ProtectedRoute() {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
+  //delete
   console.log('Checking token in ProtectedRoute:', token);
 
   return token ? <Outlet /> : <Navigate to="/login" replace />;

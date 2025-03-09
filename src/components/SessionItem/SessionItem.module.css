@@ -1,6 +1,6 @@
 .itemwrapper {
   padding-bottom: 20px;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid var(--color-gray);
 }
 
 .namewrapper {
@@ -20,18 +20,18 @@
 }
 
 .ready {
-  background-color: #22c55e;
+  background-color: var(--color-green);
   background-image: url('../../assets/icons/Icon-check.svg');
 }
 
 .inprocess {
-  background-color: #ff9500;
+  background-color: var(--color-orange);
   background-image: url('../../assets/icons/icon-sync.svg');
 }
 
 .name {
   font-size: 16px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 22px;
   text-align: right;

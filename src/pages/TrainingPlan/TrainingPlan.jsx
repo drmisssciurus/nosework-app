@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import Header from '../../components/Header/Header';
-import NavBar from '../../components/NavBar/NavBar';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import styles from './TrainingPlan.module.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import Header from '../../components/Header/Header';
+import NavBar from '../../components/NavBar/NavBar';
 import Button from '../../components/Button/Button';
 
 function TrainingPlan() {
@@ -83,6 +84,7 @@ function TrainingPlan() {
   const handleSubmit = async () => {
     //delete
     console.log('sessionId перед отправкой:', sessionId);
+    //delete
     console.log('trials перед отправкой:', trials);
 
     const trainingData = selectedValues.map((trial, index) => {
@@ -126,7 +128,7 @@ function TrainingPlan() {
       if (!response.ok) {
         throw new Error(`Error sending data: ${response.status}`);
       }
-      alert('Data saved successfully!'); //for testing
+      // alert('Data saved successfully!'); //for testing
       navigate('/trials', { state: { trainingData } });
     } catch (error) {
       console.error('Error while requesting:', error);
@@ -150,16 +152,16 @@ function TrainingPlan() {
           {Array.from({ length: trials }, (_, index) => (
             <div key={index} className={styles.trial}>
               {[...Array(3)].map((_, i, arr) => {
-                const reversedIndex = arr.length - 1 - i; // Разворачиваем порядок select
+                const reversedIndex = arr.length - 1 - i;
 
                 return (
                   <div key={reversedIndex} className={styles.selectWrapper}>
                     <select
                       className={styles.item}
-                      value={selectedValues[index][reversedIndex]} // Используем перевернутый индекс
+                      value={selectedValues[index][reversedIndex]}
                       onChange={(event) =>
                         handleChange(index, reversedIndex, event)
-                      } // Передаем корректный индекс
+                      }
                       style={{
                         backgroundColor:
                           backgroundColors[

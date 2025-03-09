@@ -8,39 +8,43 @@ import closedEyeIcon from '../../assets/icons/close-eye.svg';
 import Button from '../Button/Button';
 
 function Register({ closeModal }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (password !== confirmPassword) {
-      setMessage('The passwords do not match');
-      return;
-    }
+    const newErrors = {
+      email: validateEmail(formData.email),
+      password: validatePassword(formData.password),
+      confirmPassword:
+        formData.password !== formData.confirmPassword
+          ? 'Passwords do not match'
+          : '',
+    };
 
-    // Validate password before sending
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
+    Object.keys(newErrors).forEach((key) => {
+      if (!newErrors[key]) delete newErrors[key];
+    });
 
-    if (emailError) {
-      setMessage(emailError);
-      return;
-    }
+    setErrors(newErrors);
 
-    if (passwordError) {
-      setMessage(passwordError);
-      return;
-    }
-
-    const userData = { email, password };
-
-    //delete
-    console.log('Отправляем на сервер:', userData);
+    if (Object.keys(newErrors).length > 0) return;
 
     try {
       const response = await fetch('/api/User/Register', {
@@ -49,35 +53,25 @@ function Register({ closeModal }) {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        console.error('JSON parsing error:', jsonError);
-        throw new Error('Incorrect server response');
-      }
-
-      //delete
-      console.log('Ответ от сервера:', data);
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Registration error');
+        throw new Error(Object.values(data)?.[0]?.[0] || 'Registration error');
       }
 
-      // if (data?.token) {
-      //   localStorage.setItem('token', data.token);
-      //   console.log('Token saved:', data.token);
-      // } else {
-      //   console.log('there is no token');
-      // }
-
-      setMessage('Registration sucsess!');
-      closeModal();
+      setMessage(
+        'Registration successful! Please check your email to confirm your account.'
+      );
+      setFormData({ email: '', password: '', confirmPassword: '' });
+      setShowPassword(false);
+      setShowSecondPassword(false);
     } catch (error) {
-      console.error('Registration error:', error);
       setMessage(error.message);
     }
   }
@@ -93,21 +87,28 @@ function Register({ closeModal }) {
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.item}>
           <input
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.email ? styles.errorBorder : ''
+            }`}
             type="email"
+            name="email"
             placeholder="דואר אלקטרוני"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             required
           />
+          {errors.email && <p className={styles.errorText}>{errors.email}</p>}
         </div>
         <div className={styles.item} style={{ position: 'relative' }}>
           <input
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.password ? styles.errorBorder : ''
+            }`}
             type={showPassword ? 'text' : 'password'}
+            name="password"
             placeholder="סיסמה"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             required
           />
           <button
@@ -123,11 +124,14 @@ function Register({ closeModal }) {
         </div>
         <div className={styles.item} style={{ position: 'relative' }}>
           <input
-            className={styles.input}
-            type={showPassword ? 'text' : 'password'}
+            className={`${styles.input} ${
+              errors.confirmPassword ? styles.errorBorder : ''
+            }`}
+            type={showSecondPassword ? 'text' : 'password'}
+            name="confirmPassword"
             placeholder="אמת סיסמה"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={formData.confirmPassword}
+            onChange={handleChange}
             required
           />
           <button
@@ -141,6 +145,12 @@ function Register({ closeModal }) {
             />
           </button>
         </div>
+        {errors.password && (
+          <p className={styles.errorText}>{errors.password}</p>
+        )}
+        {errors.confirmPassword && (
+          <p className={styles.errorText}>{errors.confirmPassword}</p>
+        )}
         {message && <p className={styles.message}>{message}</p>}
         <Button type="submit">הירשמו</Button>
       </form>

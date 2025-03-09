@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
+import { validateEmail } from '../../utils/utils';
+
 import ForgotPassword from '../../components/ForgotPassword/ForgotPassword';
 import Register from '../../components/Register/Register';
 import Button from '../../components/Button/Button';
@@ -11,7 +13,6 @@ import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
 
 import styles from './LogIn.module.css';
-import { validateEmail } from '../../utils/utils';
 
 Modal.setAppElement('#root');
 
@@ -65,6 +66,7 @@ function LogIn() {
 
       if (data.token) {
         localStorage.setItem('token', data.token);
+        //delete
         console.log('Saved token:', localStorage.getItem('token'));
         navigate('/mainpage');
       } else {

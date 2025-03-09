@@ -5,6 +5,14 @@
   gap: 20px;
 }
 
+.loader {
+  font-size: 14px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 50px;
+}
+
 .sessionOverviewPanel {
   display: flex;
   flex-direction: column;
@@ -35,7 +43,7 @@
 
 .title {
   font-size: 14px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
 }
 
@@ -47,13 +55,13 @@
 
 .dprime {
   font-size: 36px;
-  font-family: 'Poppins';
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
 }
 
 .dprimeTitle {
   font-size: 18px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   line-height: 28px;
 }
 
@@ -99,7 +107,7 @@
 
 .trialNumber {
   font-size: 18px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
 }
 
@@ -109,9 +117,14 @@
   gap: 10px;
 }
 
+.resultResult {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+}
+
 .result {
   font-size: 16px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 400;
 }
 

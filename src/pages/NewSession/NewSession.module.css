@@ -5,7 +5,7 @@
 
 .sessionname {
   font-size: 15px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   text-align: right;
 
@@ -14,7 +14,7 @@
 
 .sessionsubtitle {
   font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   text-align: right;
 }
 
@@ -35,7 +35,7 @@
   color: var(--color-black);
 
   font-size: 16px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   line-height: 43px;
   text-align: right;
   outline: none;
@@ -51,7 +51,7 @@
   color: var(--color-black);
 
   font-size: 14px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 20px;
   text-align: right;
@@ -60,7 +60,7 @@
 .date {
   color: var(--color-black);
   font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   line-height: 16px;
   text-align: right;
 }
