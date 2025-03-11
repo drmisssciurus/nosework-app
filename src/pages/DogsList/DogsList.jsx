@@ -35,8 +35,6 @@ function DogsList() {
           age: calculateAge(dog.dateOfBirth),
           formattedDate: formatDate(dog.dateOfBirth),
         }));
-        //delete
-        console.log(formattedDogs);
         setDogs(formattedDogs);
       } catch (err) {
         setError(err.message);

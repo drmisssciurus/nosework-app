@@ -34,10 +34,6 @@ function ContinueTrials() {
   );
   const trainingId = location.state?.sessionId || null;
 
-  console.log('currentTrialIndex: ', currentTrialIndex);
-  console.log('trainingData: ', trainingData);
-
-  console.log('trainingId: ', trainingId);
   const currentTrial = trainingData[currentTrialIndex] || {};
   const containersColors = {
     positive: '#22c55e',
@@ -124,8 +120,6 @@ function ContinueTrials() {
           }
         );
 
-        console.log('fetchTrainingData response: ', response);
-
         if (!response.ok)
           throw new Error(`Fetching error: ${response.statusText}`);
         const data = await response.json();
@@ -140,12 +134,6 @@ function ContinueTrials() {
   useEffect(() => {
     async function fetchTrials() {
       if (!trainingId || trainingData.length === 0) {
-        console.log(
-          '❌ fetchTrials did not start, trainingId:',
-          trainingId,
-          'trainingData.length:',
-          trainingData.length
-        );
         return;
       }
 
@@ -228,7 +216,6 @@ function ContinueTrials() {
       }
 
       const responseData = await response.json();
-      console.log('Video uploaded successfully:', responseData);
 
       return responseData.videoUrl;
     } catch (error) {
@@ -238,14 +225,13 @@ function ContinueTrials() {
 
   function closeModal() {
     setModalOpen(false);
+    setSelectedLocation(0);
     if (currentTrialIndex < trainingData.length - 1) {
       const nextIndex = currentTrialIndex + 1;
       setCurrentTrialIndex((prevIndex) => prevIndex + 1);
       localStorage.setItem('currentTrialIndex', nextIndex);
       setUploadedVideoName('');
     } else {
-      //delete
-      console.log('Отправляем trainingId:', trainingId);
       navigate('/end_session', {
         state: { trainingId },
       });
@@ -253,8 +239,6 @@ function ContinueTrials() {
   }
 
   async function handleSubmit() {
-    //delete
-    console.log('hndle submit started');
     if (!trainingData.length) {
       console.error('Error: No training data available');
       return;
@@ -267,8 +251,6 @@ function ContinueTrials() {
     }
 
     setIsLoading(true);
-    //delete
-    console.log('handleSubmit trainingId', trainingId);
 
     let videoUrl = 'string';
 
@@ -280,8 +262,6 @@ function ContinueTrials() {
       result: 'completed',
       videoUrl,
     };
-//delete
-    console.log('payload', payload);
 
     try {
       const response = await fetch('/api/Trial', {
@@ -292,8 +272,6 @@ function ContinueTrials() {
         },
         body: JSON.stringify(payload),
       });
-//delete
-      console.log('handleSubmit response', response);
 
       if (!response.ok) {
         throw new Error(`Sending error: ${response.statusText}`);

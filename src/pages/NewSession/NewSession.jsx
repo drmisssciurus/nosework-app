@@ -32,8 +32,6 @@ function NewSession({ setTrials, trials }) {
     })
       .then((res) => res.json())
       .then((data) => {
-      //delete
-        console.log('Тренеры:', data);
         setTrainers(data);
       })
       .catch((err) => console.error('Error to upload trainers: ', err));
@@ -47,8 +45,6 @@ function NewSession({ setTrials, trials }) {
     })
       .then((res) => res.json())
       .then((data) => {
-      //delete
-        console.log('Dogs: ', data);
         setDogs(data);
       })
       .catch((err) => console.error('Error to upload dogs: ', err));
@@ -93,63 +89,19 @@ function NewSession({ setTrials, trials }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    const sessionData = {
-      id: 0,
-      dogId: Number(dogId),
-      trainer,
-      date: new Date().toISOString(),
-      numberOfTrials: trials,
-      containerType: Number(containerType),
-      trialX,
-      finalResults,
-      dPrimeScore: Number(dPrimeScore),
-    };
-
-    //delete
-    console.log('Отправляемые данные на сервер:', sessionData);
-    //delete
-    console.log('trialX перед отправкой:', trialX);
-
-    const token = localStorage.getItem('token');
-
-    //delete
-    console.log('Отправляемый токен:', token);
-
-    try {
-      const response = await fetch('/api/Session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(sessionData),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authorization error: token is invalid or missing.');
-        }
-        throw new Error(`Error sending data: ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      //delete
-      console.log('Ответ от сервера:', responseData);
-      //delete
-      console.log('containerType перед навигацией:', containerType);
-
-      navigate('/training_plan', {
-        state: {
-          sessionId: responseData.id || 0, //change it later
-          containerType: Number(containerType),
-          trials: trials,
-        },
-      });
-    } catch (error) {
-      console.error('Error request', error);
-      alert(error.message);
-    }
+    navigate('/training_plan', {
+      state: {
+        sessionId: 0,
+        date: date,
+        dogId: Number(dogId),
+        trainer: trainer,
+        trialX: trialX,
+        finalResults: finalResults,
+        dPrimeScore: Number(dPrimeScore),
+        containerType: Number(containerType),
+        trials: trials,
+      },
+    });
   }
 
   return (

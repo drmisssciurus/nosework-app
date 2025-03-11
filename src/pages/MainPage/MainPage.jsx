@@ -33,51 +33,87 @@ function MainPage() {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (!response.ok) throw new Error('Failed to fetch sessions');
 
         const sessionsData = await response.json();
+        const validSessions = [];
 
-        const updatedSessions = await Promise.all(
-          sessionsData.map(async (session) => {
-            try {
-              const [statusResponse, dogResponse, dPrimeResponse] =
-                await Promise.all([
-                  fetch(`/api/Session/status/${session.id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                  }),
-                  fetch(`/api/Dog/${session.dogId}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                  }),
-                  fetch(`/api/Session/dprime/${session.id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                  }),
-                ]);
-
-              if (!statusResponse.ok || !dogResponse.ok || !dPrimeResponse.ok) {
-                throw new Error('Failed to fetch session details');
-              }
-
-              const { status } = await statusResponse.json();
-              const { name: dogName } = await dogResponse.json();
-              const { dPrime } = await dPrimeResponse.json();
-
-              return { ...session, status, dogName, dPrime };
-            } catch (error) {
-              console.error(
-                `Error fetching details for session ${session.id}:`,
-                error
-              );
-              return {
-                ...session,
-                status: 'InProgress',
-                dogName: 'Unknown',
-                dPrimeScore: null,
-              };
+        for (const session of sessionsData) {
+          try {
+            if (!session.id) {
+              console.warn('Session missed without `session.id`:', session);
+              continue;
             }
-          })
-        );
 
-        setSessions(updatedSessions);
+            const trainingResponse = await fetch(
+              `/api/TrainingProgram/BySession/${session.id}`,
+              {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!trainingResponse.ok) {
+              console.warn(
+                `Session ${session.id} has no TrainingProgram. Deleting...`
+              );
+
+              await fetch(`/api/Session/${session.id}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+              });
+
+              continue;
+            }
+
+            const [statusResponse, dPrimeResponse] = await Promise.all([
+              fetch(`/api/Session/status/${session.id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              fetch(`/api/Session/dprime/${session.id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+            ]);
+
+            if (!statusResponse.ok || !dPrimeResponse.ok) {
+              console.warn(
+                `Failed to load session details (id: ${session.id})`
+              );
+              continue;
+            }
+
+            let dogName = 'כלב';
+            if (session.dogId && session.dogId !== 0) {
+              try {
+                const dogResponse = await fetch(`/api/Dog/${session.dogId}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+                if (dogResponse.ok) {
+                  const { name } = await dogResponse.json();
+                  dogName = name;
+                } else {
+                  console.warn(
+                    `Error loading dog data (dogId: ${session.dogId})`
+                  );
+                }
+              } catch (dogError) {
+                console.error(
+                  `Error getting a dog(dogId: ${session.dogId}):`,
+                  dogError
+                );
+              }
+            }
+            const { status } = await statusResponse.json();
+            const { dPrime } = await dPrimeResponse.json();
+
+            validSessions.push({ ...session, status, dogName, dPrime });
+          } catch (error) {
+            console.error(`Error processing session ${session.id}:`, error);
+          }
+        }
+
+        setSessions(validSessions);
       } catch (error) {
         console.error('Error fetching sessions:', error);
       } finally {
@@ -96,8 +132,6 @@ function MainPage() {
     }
 
     localStorage.removeItem('token');
-    //delete
-    console.log('Token removed:', localStorage.getItem('token'));
     navigate('/login');
   };
 

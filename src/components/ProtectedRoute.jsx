@@ -13,7 +13,7 @@ function ProtectedRoute() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
   //delete
-  console.log('Checking token in ProtectedRoute:', token);
+  // console.log('Checking token in ProtectedRoute:', token);
 
   return token ? <Outlet /> : <Navigate to="/login" replace />;
 }

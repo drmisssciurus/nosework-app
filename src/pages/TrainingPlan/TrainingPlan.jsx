@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import styles from './TrainingPlan.module.css';
@@ -11,7 +11,17 @@ function TrainingPlan() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { sessionId, containerType, trials } = location.state || {};
+  const {
+    sessionId,
+    containerType,
+    trials,
+    date,
+    dogId,
+    trainer,
+    trialX,
+    finalResults,
+    dPrimeScore,
+  } = location.state || {};
 
   const arrX =
     containerType === 0 ? ['חיובי', 'ביקורת'] : ['שלילי', 'חיובי', 'ביקורת'];
@@ -24,6 +34,7 @@ function TrainingPlan() {
   const [selectedValues, setSelectedValues] = useState(
     Array.from({ length: trials }, () => Array(3).fill(''))
   );
+  const [currentSessionId, setCurrentSessionId] = useState(sessionId || 0);
 
   const handleChange = (trialIndex, selectIndex, event) => {
     const newValues = [...selectedValues];
@@ -31,7 +42,91 @@ function TrainingPlan() {
     setSelectedValues(newValues);
   };
 
-  const fillRandomly = async (sessionId) => {
+  const sessionCreatedRef = useRef(false);
+
+  //session post
+  const handleSessionSubmit = useCallback(async () => {
+    if (sessionCreatedRef.current) return;
+
+    sessionCreatedRef.current = true;
+
+    if (currentSessionId !== 0) return;
+
+    const sessionData = {
+      id: 0,
+      dogId,
+      trainer,
+      date: new Date(date).toISOString(),
+      numberOfTrials: trials,
+      containerType,
+      trialX,
+      finalResults,
+      dPrimeScore,
+    };
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Error: Missing authorization token');
+      }
+
+      const response = await fetch('/api/Session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(sessionData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error creating session: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+
+      setCurrentSessionId(responseData.id);
+      localStorage.setItem('sessionId', responseData.id);
+
+      return responseData.id;
+    } catch (error) {
+      console.error('Error creating session:', error);
+      alert(error.message);
+      sessionCreatedRef.current = false;
+      return null;
+    }
+  }, [
+    currentSessionId,
+    date,
+    dogId,
+    trainer,
+    trials,
+    containerType,
+    trialX,
+    finalResults,
+    dPrimeScore,
+  ]);
+
+  useEffect(() => {
+    const createSession = async () => {
+      const savedSessionId = localStorage.getItem('sessionId');
+
+      if (savedSessionId && savedSessionId !== '0') {
+        setCurrentSessionId(Number(savedSessionId));
+      } else {
+        await handleSessionSubmit();
+      }
+    };
+
+    createSession();
+  }, []);
+
+  const fillRandomly = async () => {
+    if (!currentSessionId || currentSessionId === 0) {
+      console.error('Error: sessionId is missing, generation is not possible.');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -39,22 +134,22 @@ function TrainingPlan() {
         return;
       }
 
-      const response = await fetch(`/api/TrainingProgram/Random/${sessionId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `/api/TrainingProgram/Random/${currentSessionId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error loading data: ${response.statusText}`);
       }
 
       const data = await response.json();
-
-      //delete
-      console.log('Ответ API:', data);
 
       const transformedData = data.map((item) => {
         let row = Array(3).fill('');
@@ -73,8 +168,7 @@ function TrainingPlan() {
 
         return row;
       });
-      //delete
-      console.log('Преобразованные данные:', transformedData);
+
       setSelectedValues(transformedData);
     } catch (error) {
       console.error('Error getting random values:', error);
@@ -82,40 +176,34 @@ function TrainingPlan() {
   };
 
   const handleSubmit = async () => {
-    //delete
-    console.log('sessionId перед отправкой:', sessionId);
-    //delete
-    console.log('trials перед отправкой:', trials);
+    const newSessionId = currentSessionId;
+    if (!newSessionId || newSessionId === 0) {
+      console.error('Error: sessionId not received, aborting execution.');
+      return;
+    }
 
     const trainingData = selectedValues.map((trial, index) => {
-      const mappedIndexes = {
-        0: 1,
-        1: 2,
-        2: 3,
-      };
+      const mappedIndexes = { 0: 1, 1: 2, 2: 3 };
 
       return {
         id: 0,
-        trialNumber: Math.min(index + 1, trials),
+        trialNumber: index + 1,
         positiveLocation: trial.includes('חיובי')
-          ? mappedIndexes[trial.indexOf('חיובי')] // Преобразуем индекс
+          ? mappedIndexes[trial.indexOf('חיובי')]
           : 0,
         negativeLocation: trial.includes('שלילי')
-          ? mappedIndexes[trial.indexOf('שלילי')] // Преобразуем индекс
+          ? mappedIndexes[trial.indexOf('שלילי')]
           : 0,
-        sessionId: sessionId || 0,
+        sessionId: newSessionId,
       };
     });
 
-    //delete
-    console.log(
-      'Отправляемые данные на сервер:',
-      JSON.stringify(trainingData, null, 2)
-    );
-
-    const token = localStorage.getItem('token');
-
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Error: Missing authorization token');
+      }
+
       const response = await fetch('/api/TrainingProgram', {
         method: 'POST',
         headers: {
@@ -126,18 +214,23 @@ function TrainingPlan() {
       });
 
       if (!response.ok) {
-        throw new Error(`Error sending data: ${response.status}`);
+        throw new Error(`Error sending TrainingProgram: ${response.status}`);
       }
-      // alert('Data saved successfully!'); //for testing
+
+      // alert('Data send!');
       navigate('/trials', { state: { trainingData } });
     } catch (error) {
-      console.error('Error while requesting:', error);
+      console.error('Error sending TrainingProgram:', error);
       alert(error.message);
     }
   };
 
-  //delete
-  console.log('Текущее состояние selectedValues:', selectedValues);
+  useEffect(() => {
+    return () => {
+      // console.log('🗑 Clearing sessionId when exiting the page');
+      localStorage.removeItem('sessionId');
+    };
+  }, []);
 
   return (
     <div className="container">
@@ -186,12 +279,22 @@ function TrainingPlan() {
         </div>
 
         <div className={styles.buttonWrapper}>
-          <Button className={styles.btnStart} onClick={handleSubmit}>
+          <Button
+            className={styles.btnStart}
+            onClick={handleSubmit}
+            disabled={
+              selectedValues.some((row) =>
+                row.every((value) => value === '')
+              ) || currentSessionId === 0
+            }
+          >
             המשך
           </Button>
+
           <Button
             className={styles.btnRandom}
-            onClick={() => fillRandomly(sessionId)}
+            onClick={() => fillRandomly()}
+            disabled={currentSessionId === 0}
           >
             מילוי רנדומלי
           </Button>

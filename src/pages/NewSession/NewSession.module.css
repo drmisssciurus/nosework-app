@@ -95,7 +95,7 @@
   color: var(--color-black);
 
   position: absolute;
-  top: 45px;
+  top: 40px;
   right: 12px;
   transform: translateY(-50%);
   pointer-events: none;

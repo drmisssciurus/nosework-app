@@ -8,8 +8,6 @@ function SessionItem({ session }) {
   const [loading, setLoading] = useState(true);
 
   const { dogName, id, status, dPrime } = session;
-  //delete
-  console.log('dprime:', dPrime);
 
   useEffect(() => {
     const fetchTrials = async () => {
@@ -23,9 +21,6 @@ function SessionItem({ session }) {
         if (!response.ok) throw new Error('Failed to fetch trials');
 
         const trials = await response.json();
-        //delete
-
-        console.log('trials:', trials);
         setNextTrialNumber(trials.length + 1);
       } catch (error) {
         console.error(`Error fetching trials for session ${id}:`, error);
@@ -71,7 +66,7 @@ function SessionItem({ session }) {
             ראה נתונים
           </button>
         )}
-        {dPrime === undefined ? (
+        {status === 'InProgress' ? (
           <p className={styles.dPrimeInProg}>אימון בתהליך</p>
         ) : (
           <p className={styles.dPrime}>ד-פריים {dPrime?.toFixed(3) ?? '—'}</p>

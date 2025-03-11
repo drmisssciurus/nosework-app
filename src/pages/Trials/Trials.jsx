@@ -34,19 +34,11 @@ function Trials() {
   const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
   const currentTrial =
     trainingData.length > 0 ? trainingData[currentTrialIndex] : null;
-  //delete
-  console.log('currentTrial: ', currentTrial);
-  //delete
-  console.log('currentTrialIndex: ', currentTrialIndex);
-  //delete
-  console.log('trainingData: ', trainingData);
 
   const trainingId =
     location.state?.trainingId ||
     location.state?.trainingData?.[0]?.sessionId ||
     null;
-  //delete
-  console.log('trainingId: ', trainingId);
 
   const containersColors = {
     positive: '#22c55e',
@@ -132,8 +124,6 @@ function Trials() {
             },
           }
         );
-        //delete
-        console.log('fetchTrainingData response: ', response);
 
         if (!response.ok)
           throw new Error(`Fetching error: ${response.statusText}`);
@@ -149,13 +139,6 @@ function Trials() {
   useEffect(() => {
     async function fetchTrials() {
       if (!trainingId || trainingData.length === 0) {
-        //delete
-        console.log(
-          '❌ fetchTrials did not start, trainingId:',
-          trainingId,
-          'trainingData.length:',
-          trainingData.length
-        );
         return;
       }
 
@@ -243,8 +226,6 @@ function Trials() {
       }
 
       const responseData = await response.json();
-      //delete
-      console.log('Video uploaded successfully:', responseData);
 
       return responseData.videoUrl;
     } catch (error) {
@@ -254,14 +235,13 @@ function Trials() {
 
   function closeModal() {
     setModalOpen(false);
+    setSelectedLocation(0);
     if (currentTrialIndex < trainingData.length - 1) {
       const nextIndex = currentTrialIndex + 1;
       setCurrentTrialIndex((prevIndex) => prevIndex + 1);
       localStorage.setItem('currentTrialIndex', nextIndex);
       setUploadedVideoName('');
     } else {
-      //delete
-      console.log('Отправляем trainingId:', trainingId);
       navigate('/end_session', {
         state: { trainingId },
       });
@@ -292,8 +272,6 @@ function Trials() {
       result: 'completed',
       videoUrl,
     };
-    //delete
-    console.log('payload', payload);
 
     try {
       const response = await fetch('/api/Trial', {
@@ -308,8 +286,6 @@ function Trials() {
       if (!response.ok) {
         throw new Error(`Sending error: ${response.statusText}`);
       }
-      //delete
-      console.log('Data sent:', payload);
       const responseData = await response.json();
 
       const newTrialId = responseData.id;
