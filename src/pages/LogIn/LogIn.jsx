@@ -67,7 +67,7 @@ function LogIn() {
       if (data.token) {
         localStorage.setItem('token', data.token);
         //delete
-        // console.log('Saved token:', localStorage.getItem('token'));
+        console.log('Saved token:', localStorage.getItem('token'));
         navigate('/mainpage');
       } else {
         console.error('Error: Token not found in response');
