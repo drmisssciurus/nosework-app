@@ -151,7 +151,7 @@ function Register({ closeModal }) {
         {errors.confirmPassword && (
           <p className={styles.errorText}>{errors.confirmPassword}</p>
         )}
-        {message && <p className={styles.message}>{message}</p>}
+        {message && <p className={styles.errorText}>{message}</p>}
         <Button type="submit">הירשמו</Button>
       </form>
     </div>
