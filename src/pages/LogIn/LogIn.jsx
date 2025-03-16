@@ -66,14 +66,32 @@ function LogIn() {
 
       if (data.token) {
         localStorage.setItem('token', data.token);
-        //delete
-        console.log('Saved token:', localStorage.getItem('token'));
-        navigate('/mainpage');
-      } else {
-        console.error('Error: Token not found in response');
-      }
+        localStorage.setItem('userEmail', email);
 
-      navigate('/mainpage');
+        try {
+          const userResponse = await fetch('/api/User', {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${data.token}` },
+          });
+
+          if (!userResponse.ok) {
+            throw new Error('Failed to fetch user data');
+          }
+
+          const users = await userResponse.json();
+          const storedEmail = localStorage.getItem('userEmail');
+          const currentUser = users.find((user) => user.email === storedEmail);
+
+          if (currentUser) {
+            localStorage.setItem('userId', currentUser.id);
+            localStorage.setItem('userName', currentUser.userName);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+
+        navigate('/mainpage');
+      }
     } catch (err) {
       console.error('Error while requesting:', err);
       setError('Server error. Try again later.');

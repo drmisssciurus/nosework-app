@@ -216,7 +216,7 @@ function NewSession({ setTrials, trials }) {
             />
           </div>
           <Button type="submit" className={styles.btnNewSession}>
-            שמור אימון
+            המשך
           </Button>
         </form>
       </div>

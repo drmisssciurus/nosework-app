@@ -375,7 +375,7 @@ function Trials() {
         </div>
         <div className={styles.videoContainer}>
           <h2 className={styles.videoTitle}>
-            {uploadedVideo ? 'הסרטון הועלה בהצלחה' : 'העלאה או הקלטה של סרטון'}
+            {uploadedVideo ? 'הסרטון צורף בהצלחה' : 'העלאה או הקלטה של סרטון'}
           </h2>
           <div className={styles.btnContainer}>
             {uploadedVideoName ? (

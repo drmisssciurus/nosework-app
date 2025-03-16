@@ -9,7 +9,6 @@ import MainPage from './pages/MainPage/MainPage';
 import PageNotFound from './pages/PageNotFound';
 import DogsList from './pages/DogsList/DogsList';
 import NewSession from './pages/NewSession/NewSession';
-import Analysis from './pages/Analysis/Analysis';
 import AddDog from './pages/AddDog/AddDog';
 import TrainingPlan from './pages/TrainingPlan/TrainingPlan';
 import Trials from './pages/Trials/Trials';
@@ -18,6 +17,8 @@ import EndSession from './pages/EndSession/EndSession';
 import SessionOverview from './pages/SessionOverview/SessionOverview';
 import ContinueTrials from './pages/ContinueTrials/ContinueTrials';
 import ResetPassword from './components/ResetPassword/ResetPassword';
+import SessionsPage from './pages/SessionsPage/SessionsPage';
+import SessionTrainProgOverw from './pages/SessionTrainProgOverw/SessionTrainProgOverw';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -29,6 +30,7 @@ function App() {
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
         <Route path="reset_password" element={<ResetPassword />} />
+        <Route path="session_pdf" element={<SessionTrainProgOverw />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>
@@ -49,7 +51,7 @@ function App() {
             path="session_overview/:sessionId"
             element={<SessionOverview />}
           />
-          <Route path="analysis" element={<Analysis />} />
+          <Route path="sessions_page" element={<SessionsPage />} />
           <Route path="dogs" element={<DogsList />} />
           <Route path="add_dog" element={<AddDog />} />
         </Route>

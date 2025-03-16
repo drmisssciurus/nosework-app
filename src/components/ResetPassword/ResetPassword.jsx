@@ -1,7 +1,7 @@
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from './ResetPassword.module.css';
-import { validatePassword } from '../../utils/utils';
+// import { validatePassword } from '../../utils/utils';
 import Button from '../Button/Button';
 import openEyeIcon from '../../assets/icons/open-eye.svg';
 import closedEyeIcon from '../../assets/icons/close-eye.svg';
@@ -23,7 +23,7 @@ function ResetPassword() {
     e.preventDefault();
 
     const newErrors = {
-      password: validatePassword(password),
+      password: password,
       confirmPassword:
         password !== confirmPassword ? 'Passwords do not match' : '',
     };

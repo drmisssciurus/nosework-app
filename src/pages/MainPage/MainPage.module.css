@@ -9,6 +9,13 @@
   padding: 0 10px;
 }
 
+.message {
+  text-align: center;
+  font-size: 17px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+}
+
 .text {
   text-align: right;
   font-size: 24px;
@@ -16,16 +23,32 @@
   font-weight: 500;
 }
 
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.menuItem {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-gray);
+}
+
 .title {
-  font-size: 18px;
+  text-align: right;
+  font-size: 22px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 700;
   line-height: 24px;
   text-align: right;
-
-  margin-bottom: 40px;
-
-  border-bottom: 1px solid var(--color-gray);
 }
 
 .btnWrapper {
@@ -35,19 +58,19 @@
   margin-bottom: 70px;
 }
 
-.btn,
+/* .btn,
 .btnLogout {
   width: 50%;
 }
 
 .btnLogout {
   background-color: var(--color-gray);
-}
+} */
 
-.loader {
+/* .loader {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
   font-family: 'Noto Sans Hebrew', sans-serif;
   margin-top: 20px;
-}
+} */

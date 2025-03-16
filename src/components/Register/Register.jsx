@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { validateEmail, validatePassword } from '../../utils/utils';
+import { validateEmail } from '../../utils/utils';
 
 import styles from './Register.module.css';
 import arrowBack from '../../assets/icons/icon-arrow-left.svg';
@@ -10,6 +10,7 @@ import Button from '../Button/Button';
 function Register({ closeModal }) {
   const [formData, setFormData] = useState({
     email: '',
+    name: '',
     password: '',
     confirmPassword: '',
   });
@@ -31,7 +32,7 @@ function Register({ closeModal }) {
 
     const newErrors = {
       email: validateEmail(formData.email),
-      password: validatePassword(formData.password),
+      name: formData.name.trim() ? '' : 'Name is required',
       confirmPassword:
         formData.password !== formData.confirmPassword
           ? 'Passwords do not match'
@@ -56,6 +57,7 @@ function Register({ closeModal }) {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
+          name: formData.name,
         }),
       });
 
@@ -68,9 +70,11 @@ function Register({ closeModal }) {
       setMessage(
         'Registration successful! Please check your email to confirm your account.'
       );
-      setFormData({ email: '', password: '', confirmPassword: '' });
+      console.log(formData);
+      setFormData({ email: '', name: '', password: '', confirmPassword: '' });
       setShowPassword(false);
       setShowSecondPassword(false);
+      setErrors({});
     } catch (error) {
       setMessage(error.message);
     }
@@ -98,6 +102,18 @@ function Register({ closeModal }) {
             required
           />
           {errors.email && <p className={styles.errorText}>{errors.email}</p>}
+        </div>
+        <div className={styles.item}>
+          <input
+            className={styles.input}
+            type="text"
+            name="name"
+            placeholder="שם"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          {errors.name && <p className={styles.errorText}>{errors.name}</p>}
         </div>
         <div className={styles.item} style={{ position: 'relative' }}>
           <input
@@ -145,9 +161,7 @@ function Register({ closeModal }) {
             />
           </button>
         </div>
-        {errors.password && (
-          <p className={styles.errorText}>{errors.password}</p>
-        )}
+
         {errors.confirmPassword && (
           <p className={styles.errorText}>{errors.confirmPassword}</p>
         )}

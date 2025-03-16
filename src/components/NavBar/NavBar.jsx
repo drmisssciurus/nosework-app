@@ -24,10 +24,10 @@ function NavBar() {
         </li>
         <li className={styles.item}>
           <NavLink
-            to="/analysis"
+            to="/sessions_page"
             className={({ isActive }) => (isActive ? styles.active : '')}
           >
-            <Icons name="analysis" />
+            <Icons name="sessions" />
           </NavLink>
         </li>
         <li className={styles.item}>
