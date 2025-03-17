@@ -34,17 +34,15 @@
   gap: 10px;
 }
 
-.titleWrapper {
-  border: 2px solid var(--color-black);
-  border-radius: 12px;
-  padding: 0 10px;
-  align-items: center;
-}
-
-.title {
+.forPdf {
+  cursor: pointer;
   font-size: 14px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
+  background-color: transparent;
+  border: 2px solid var(--color-black);
+  border-radius: 12px;
+  padding: 0 10px;
 }
 
 .dprimeWrapper {

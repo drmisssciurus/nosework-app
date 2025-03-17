@@ -103,14 +103,12 @@ function SessionOverview() {
       <div className={styles.container}>
         <div className={styles.sessionOverviewPanel}>
           <div className={styles.infoContainer}>
-            <div className={styles.titleWrapper}>
-              <p
-                className={styles.title}
-                onClick={() => navigate(`/session_pdf/${sessionId}`)}
-              >
-                תוכנית אימון
-              </p>
-            </div>
+            <button
+              className={styles.forPdf}
+              onClick={() => navigate(`/session_pdf/${sessionId}`)}
+            >
+              תוכנית אימון
+            </button>
             <div>
               <p className={styles.title}>
                 כלב: {dogName} <br /> שם מאמן: {sessionData.trainer}

@@ -1,7 +1,8 @@
 import styles from './Dogs.module.css';
 import { formatDogAge } from '../../utils/utils';
+import Button from '../Button/Button';
 
-function Dogs({ dogs }) {
+function Dogs({ dogs, onDelete }) {
   return (
     <>
       {dogs.map(({ id, name, breed, age, imageUrl }) => (
@@ -16,6 +17,12 @@ function Dogs({ dogs }) {
               {formatDogAge(age)}
             </p>
           </div>
+          <Button
+            className={styles.deleteBtn}
+            onClick={() => onDelete({ id, name })}
+          >
+            מחק כלב
+          </Button>
         </li>
       ))}
     </>

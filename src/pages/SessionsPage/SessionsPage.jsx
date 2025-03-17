@@ -20,8 +20,15 @@ function SessionsPage() {
         return;
       }
 
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        console.error('User ID is missing in localStorage');
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch('/api/Session', {
+        const response = await fetch(`/api/Session/byUserId/${userId}`, {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });

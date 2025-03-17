@@ -74,7 +74,7 @@ function SessionTrainProgOverw() {
   }, [sessionId]);
 
   const downloadPDF = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500)); // Даем время DOM отрендериться
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Ждем рендеринг DOM
 
     const element = document.getElementById('pdf-content');
     if (!element) {
@@ -84,16 +84,62 @@ function SessionTrainProgOverw() {
 
     try {
       const canvas = await html2canvas(element, {
-        scale: 3, // Повышаем качество рендеринга
-        backgroundColor: null, // Убираем белые рамки
+        scale: 2, // Высокое качество
+        useCORS: true,
       });
 
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = 190;
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const imgWidth = 190; // Ширина PDF
+      const pageHeight = 277; // Высота одной страницы PDF
 
-      pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Рассчитываем высоту изображения
+
+      let heightLeft = imgHeight;
+      let position = 0;
+      let currentPage = 1;
+
+      while (heightLeft >= 0) {
+        const startY =
+          (currentPage - 1) * pageHeight * (canvas.width / imgWidth); // Рассчитываем начальную позицию Y для обрезки
+
+        const canvasPage = document.createElement('canvas');
+        canvasPage.width = canvas.width;
+        canvasPage.height = Math.min(
+          pageHeight * (canvas.width / imgWidth),
+          canvas.height - startY
+        );
+
+        const ctx = canvasPage.getContext('2d');
+        ctx.drawImage(
+          canvas,
+          0,
+          startY, // Начальная позиция X и Y для обрезки из исходного canvas
+          canvas.width,
+          canvasPage.height, // Ширина и высота для обрезки
+          0,
+          0, // Позиция X и Y для вставки в новый canvas
+          canvasPage.width,
+          canvasPage.height // Ширина и высота для вставки
+        );
+
+        const imgData = canvasPage.toDataURL('image/png');
+
+        if (currentPage > 1) {
+          pdf.addPage();
+        }
+
+        pdf.addImage(
+          imgData,
+          'PNG',
+          10,
+          0,
+          imgWidth,
+          canvasPage.height / (canvas.width / imgWidth)
+        ); // Корректная высота изображения на странице
+        heightLeft -= pageHeight;
+        currentPage++;
+      }
+
       pdf.save(`Session_${sessionId}_Training_Program.pdf`);
     } catch (error) {
       console.error('Ошибка при создании PDF:', error);
@@ -102,10 +148,10 @@ function SessionTrainProgOverw() {
 
   return (
     <div className="container">
+      <Header>
+        תוכנית אימון {dogName}, אימון {sessionId}
+      </Header>
       <div id="pdf-content" className={styles.content}>
-        <Header>
-          תוכנית אימון {dogName}, אימון {sessionId}
-        </Header>
         <div className={styles.targetContainers}>
           <p className={styles.target}>סניפר 3</p>
           <p className={styles.target}>סניפר 2</p>
