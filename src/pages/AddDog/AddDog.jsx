@@ -39,29 +39,41 @@ function AddDog() {
     setError(null);
 
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
     if (!token) {
       setError('Authentication token missing.');
       setLoading(false);
       return;
     }
+    if (!userId) {
+      setError('User ID is missing.');
+      setLoading(false);
+      return;
+    }
+    console.log(userId);
 
     const dogData = {
       name: dogName,
       breed: dogBreed,
       dateOfBirth: new Date(dogBirth).toISOString(),
       imageUrl: '',
+      userId: userId,
     };
 
     try {
-      const response = await fetch('/api/Dog', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(dogData),
-      });
+      const response = await fetch(
+        `/api/Dog?userId=${encodeURIComponent(userId)}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(dogData),
+        }
+      );
+      console.log('Отправляемые данные:', JSON.stringify(dogData, null, 2));
 
       if (!response.ok) {
         const errorMessage = await response.text();
@@ -94,6 +106,7 @@ function AddDog() {
       setUploadedPhoto(null);
       navigate('/dogs');
     } catch (err) {
+      console.error(err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -161,7 +174,7 @@ function AddDog() {
               <p style={{ textAlign: 'center' }}>התמונה הועלתה!</p>
             )}
           </div>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && <p className={styles.error}>Sorry server error</p>}
           <Button className={styles.btn} type="submit" disabled={loading}>
             {loading ? 'מוסיף...' : 'הוסף'}
           </Button>

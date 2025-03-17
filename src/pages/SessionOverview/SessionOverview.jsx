@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import styles from './SessionOverview.module.css';
@@ -15,6 +15,7 @@ function SessionOverview() {
   const [dogName, setDogName] = useState(null);
   const [DPrimeScore, setDPrimeScore] = useState(null);
   const [trials, setTrials] = useState([]);
+  const navigate = useNavigate();
 
   const resultColors = {
     H: '#22c55e',
@@ -103,7 +104,12 @@ function SessionOverview() {
         <div className={styles.sessionOverviewPanel}>
           <div className={styles.infoContainer}>
             <div className={styles.titleWrapper}>
-              <p className={styles.title}>תוכנית אימון</p>
+              <p
+                className={styles.title}
+                onClick={() => navigate(`/session_pdf/${sessionId}`)}
+              >
+                תוכנית אימון
+              </p>
             </div>
             <div>
               <p className={styles.title}>

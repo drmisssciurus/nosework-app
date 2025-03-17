@@ -48,53 +48,67 @@ function LogIn() {
         body: requestBody,
       });
 
+      let errorMessage = 'Произошла ошибка, попробуйте снова.';
+      const contentType = response.headers.get('content-type');
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Login error: ${errorText || 'Check your email and password.'}`
-        );
+        if (contentType && contentType.includes('application/json')) {
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+          } catch {
+            errorMessage = await response.text();
+          }
+        } else {
+          errorMessage = await response.text();
+        }
+        setError(errorMessage);
+        return;
       }
 
-      const contentType = response.headers.get('content-type');
-      let data;
+      let data = {};
 
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
-        data = { message: await response.text() };
+        data.message = await response.text();
       }
 
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userEmail', email);
+      if (!data.token) {
+        setError('Ошибка аутентификации. Сервер не вернул токен.');
+        return;
+      }
 
-        try {
-          const userResponse = await fetch('/api/User', {
-            method: 'GET',
-            headers: { Authorization: `Bearer ${data.token}` },
-          });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userEmail', email);
+      console.log('Token:', data.token);
 
-          if (!userResponse.ok) {
-            throw new Error('Failed to fetch user data');
-          }
+      try {
+        const userResponse = await fetch('/api/User', {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${data.token}` },
+        });
 
-          const users = await userResponse.json();
-          const storedEmail = localStorage.getItem('userEmail');
-          const currentUser = users.find((user) => user.email === storedEmail);
-
-          if (currentUser) {
-            localStorage.setItem('userId', currentUser.id);
-            localStorage.setItem('userName', currentUser.userName);
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+        if (!userResponse.ok) {
+          throw new Error('Не удалось получить данные пользователя.');
         }
 
-        navigate('/mainpage');
+        const users = await userResponse.json();
+        const storedEmail = localStorage.getItem('userEmail');
+        const currentUser = users.find((user) => user.email === storedEmail);
+
+        if (currentUser) {
+          localStorage.setItem('userId', currentUser.id);
+          localStorage.setItem('userName', currentUser.userName);
+        }
+      } catch (error) {
+        console.error('Ошибка при получении данных пользователя:', error);
       }
+
+      navigate('/mainpage');
     } catch (err) {
-      console.error('Error while requesting:', err);
-      setError('Server error. Try again later.');
+      console.error('Ошибка при отправке запроса:', err);
+      setError('Ошибка сервера. Попробуйте позже.');
     }
   }
 

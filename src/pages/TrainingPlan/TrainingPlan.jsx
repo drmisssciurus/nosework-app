@@ -51,7 +51,7 @@ function TrainingPlan() {
     sessionCreatedRef.current = true;
 
     if (currentSessionId !== 0) return;
-
+    const userId = localStorage.getItem('userId');
     const sessionData = {
       id: 0,
       dogId,
@@ -62,6 +62,7 @@ function TrainingPlan() {
       trialX,
       finalResults,
       dPrimeScore,
+      userId: userId,
     };
 
     try {
@@ -70,14 +71,17 @@ function TrainingPlan() {
         throw new Error('Error: Missing authorization token');
       }
 
-      const response = await fetch('/api/Session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(sessionData),
-      });
+      const response = await fetch(
+        `/api/Session?userId=${encodeURIComponent(userId)}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(sessionData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error creating session: ${response.status}`);
@@ -87,6 +91,13 @@ function TrainingPlan() {
 
       setCurrentSessionId(responseData.id);
       localStorage.setItem('sessionId', responseData.id);
+
+      console.log(
+        '📤 Отправляемые данные на сервер:',
+        JSON.stringify(sessionData, null, 2)
+      );
+      console.log('✅ userId из localStorage:', userId);
+      console.log('🟢 Используемый sessionId:', currentSessionId);
 
       return responseData.id;
     } catch (error) {

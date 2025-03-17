@@ -30,7 +30,6 @@ function App() {
         <Route index element={<Welcome />} />
         <Route path="login" element={<LogIn />} />
         <Route path="reset_password" element={<ResetPassword />} />
-        <Route path="session_pdf" element={<SessionTrainProgOverw />} />
 
         {/* For logged in users */}
         <Route element={<ProtectedRoute />}>
@@ -50,6 +49,10 @@ function App() {
           <Route
             path="session_overview/:sessionId"
             element={<SessionOverview />}
+          />
+          <Route
+            path="session_pdf/:sessionId"
+            element={<SessionTrainProgOverw />}
           />
           <Route path="sessions_page" element={<SessionsPage />} />
           <Route path="dogs" element={<DogsList />} />

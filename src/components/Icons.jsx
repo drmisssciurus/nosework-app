@@ -353,6 +353,56 @@ const icons = {
       </defs>
     </svg>
   ),
+  choose: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 61 27"
+      width="61"
+      height="27"
+      fill="none"
+    >
+      <g opacity="100%">
+        <rect
+          x="1"
+          y="1"
+          width="59"
+          height="25"
+          fill="#fff"
+          stroke="#505050"
+          rx="12.5"
+          filter="url(#filter_dshadow_0_0_0_00000014)"
+        ></rect>
+      </g>
+      <defs>
+        <filter id="filter_dshadow_0_0_0_00000014" filterUnits="userSpaceOnUse">
+          <feFlood result="bg-fix"></feFlood>
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="alpha"
+          ></feColorMatrix>
+          <feOffset dx="0" dy="0"></feOffset>
+          <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+          <feComposite in2="alpha" operator="out"></feComposite>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+          ></feColorMatrix>
+          <feBlend
+            mode="normal"
+            in2="bg-fix"
+            result="bg-fix-filter_dshadow_0_0_0_00000014"
+          ></feBlend>
+          <feBlend
+            in="SourceGraphic"
+            in2="bg-fix-filter_dshadow_0_0_0_00000014"
+            result="shape"
+          ></feBlend>
+        </filter>
+      </defs>
+    </svg>
+  ),
 };
 
 const Icons = ({ name }) => {

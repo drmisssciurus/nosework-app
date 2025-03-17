@@ -71,11 +71,14 @@ function Register({ closeModal }) {
         'Registration successful! Please check your email to confirm your account.'
       );
       console.log(formData);
+
       setFormData({ email: '', name: '', password: '', confirmPassword: '' });
       setShowPassword(false);
       setShowSecondPassword(false);
       setErrors({});
     } catch (error) {
+      console.log(error.message);
+
       setMessage(error.message);
     }
   }
