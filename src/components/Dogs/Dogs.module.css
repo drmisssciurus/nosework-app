@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 20px;
+  padding: 15px;
   background-color: var(--color-bgGray);
   border-radius: 12px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -40,4 +40,19 @@
 .breed,
 .age {
   font-size: 14px;
+}
+
+.wrapperDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+}
+
+.deleteBtn {
+  padding: 2px 2px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 90px;
+  border-radius: 16px;
 }
