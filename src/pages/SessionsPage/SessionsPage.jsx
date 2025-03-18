@@ -5,11 +5,15 @@ import SessionsList from '../../components/SessionsList/SessionsList';
 import { useNavigate } from 'react-router-dom';
 import styles from './SessionsPage.module.css';
 import Calendar from '../../components/Calendar/Calendar';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function SessionsPage() {
   const [sessions, setSessions] = useState([]);
-
   const [loading, setLoading] = useState(true);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -123,6 +127,36 @@ function SessionsPage() {
     fetchSessions();
   }, [navigate]);
 
+  function openModal(session) {
+    setSelectedSession(session);
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setSelectedSession(null);
+    setIsModalOpen(false);
+  }
+
+  async function handleDeleteSession() {
+    if (!selectedSession) return;
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/Session/${selectedSession.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete session');
+      }
+      setSessions((prevSessions) =>
+        prevSessions.filter((session) => session.id !== selectedSession.id)
+      );
+      closeModal();
+    } catch (error) {
+      console.error('Error deleting session:', error);
+    }
+  }
+
   return (
     <div>
       <Header>האימונים שלי</Header>
@@ -130,9 +164,28 @@ function SessionsPage() {
       {loading ? (
         <div className={styles.loader}>טוען נתונים...</div>
       ) : (
-        <SessionsList sessions={sessions} />
+        <SessionsList sessions={sessions} onDelete={openModal} />
       )}
       <NavBar />
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        className={styles.modal}
+        overlayClassName={styles.overlay}
+      >
+        <p className={styles.titleModal}>
+          האם אתה בטוח שברצונך למחוק את {selectedSession?.id}{' '}
+          {selectedSession?.dogName}?
+        </p>
+        <div className={styles.modalActions}>
+          <button className={styles.btnYes} onClick={handleDeleteSession}>
+            אישור
+          </button>
+          <button className={styles.btnNo} onClick={closeModal}>
+            ביטול
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

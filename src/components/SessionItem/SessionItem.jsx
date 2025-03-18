@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SessionItem.module.css';
 
-function SessionItem({ session }) {
+function SessionItem({ session, onDelete }) {
   const navigate = useNavigate();
   const [nextTrialNumber, setNextTrialNumber] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -34,15 +34,23 @@ function SessionItem({ session }) {
 
   return (
     <li className={styles.itemwrapper}>
-      <div className={styles.namewrapper}>
-        <p className={styles.name}>
-          {dogName || 'Unknown'}: אימון {id}
-        </p>
-        <span
-          className={`${styles['status-icon']} ${
-            status === 'Completed' ? styles.ready : styles.inprocess
-          }`}
-        ></span>
+      <div className={styles.headerWrapper}>
+        <button
+          className={styles.deleteBtn}
+          onClick={() => onDelete({ id, dogName })}
+        >
+          מחק אימון
+        </button>
+        <div className={styles.nameWrapper}>
+          <p className={styles.name}>
+            {dogName || 'Unknown'}: אימון {id}
+          </p>
+          <span
+            className={`${styles['status-icon']} ${
+              status === 'Completed' ? styles.ready : styles.inprocess
+            }`}
+          ></span>
+        </div>
       </div>
 
       <div className={styles.wrapper}>

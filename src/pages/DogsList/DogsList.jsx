@@ -113,10 +113,16 @@ function DogsList() {
         className={styles.modal}
         overlayClassName={styles.overlay}
       >
-        <p>האם אתה בטוח שברצונך למחוק את {selectedDog?.name}?</p>
+        <p className={styles.titleModal}>
+          האם אתה בטוח שברצונך למחוק את {selectedDog?.name}?
+        </p>
         <div className={styles.modalActions}>
-          <Button onClick={handleDeleteDog}>אישור</Button>
-          <Button onClick={closeModal}>ביטול</Button>
+          <button className={styles.btnYes} onClick={handleDeleteDog}>
+            אישור
+          </button>
+          <button className={styles.btnNo} onClick={closeModal}>
+            ביטול
+          </button>
         </div>
       </Modal>
     </div>

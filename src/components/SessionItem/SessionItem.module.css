@@ -3,12 +3,18 @@
   border-bottom: 1px solid var(--color-gray);
 }
 
-.namewrapper {
+.headerWrapper {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.nameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .status-icon {
@@ -100,4 +106,15 @@
   font-weight: 500;
   line-height: 16px;
   outline: none;
+}
+
+.deleteBtn {
+  padding: 2px 2px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid var(--color-red);
+  color: #800000;
+  background-color: rgb(255, 59, 48, 0.3);
+  width: 90px;
+  border-radius: 16px;
 }
