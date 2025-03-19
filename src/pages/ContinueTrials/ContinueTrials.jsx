@@ -1,7 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+
 import styles from './ContinueTrials.module.css';
+
 import Footer from '../../components/Footer/Footer';
 import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Button from '../../components/Button/Button';
@@ -151,8 +153,8 @@ function ContinueTrials() {
 
         if (!response.ok)
           throw new Error(`Fetching error: ${response.statusText}`);
-        const trials = await response.json();
 
+        const trials = await response.json();
         const matchedTrials = trainingData.map((trial, index) => {
           const matchedTrial = trials.find(
             (t) => t.trainingId === trainingId && t.trialNumber === index + 1
@@ -179,45 +181,56 @@ function ContinueTrials() {
       return;
     }
 
-    //duration of sending video START
-    // console.log(
-    //   '🚀 [START] Sending video for TrialId: ',
-    //   trialId,
-    //   new Date().toISOString()
-    // );
+    if (!trialId) {
+      console.error('Error: No valid trialId for video upload');
+      return;
+    }
 
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const formData = new FormData();
-    formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4');
+    const fileName = uploadedVideo.name;
 
     try {
-      // const start = performance.now();
-      const response = await fetch(`/api/Trial/uploadVideo/${trialId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const presignedUrlResponse = await fetch(
+        `/api/Trial/getPresignedUrl/${trialId}?fileName=${encodeURIComponent(
+          fileName
+        )}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      //duration of sending video DONE
-      // const duration = performance.now() - start;
-      // console.log(
-      //   `✅ [DONE] Sending video took ${duration.toFixed(2)} ms`,
-      //   new Date().toISOString()
-      // );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error loading video:', errorText);
-        throw new Error(`Error loading video: ${response.status} ${errorText}`);
+      if (!presignedUrlResponse.ok) {
+        const errorText = await presignedUrlResponse.text();
+        console.error('Error getting presigned URL:', errorText);
+        return;
       }
 
-      const responseData = await response.json();
+      const { url: presignedUrl } = await presignedUrlResponse.json();
 
-      return responseData.videoUrl;
+      const uploadResponse = await fetch(presignedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': uploadedVideo.type,
+        },
+        body: uploadedVideo,
+      });
+
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text();
+        console.error('Error uploading video to presigned URL:', errorText);
+        return;
+      }
+
+      console.log(
+        '[DONE] Video upload completed for TrialId:',
+        trialId,
+        new Date().toISOString()
+      );
     } catch (error) {
       console.error('Error loading video:', error);
     }
@@ -226,15 +239,39 @@ function ContinueTrials() {
   function closeModal() {
     setModalOpen(false);
     setSelectedLocation(0);
+    setUploadedVideoName('');
+    setUploadedVideo(null);
+
     if (currentTrialIndex < trainingData.length - 1) {
       const nextIndex = currentTrialIndex + 1;
       setCurrentTrialIndex((prevIndex) => prevIndex + 1);
       localStorage.setItem('currentTrialIndex', nextIndex);
-      setUploadedVideoName('');
     } else {
       navigate('/end_session', {
         state: { trainingId },
       });
+    }
+  }
+
+  function openResultModal(result) {
+    const resultMessages = {
+      H: '✅ כל הכבוד',
+      M: '❌ לא נורא, פעם הבאה',
+      FA: '❌ לא נורא, פעם הבאה',
+      CR: '✅ כל הכבוד',
+    };
+
+    const resultColors = {
+      H: '#22c55e',
+      M: '#ff3b30',
+      FA: '#ff3b30',
+      CR: '#22c55e',
+    };
+
+    if (result in resultMessages) {
+      setModalMessage(resultMessages[result] || '');
+      setModalBackground(resultColors[result] || '');
+      setModalOpen(true);
     }
   }
 
@@ -274,40 +311,28 @@ function ContinueTrials() {
       });
 
       if (!response.ok) {
-        throw new Error(`Sending error: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error(
+          `Error sending trial data: ${response.status} ${errorText}`
+        );
+        throw new Error(`Error sending data: ${response.statusText}`);
       }
 
       const responseData = await response.json();
 
       const newTrialId = responseData.id;
 
+      openResultModal(responseData.result);
+
       if (uploadedVideo && newTrialId) {
-        videoUrl = await handleVideoSubmit(newTrialId);
-      }
-
-      const resultMessages = {
-        H: '✅ כל הכבוד',
-        M: '❌ לא נורא, פעם הבאה',
-        FA: '❌ לא נורא, פעם הבאה',
-        CR: '✅ כל הכבוד',
-      };
-
-      const resultColors = {
-        H: '#22c55e',
-        M: '#ff3b30',
-        FA: '#ff3b30',
-        CR: '#22c55e',
-      };
-
-      if (responseData.result in resultMessages) {
-        setModalMessage(resultMessages[responseData.result] || '');
-        setModalBackground(resultColors[responseData.result] || '');
-        setModalOpen(true);
+        console.log(`[BACKGROUND] Uploading video for trialId ${newTrialId}`);
+        handleVideoSubmit(newTrialId);
       }
 
       setIsLoading(false);
     } catch (error) {
       console.error('Error:', error);
+      setIsLoading(false);
     }
   }
 

@@ -48,7 +48,7 @@ function LogIn() {
         body: requestBody,
       });
 
-      let errorMessage = 'Произошла ошибка, попробуйте снова.';
+      let errorMessage = 'An error occurred, please try again.';
       const contentType = response.headers.get('content-type');
 
       if (!response.ok) {
@@ -75,7 +75,7 @@ function LogIn() {
       }
 
       if (!data.token) {
-        setError('Ошибка аутентификации. Сервер не вернул токен.');
+        setError('Authentication error. The server did not return a token.');
         return;
       }
 
@@ -90,7 +90,7 @@ function LogIn() {
         });
 
         if (!userResponse.ok) {
-          throw new Error('Не удалось получить данные пользователя.');
+          throw new Error('Failed to retrieve user data.');
         }
 
         const users = await userResponse.json();
@@ -102,13 +102,13 @@ function LogIn() {
           localStorage.setItem('userName', currentUser.userName);
         }
       } catch (error) {
-        console.error('Ошибка при получении данных пользователя:', error);
+        console.error('Error retrieving user data:', error);
       }
 
       navigate('/mainpage');
     } catch (err) {
-      console.error('Ошибка при отправке запроса:', err);
-      setError('Ошибка сервера. Попробуйте позже.');
+      console.error('Error sending request:', err);
+      setError('Server error. Try again later.');
     }
   }
 

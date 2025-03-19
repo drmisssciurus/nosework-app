@@ -193,40 +193,31 @@ function Trials() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const fileName = uploadedVideo.name;
+    const formData = new FormData();
+    formData.append('file', uploadedVideo, uploadedVideo.name || 'video.mp4');
+
+    console.log('📤 Uploading video:', {
+      trialId,
+      fileName: uploadedVideo.name,
+      fileSize: uploadedVideo.size,
+    });
 
     try {
-      const presignedUrlResponse = await fetch(
-        `/api/Trial/getPresignedUrl/${trialId}?fileName=${encodeURIComponent(
-          fileName
-        )}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      console.log(
+        '[START] Video upload for TrialId:',
+        trialId,
+        new Date().toISOString()
       );
 
-      if (!presignedUrlResponse.ok) {
-        const errorText = await presignedUrlResponse.text();
-        console.error('Error getting presigned URL:', errorText);
-        return;
-      }
-
-      const { url: presignedUrl } = await presignedUrlResponse.json();
-
-      const uploadResponse = await fetch(presignedUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': uploadedVideo.type,
-        },
-        body: uploadedVideo,
+      const response = await fetch(`/api/Trial/uploadVideo/${trialId}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
       });
 
-      if (!uploadResponse.ok) {
-        const errorText = await uploadResponse.text();
-        console.error('Error uploading video to presigned URL:', errorText);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error loading video:', errorText);
         return;
       }
 
@@ -243,9 +234,9 @@ function Trials() {
   function closeModal() {
     setModalOpen(false);
     setSelectedLocation(0);
+
     setUploadedVideoName('');
     setUploadedVideo(null);
-
     if (currentTrialIndex < trainingData.length - 1) {
       const nextIndex = currentTrialIndex + 1;
       setCurrentTrialIndex((prevIndex) => prevIndex + 1);
@@ -304,7 +295,7 @@ function Trials() {
       videoUrl,
     };
 
-    console.log('Sending trial data:', JSON.stringify(payload, null, 2));
+    console.log('🚀 Sending trial data:', JSON.stringify(payload, null, 2));
 
     try {
       const response = await fetch('/api/Trial', {
@@ -325,14 +316,16 @@ function Trials() {
       }
 
       const responseData = await response.json();
-      console.log('Server response (Trial Created):', responseData);
+      console.log('📩 Server response (Trial Created):', responseData);
 
       const newTrialId = responseData.id;
 
       openResultModal(responseData.result);
 
       if (uploadedVideo && newTrialId) {
-        console.log(`[BACKGROUND] Uploading video for trialId ${newTrialId}`);
+        console.log(
+          `📤 [BACKGROUND] Uploading video for trialId ${newTrialId}`
+        );
         handleVideoSubmit(newTrialId);
       }
 

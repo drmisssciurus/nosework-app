@@ -171,9 +171,8 @@
   display: inline-block;
 }
 
-/* Добавляем галочку при выборе */
 .item input[type='radio']:checked::after {
-  content: '✔'; /* Галочка */
+  content: '✔';
   font-size: 14px;
   color: var(--color-black);
   position: absolute;

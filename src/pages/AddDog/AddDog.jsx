@@ -73,7 +73,7 @@ function AddDog() {
           body: JSON.stringify(dogData),
         }
       );
-      console.log('Отправляемые данные:', JSON.stringify(dogData, null, 2));
+      console.log('Data sent:', JSON.stringify(dogData, null, 2));
 
       if (!response.ok) {
         const errorMessage = await response.text();
@@ -171,10 +171,14 @@ function AddDog() {
               <Icons name="upload" />
             </button>
             {uploadedPhoto && (
-              <p style={{ textAlign: 'center' }}>התמונה הועלתה!</p>
+              <p className={styles.photoMessage}>התמונה הועלתה!</p>
             )}
           </div>
-          {error && <p className={styles.error}>Sorry server error</p>}
+          {error && (
+            <p className={styles.error}>
+              Server error occurred. Please try again later.
+            </p>
+          )}
           <Button className={styles.btn} type="submit" disabled={loading}>
             {loading ? 'מוסיף...' : 'הוסף'}
           </Button>

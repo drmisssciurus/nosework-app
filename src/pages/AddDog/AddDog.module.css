@@ -33,7 +33,7 @@
   color: var(--color-black);
 
   font-size: 14px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 20px;
   text-align: right;
@@ -91,4 +91,11 @@
   padding: 10px 0;
   margin-top: 20px;
   margin-bottom: 70px;
+}
+
+.photoMessage {
+  text-align: center;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  margin-top: 5px;
+  font-size: 14px;
 }

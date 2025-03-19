@@ -9,32 +9,33 @@ function NewSession({ setTrials, trials }) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [dogId, setDogId] = useState('');
   const [dogs, setDogs] = useState([]);
-  const [trainer, setTrainer] = useState('');
-  const [trainers, setTrainers] = useState([]);
-  const [newTrainer, setNewTrainer] = useState('');
-  const [isAddingTrainer, setIsAddingTrainer] = useState(false);
+  // const [trainer, setTrainer] = useState('');
+  // const [trainers, setTrainers] = useState([]);
+  // const [newTrainer, setNewTrainer] = useState('');
+  // const [isAddingTrainer, setIsAddingTrainer] = useState(false);
   const [containerType, setContainerType] = useState('');
   const [trialX, setTrialX] = useState(false);
   const [finalResults, setFinalResults] = useState([]);
   const [dPrimeScore, setDPrimeScore] = useState(0);
 
   const navigate = useNavigate();
+  const userName = localStorage.getItem('userName');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    fetch('/api/Trainer', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTrainers(data);
-      })
-      .catch((err) => console.error('Error to upload trainers: ', err));
+    // fetch('/api/Trainer', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setTrainers(data);
+    //   })
+    //   .catch((err) => console.error('Error to upload trainers: ', err));
 
     fetch('/api/Dog', {
       method: 'GET',
@@ -50,42 +51,42 @@ function NewSession({ setTrials, trials }) {
       .catch((err) => console.error('Error to upload dogs: ', err));
   }, []);
 
-  function handleTrainerChange(e) {
-    const value = e.target.value;
-    if (value === 'add_new') {
-      setIsAddingTrainer(true);
-      setTrainer('');
-    } else {
-      setIsAddingTrainer(false);
-      setTrainer(value);
-    }
-  }
+  // function handleTrainerChange(e) {
+  //   const value = e.target.value;
+  //   if (value === 'add_new') {
+  //     setIsAddingTrainer(true);
+  //     setTrainer('');
+  //   } else {
+  //     setIsAddingTrainer(false);
+  //     setTrainer(value);
+  //   }
+  // }
 
-  function handleAddTrainer() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Error: There is no token');
-      return;
-    }
+  // function handleAddTrainer() {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     console.error('Error: There is no token');
+  //     return;
+  //   }
 
-    if (newTrainer.trim()) {
-      fetch('/api/Trainer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newTrainer),
-      })
-        .then(() => {
-          setTrainers([...trainers, newTrainer]);
-          setTrainer(newTrainer);
-          setNewTrainer('');
-          setIsAddingTrainer(false);
-        })
-        .catch((err) => console.error('Error adding trainer:', err));
-    }
-  }
+  //   if (newTrainer.trim()) {
+  //     fetch('/api/Trainer', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(newTrainer),
+  //     })
+  //       .then(() => {
+  //         setTrainers([...trainers, newTrainer]);
+  //         setTrainer(newTrainer);
+  //         setNewTrainer('');
+  //         setIsAddingTrainer(false);
+  //       })
+  //       .catch((err) => console.error('Error adding trainer:', err));
+  //   }
+  // }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -94,7 +95,7 @@ function NewSession({ setTrials, trials }) {
         sessionId: 0,
         date: date,
         dogId: Number(dogId),
-        trainer: trainer,
+        trainer: userName,
         trialX: trialX,
         finalResults: finalResults,
         dPrimeScore: Number(dPrimeScore),
@@ -108,10 +109,10 @@ function NewSession({ setTrials, trials }) {
     <div className="container">
       <div className={styles.newSession}>
         <Header>הוספת אימון חדש</Header>
-        <p className={styles.sessionname}>אימון מספר 19</p>
+        {/* <p className={styles.sessionname}>אימון מספר 19</p>
         <p className={styles.sessionsubtitle}>
           מספר מעודכן אוטומטית לפי הכלב המתאמן
-        </p>
+        </p> */}
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.itemwrapper}>
@@ -142,12 +143,13 @@ function NewSession({ setTrials, trials }) {
             </select>
           </div>
 
+          {/*
           <div className={styles.selectwrapper}>
             <label className={styles.label} htmlFor="">
               שם מאמן
             </label>
 
-            <select
+             <select
               className={styles.item}
               value={trainer}
               onChange={handleTrainerChange}
@@ -159,7 +161,7 @@ function NewSession({ setTrials, trials }) {
                 </option>
               ))}
               <option value="add_new">הוסף מאמן</option>
-            </select>
+            </select> 
             {isAddingTrainer && (
               <div className={styles.addTrainer}>
                 <input
@@ -175,6 +177,7 @@ function NewSession({ setTrials, trials }) {
               </div>
             )}
           </div>
+                  */}
 
           <div className={styles.selectwrapper}>
             <label className={styles.label} htmlFor="">

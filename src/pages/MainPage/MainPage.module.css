@@ -58,6 +58,42 @@
   margin-bottom: 70px;
 }
 
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aboutUsPage {
+  text-align: center;
+  font-size: 18px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  margin-bottom: 10px;
+}
+
 /* .btn,
 .btnLogout {
   width: 50%;
