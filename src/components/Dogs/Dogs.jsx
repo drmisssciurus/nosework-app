@@ -1,10 +1,12 @@
 import styles from './Dogs.module.css';
 import { formatDogAge } from '../../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 function Dogs({ dogs, onDelete }) {
+  const navigate = useNavigate();
   return (
     <>
-      {dogs.map(({ id, name, breed, age, imageUrl }) => (
+      {dogs.map(({ id, name, breed, age, imageUrl, hasSessions }) => (
         <li key={id} className={styles.item}>
           <div className={styles.imageContainer}>
             <img className={styles.image} src={imageUrl} alt="" />
@@ -17,12 +19,21 @@ function Dogs({ dogs, onDelete }) {
                 {formatDogAge(age)}
               </p>
             </div>
-            <button
-              className={styles.deleteBtn}
-              onClick={() => onDelete({ id, name })}
-            >
-              מחק כלב
-            </button>
+            <div className={styles.btnWrapper}>
+              <button
+                className={styles.deleteBtn}
+                onClick={() => navigate(`/dog_analysis/${id}`)}
+                disabled={!hasSessions}
+              >
+                ביצועי כלב
+              </button>
+              <button
+                className={styles.deleteBtn}
+                onClick={() => onDelete({ id, name })}
+              >
+                מחק כלב
+              </button>
+            </div>
           </div>
         </li>
       ))}

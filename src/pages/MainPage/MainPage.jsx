@@ -109,7 +109,7 @@ function MainPage() {
               className={`${styles.menuItem} ${
                 !hasDogs ? styles.disabled : ''
               }`}
-              onClick={() => hasDogs && navigate('/training_history')}
+              onClick={() => hasDogs && navigate('/sessions_page')}
             >
               <Icons name="arrowLeft" />
               <p className={styles.title}>הסטוריית האימונים שלי</p>
@@ -117,7 +117,7 @@ function MainPage() {
 
             <div className={styles.menuItem} onClick={() => openModal()}>
               <Icons name="arrowLeft" />
-              <p className={styles.title}>על האפליקציה Noseworks</p>
+              <p className={styles.title}>Noseworks על האפליקציה </p>
             </div>
             <div className={styles.menuItem} onClick={handleLogout}>
               <Icons name="arrowLeft" />
@@ -138,12 +138,25 @@ function MainPage() {
         overlayClassName={styles.overlay}
       >
         <p className={styles.aboutUsPage}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
-          aspernatur vel sit optio aut laboriosam rerum molestiae, voluptates
-          hic. Provident non alias iusto commodi temporibus, accusamus unde
-          ducimus vel quibusdam!
+          The Noseworks app is being developed by the Tech4Animals Lab at the
+          University of Haifa in collaboration with the Animal for Security
+          Section, IMOD. Noseworks is an app for tracking and analyzing sniffing
+          trainings of working dogs. The app is for the use of the IK9
+          community.
         </p>
-        <Button onClick={() => closeModal()}>Close</Button>
+        <p className={styles.aboutUsPage}>
+          For feedback, requests and additions, please send a message to Prof.
+          <br />
+          <a
+            href="https://wa.me/972545402870"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.whatsappLink}
+          >
+            Anna Zamansky.
+          </a>
+        </p>
+        <Button onClick={() => closeModal()}>לסגור</Button>
       </Modal>
     </div>
   );

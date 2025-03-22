@@ -133,8 +133,11 @@ function NewSession({ setTrials, trials }) {
               className={styles.item}
               value={dogId}
               onChange={(e) => setDogId(e.target.value)}
+              required
             >
-              <option value="">בחר כלב</option>
+              <option value="" disabled>
+                בחר כלב
+              </option>
               {dogs.map((dog) => (
                 <option key={dog.id} value={dog.id}>
                   {dog.name}

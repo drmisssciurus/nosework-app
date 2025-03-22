@@ -75,7 +75,9 @@ function LogIn() {
       }
 
       if (!data.token) {
-        setError('Authentication error. The server did not return a token.');
+        console.error(
+          'Authentication error. The server did not return a token.'
+        );
         return;
       }
 

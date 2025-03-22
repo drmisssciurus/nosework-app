@@ -18,10 +18,47 @@ function DogsList() {
   const [selectedDog, setSelectedDog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // async function fetchDogs() {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     console.error('There in no token');
+  //     return;
+  //   }
+
+  //   const userId = localStorage.getItem('userId');
+  //   if (!userId) {
+  //     console.error('User ID is missing in localStorage');
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`/api/Dog/byUserId/${userId}`, {
+  //       method: 'GET',
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Error data loading');
+  //     }
+  //     const data = await response.json();
+
+  //     const formattedDogs = data.map((dog) => ({
+  //       ...dog,
+  //       age: calculateAge(dog.dateOfBirth),
+  //       formattedDate: formatDate(dog.dateOfBirth),
+  //     }));
+  //     setDogs(formattedDogs);
+  //   } catch (err) {
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
   async function fetchDogs() {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('There in no token');
+      console.error('There is no token');
       return;
     }
 
@@ -37,17 +74,41 @@ function DogsList() {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
+
       if (!response.ok) {
         throw new Error('Error data loading');
       }
+
       const data = await response.json();
 
-      const formattedDogs = data.map((dog) => ({
-        ...dog,
-        age: calculateAge(dog.dateOfBirth),
-        formattedDate: formatDate(dog.dateOfBirth),
-      }));
-      setDogs(formattedDogs);
+      // 🔁 Запрашиваем аналитику для каждой собаки
+      const dogsWithSessions = await Promise.all(
+        data.map(async (dog) => {
+          let hasSessions = false;
+
+          try {
+            const statsRes = await fetch(`/api/Dog/analysis/${dog.id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (statsRes.ok) {
+              const stats = await statsRes.json();
+              hasSessions = stats.numberOfSessions > 0;
+            }
+          } catch (err) {
+            console.warn(`No sessions for dog ${dog.id}`);
+          }
+
+          return {
+            ...dog,
+            age: calculateAge(dog.dateOfBirth),
+            formattedDate: formatDate(dog.dateOfBirth),
+            hasSessions,
+          };
+        })
+      );
+
+      setDogs(dogsWithSessions);
     } catch (err) {
       setError(err.message);
     } finally {

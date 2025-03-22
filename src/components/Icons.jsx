@@ -403,9 +403,209 @@ const icons = {
       </defs>
     </svg>
   ),
+  dogAnalysis: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width="32"
+      height="32"
+      fill="none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        width="32"
+        height="32"
+        fill="#030303"
+        x="0"
+        y="0"
+        opacity="100%"
+      >
+        <path d="M64 400C64 408.8 71.16 416 80 416H480C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H80C35.82 480 0 444.2 0 400V64C0 46.33 14.33 32 32 32C49.67 32 64 46.33 64 64V400zM342.6 278.6C330.1 291.1 309.9 291.1 297.4 278.6L240 221.3L150.6 310.6C138.1 323.1 117.9 323.1 105.4 310.6C92.88 298.1 92.88 277.9 105.4 265.4L217.4 153.4C229.9 140.9 250.1 140.9 262.6 153.4L320 210.7L425.4 105.4C437.9 92.88 458.1 92.88 470.6 105.4C483.1 117.9 483.1 138.1 470.6 150.6L342.6 278.6z"></path>
+      </svg>
+      <defs>
+        <filter id="filter_dshadow_0_0_0_00000014" filterUnits="userSpaceOnUse">
+          <feFlood result="bg-fix"></feFlood>
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="alpha"
+          ></feColorMatrix>
+          <feOffset dx="0" dy="0"></feOffset>
+          <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+          <feComposite in2="alpha" operator="out"></feComposite>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+          ></feColorMatrix>
+          <feBlend
+            mode="normal"
+            in2="bg-fix"
+            result="bg-fix-filter_dshadow_0_0_0_00000014"
+          ></feBlend>
+          <feBlend
+            in="SourceGraphic"
+            in2="bg-fix-filter_dshadow_0_0_0_00000014"
+            result="shape"
+          ></feBlend>
+        </filter>
+      </defs>
+    </svg>
+  ),
+  dogSessions: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width="32"
+      height="32"
+      fill="none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 384 512"
+        width="32"
+        height="32"
+        fill="#030303"
+        x="0"
+        y="0"
+        opacity="100%"
+      >
+        <path d="M336 64h-53.88C268.9 26.8 233.7 0 192 0S115.1 26.8 101.9 64H48C21.5 64 0 85.48 0 112v352C0 490.5 21.5 512 48 512h288c26.5 0 48-21.48 48-48v-352C384 85.48 362.5 64 336 64zM192 64c17.67 0 32 14.33 32 32s-14.33 32-32 32S160 113.7 160 96S174.3 64 192 64zM282.9 262.8l-88 112c-4.047 5.156-10.02 8.438-16.53 9.062C177.6 383.1 176.8 384 176 384c-5.703 0-11.25-2.031-15.62-5.781l-56-48c-10.06-8.625-11.22-23.78-2.594-33.84c8.609-10.06 23.77-11.22 33.84-2.594l36.98 31.69l72.52-92.28c8.188-10.44 23.3-12.22 33.7-4.062C289.3 237.3 291.1 252.4 282.9 262.8z"></path>
+      </svg>
+      <defs>
+        <filter id="filter_dshadow_0_0_0_00000014" filterUnits="userSpaceOnUse">
+          <feFlood result="bg-fix"></feFlood>
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="alpha"
+          ></feColorMatrix>
+          <feOffset dx="0" dy="0"></feOffset>
+          <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+          <feComposite in2="alpha" operator="out"></feComposite>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+          ></feColorMatrix>
+          <feBlend
+            mode="normal"
+            in2="bg-fix"
+            result="bg-fix-filter_dshadow_0_0_0_00000014"
+          ></feBlend>
+          <feBlend
+            in="SourceGraphic"
+            in2="bg-fix-filter_dshadow_0_0_0_00000014"
+            result="shape"
+          ></feBlend>
+        </filter>
+      </defs>
+    </svg>
+  ),
+  dogHits: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width="32"
+      height="32"
+      fill="none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        width="32"
+        height="32"
+        fill="#030303"
+        x="0"
+        y="0"
+        opacity="100%"
+      >
+        <path d="M223.7 130.8L149.1 7.77C147.1 2.949 141.9 0 136.3 0H16.03c-12.95 0-20.53 14.58-13.1 25.18l111.3 158.9C143.9 156.4 181.7 137.3 223.7 130.8zM256 160c-97.25 0-176 78.75-176 176S158.8 512 256 512s176-78.75 176-176S353.3 160 256 160zM348.5 317.3l-37.88 37l8.875 52.25c1.625 9.25-8.25 16.5-16.63 12l-46.88-24.62L209.1 418.5c-8.375 4.5-18.25-2.75-16.63-12l8.875-52.25l-37.88-37C156.6 310.6 160.5 299 169.9 297.6l52.38-7.625L245.7 242.5c2-4.25 6.125-6.375 10.25-6.375S264.2 238.3 266.2 242.5l23.5 47.5l52.38 7.625C351.6 299 355.4 310.6 348.5 317.3zM495.1 0H375.7c-5.621 0-10.83 2.949-13.72 7.77l-73.76 122.1c42 6.5 79.88 25.62 109.5 53.38l111.3-158.9C516.5 14.58 508.9 0 495.1 0z"></path>
+      </svg>
+      <defs>
+        <filter id="filter_dshadow_0_0_0_00000014" filterUnits="userSpaceOnUse">
+          <feFlood result="bg-fix"></feFlood>
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="alpha"
+          ></feColorMatrix>
+          <feOffset dx="0" dy="0"></feOffset>
+          <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+          <feComposite in2="alpha" operator="out"></feComposite>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+          ></feColorMatrix>
+          <feBlend
+            mode="normal"
+            in2="bg-fix"
+            result="bg-fix-filter_dshadow_0_0_0_00000014"
+          ></feBlend>
+          <feBlend
+            in="SourceGraphic"
+            in2="bg-fix-filter_dshadow_0_0_0_00000014"
+            result="shape"
+          ></feBlend>
+        </filter>
+      </defs>
+    </svg>
+  ),
+  dogSucsess: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width="32"
+      height="32"
+      fill="none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 576 512"
+        width="32"
+        height="32"
+        fill="#030303"
+        x="0"
+        y="0"
+        opacity="100%"
+      >
+        <path d="M381.2 150.3L524.9 171.5C536.8 173.2 546.8 181.6 550.6 193.1C554.4 204.7 551.3 217.3 542.7 225.9L438.5 328.1L463.1 474.7C465.1 486.7 460.2 498.9 450.2 506C440.3 513.1 427.2 514 416.5 508.3L288.1 439.8L159.8 508.3C149 514 135.9 513.1 126 506C116.1 498.9 111.1 486.7 113.2 474.7L137.8 328.1L33.58 225.9C24.97 217.3 21.91 204.7 25.69 193.1C29.46 181.6 39.43 173.2 51.42 171.5L195 150.3L259.4 17.97C264.7 6.954 275.9-.0391 288.1-.0391C300.4-.0391 311.6 6.954 316.9 17.97L381.2 150.3z"></path>
+      </svg>
+      <defs>
+        <filter id="filter_dshadow_0_0_0_00000014" filterUnits="userSpaceOnUse">
+          <feFlood result="bg-fix"></feFlood>
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="alpha"
+          ></feColorMatrix>
+          <feOffset dx="0" dy="0"></feOffset>
+          <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+          <feComposite in2="alpha" operator="out"></feComposite>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+          ></feColorMatrix>
+          <feBlend
+            mode="normal"
+            in2="bg-fix"
+            result="bg-fix-filter_dshadow_0_0_0_00000014"
+          ></feBlend>
+          <feBlend
+            in="SourceGraphic"
+            in2="bg-fix-filter_dshadow_0_0_0_00000014"
+            result="shape"
+          ></feBlend>
+        </filter>
+      </defs>
+    </svg>
+  ),
 };
 
-const Icons = ({ name }) => {
+const Icons = ({ name, className = '' }) => {
   return icons[name] || null;
 };
 

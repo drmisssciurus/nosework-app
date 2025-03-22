@@ -208,6 +208,8 @@ function Trials() {
         }
       );
 
+      console.log('presignedUrlResponse:', presignedUrlResponse);
+
       if (!presignedUrlResponse.ok) {
         const errorText = await presignedUrlResponse.text();
         console.error('Error getting presigned URL:', errorText);
@@ -235,6 +237,31 @@ function Trials() {
         trialId,
         new Date().toISOString()
       );
+
+      // 3. Обновление videoUrl в Trial (если необходимо)
+      // Если вам нужно сохранить URL в вашей базе данных,
+      // то вам нужно сделать еще один запрос к вашему backend API,
+      // чтобы обновить поле videoUrl.
+      // Например:
+      const videoUrl = presignedUrl.split('?')[0];
+      console.log('VideoUrl:', videoUrl);
+      const updateTrialResponse = await fetch(
+        `/api/Trial/updateVideoUrl/${trialId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(videoUrl), // Сохраняем базовый URL
+        }
+      );
+      if (!updateTrialResponse.ok) {
+        console.error('Error updating video URL in Trial');
+      }
+
+      // const videoUrl = presignedUrl.split('?')[0];
+      // console.log('videoUrl:', videoUrl);
     } catch (error) {
       console.error('Error loading video:', error);
     }

@@ -1,0 +1,138 @@
+.btnBack {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 25px;
+  left: 35px;
+}
+
+.dogInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.dogBreedWrapper {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-self: center;
+}
+
+.imgContainer {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray);
+}
+
+.dogImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dogName {
+  font-size: 20px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+}
+
+.dogText {
+  font-size: 14px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  line-height: 20px;
+  text-align: center;
+}
+
+.statsWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 70px;
+}
+
+.statsTitle {
+  font-size: 20px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 500;
+  text-align: right;
+  margin-right: 30px;
+}
+
+/* .statsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.statsItems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 40%;
+} */
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 карточки в ряд */
+  gap: 16px;
+  padding: 10px;
+}
+
+.statsItems {
+  background-color: rgb(243, 243, 243);
+  border-radius: 16px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  aspect-ratio: 1/1;
+}
+
+.statsNumber {
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+.statsDescription {
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* .dogSucsessWrapper {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-self: center;
+}
+
+.dogSucsessText {
+  font-size: 18px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  line-height: 20px;
+  margin-top: 10px;
+  font-weight: 700;
+  text-align: center;
+} */

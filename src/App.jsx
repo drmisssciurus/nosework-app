@@ -19,6 +19,7 @@ import ContinueTrials from './pages/ContinueTrials/ContinueTrials';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import SessionsPage from './pages/SessionsPage/SessionsPage';
 import SessionTrainProgOverw from './pages/SessionTrainProgOverw/SessionTrainProgOverw';
+import DogAnalysis from './pages/DogAnalysis/DogAnalysis';
 
 function App() {
   const [trials, setTrials] = useState(10);
@@ -56,6 +57,7 @@ function App() {
           />
           <Route path="sessions_page" element={<SessionsPage />} />
           <Route path="dogs" element={<DogsList />} />
+          <Route path="dog_analysis/:id" element={<DogAnalysis />} />
           <Route path="add_dog" element={<AddDog />} />
         </Route>
 

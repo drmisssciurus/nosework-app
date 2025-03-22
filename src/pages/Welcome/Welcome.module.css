@@ -3,6 +3,7 @@
   font-family: 'Poppins', serif;
   font-weight: 700;
   text-align: center;
+  margin-top: 30px;
 }
 
 .welcome {
@@ -11,6 +12,19 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+}
+
+.logosWrapper {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.imgLogo {
+  display: block;
+  width: 25%;
 }
 
 .about {
@@ -22,7 +36,8 @@
 
 .img {
   display: block;
-  margin: 20px auto;
+  margin: 0 auto;
+  width: 70%;
 }
 
 .btn {
