@@ -14,21 +14,17 @@ function ContinueTrials() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [trialData, setTrialData] = useState([]);
   const [trainingData, setTrainingData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(0);
-
-  const [trialData, setTrialData] = useState([]);
-
   const [targetScent, setTargetScent] = useState('');
   const [uploadedVideo, setUploadedVideo] = useState(null);
   const [uploadedVideoName, setUploadedVideoName] = useState('');
   const [dogName, setDogName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalBackground, setModalBackground] = useState('');
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [currentTrialIndex, setCurrentTrialIndex] = useState(
@@ -204,6 +200,8 @@ function ContinueTrials() {
         }
       );
 
+      console.log('presignedUrlResponse:', presignedUrlResponse);
+
       if (!presignedUrlResponse.ok) {
         const errorText = await presignedUrlResponse.text();
         console.error('Error getting presigned URL:', errorText);
@@ -231,6 +229,23 @@ function ContinueTrials() {
         trialId,
         new Date().toISOString()
       );
+
+      const videoUrl = presignedUrl.split('?')[0];
+      console.log('VideoUrl:', videoUrl);
+      const updateTrialResponse = await fetch(
+        `/api/Trial/updateVideoUrl/${trialId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(videoUrl),
+        }
+      );
+      if (!updateTrialResponse.ok) {
+        console.error('Error updating video URL in Trial');
+      }
     } catch (error) {
       console.error('Error loading video:', error);
     }

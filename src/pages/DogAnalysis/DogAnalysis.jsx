@@ -23,7 +23,7 @@ function DogAnalysis() {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      setLoading(true); // Устанавливаем загрузку в true перед запросом
+      setLoading(true);
       setError(null);
 
       try {
@@ -66,15 +66,15 @@ function DogAnalysis() {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>; // Отображаем индикатор загрузки
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>; // Отображаем сообщение об ошибке
+    return <div>Error: {error.message}</div>;
   }
 
   if (!dogData) {
-    return null; // Если данные еще не получены, ничего не отображаем
+    return null;
   }
 
   const { name, breed, dateOfBirth, imageUrl } = dogData;

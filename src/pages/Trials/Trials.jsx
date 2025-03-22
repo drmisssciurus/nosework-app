@@ -238,11 +238,6 @@ function Trials() {
         new Date().toISOString()
       );
 
-      // 3. Обновление videoUrl в Trial (если необходимо)
-      // Если вам нужно сохранить URL в вашей базе данных,
-      // то вам нужно сделать еще один запрос к вашему backend API,
-      // чтобы обновить поле videoUrl.
-      // Например:
       const videoUrl = presignedUrl.split('?')[0];
       console.log('VideoUrl:', videoUrl);
       const updateTrialResponse = await fetch(
@@ -259,9 +254,6 @@ function Trials() {
       if (!updateTrialResponse.ok) {
         console.error('Error updating video URL in Trial');
       }
-
-      // const videoUrl = presignedUrl.split('?')[0];
-      // console.log('videoUrl:', videoUrl);
     } catch (error) {
       console.error('Error loading video:', error);
     }

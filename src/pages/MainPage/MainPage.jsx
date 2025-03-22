@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import styles from './MainPage.module.css';
-
-import NavBar from '../../components/NavBar/NavBar';
-
-import logo from '../../assets/logo-dog.png';
-import Icons from '../../components/Icons';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+
+import styles from './MainPage.module.css';
+
+import logo from '../../assets/logo-dog.png';
+
+import NavBar from '../../components/NavBar/NavBar';
+import Icons from '../../components/Icons';
 import Button from '../../components/Button/Button';
 
 const today = new Date().toLocaleDateString('he-IL', {

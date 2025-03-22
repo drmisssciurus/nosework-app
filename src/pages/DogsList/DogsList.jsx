@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { calculateAge, formatDate } from '../../utils/utils';
+import Modal from 'react-modal';
+
 import styles from './DogsList.module.css';
+
 import NavBar from '../../components/NavBar/NavBar';
 import Header from '../../components/Header/Header';
 import Dogs from '../../components/Dogs/Dogs';
 import Button from '../../components/Button/Button';
-import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
@@ -17,43 +19,6 @@ function DogsList() {
   const [error, setError] = useState(null);
   const [selectedDog, setSelectedDog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // async function fetchDogs() {
-  //   const token = localStorage.getItem('token');
-  //   if (!token) {
-  //     console.error('There in no token');
-  //     return;
-  //   }
-
-  //   const userId = localStorage.getItem('userId');
-  //   if (!userId) {
-  //     console.error('User ID is missing in localStorage');
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch(`/api/Dog/byUserId/${userId}`, {
-  //       method: 'GET',
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error('Error data loading');
-  //     }
-  //     const data = await response.json();
-
-  //     const formattedDogs = data.map((dog) => ({
-  //       ...dog,
-  //       age: calculateAge(dog.dateOfBirth),
-  //       formattedDate: formatDate(dog.dateOfBirth),
-  //     }));
-  //     setDogs(formattedDogs);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   async function fetchDogs() {
     const token = localStorage.getItem('token');
@@ -81,7 +46,6 @@ function DogsList() {
 
       const data = await response.json();
 
-      // 🔁 Запрашиваем аналитику для каждой собаки
       const dogsWithSessions = await Promise.all(
         data.map(async (dog) => {
           let hasSessions = false;
@@ -95,7 +59,7 @@ function DogsList() {
               const stats = await statsRes.json();
               hasSessions = stats.numberOfSessions > 0;
             }
-          } catch (err) {
+          } catch {
             console.warn(`No sessions for dog ${dog.id}`);
           }
 

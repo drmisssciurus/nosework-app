@@ -102,7 +102,7 @@
   background-color: var(--color-gray);
 
   font-size: 12px;
-  font-family: 'Noto Sans Hebrew';
+  font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;
   line-height: 16px;
   outline: none;

@@ -228,7 +228,6 @@ function TrainingPlan() {
         throw new Error(`Error sending TrainingProgram: ${response.status}`);
       }
 
-      // alert('Data send!');
       navigate('/trials', { state: { trainingData } });
     } catch (error) {
       console.error('Error sending TrainingProgram:', error);
@@ -238,7 +237,6 @@ function TrainingPlan() {
 
   useEffect(() => {
     return () => {
-      // console.log('🗑 Clearing sessionId when exiting the page');
       localStorage.removeItem('sessionId');
     };
   }, []);

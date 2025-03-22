@@ -1,14 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+
+import styles from './AddDog.module.css';
 
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 import PhotoUpload from '../../components/PhotoUpload/PhotoUpload';
-
-import styles from './AddDog.module.css';
 import Icons from '../../components/Icons';
 import Button from '../../components/Button/Button';
-import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -16,8 +16,8 @@ function AddDog() {
   const [dogName, setDogName] = useState('');
   const [dogBreed, setDogBreed] = useState('');
   const [dogBirth, setDogBirth] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedPhoto, setUploadedPhoto] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 

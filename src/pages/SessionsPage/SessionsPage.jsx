@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+
+import styles from './SessionsPage.module.css';
+
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 import SessionsList from '../../components/SessionsList/SessionsList';
-import { useNavigate } from 'react-router-dom';
-import styles from './SessionsPage.module.css';
 import Calendar from '../../components/Calendar/Calendar';
-import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 

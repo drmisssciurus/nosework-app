@@ -45,7 +45,7 @@ function App() {
           />
           <Route path="trials" element={<Trials />} />
           <Route path="continue_trials" element={<ContinueTrials />} />
-          <Route path="video_recording" element={<VideoRecorder />} />
+          {/* <Route path="video_recording" element={<VideoRecorder />} /> */}
           <Route path="end_session" element={<EndSession />} />
           <Route
             path="session_overview/:sessionId"

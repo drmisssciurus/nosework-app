@@ -605,7 +605,7 @@ const icons = {
   ),
 };
 
-const Icons = ({ name, className = '' }) => {
+const Icons = ({ name }) => {
   return icons[name] || null;
 };
 

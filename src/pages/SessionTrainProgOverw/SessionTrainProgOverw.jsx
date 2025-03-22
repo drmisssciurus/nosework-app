@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+
+import styles from './SessionTrainProgOverw.module.css';
+
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 import Button from '../../components/Button/Button';
-import styles from './SessionTrainProgOverw.module.css';
-import html2canvas from 'html2canvas';
-import Icons from '../../components/Icons';
 
 function SessionTrainProgOverw() {
   const { sessionId } = useParams();
@@ -21,7 +22,6 @@ function SessionTrainProgOverw() {
       if (!token) return;
 
       try {
-        // Получаем данные о сессии, чтобы определить тип контейнеров и имя собаки
         const sessionResponse = await fetch(`/api/Session/${sessionId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -31,7 +31,6 @@ function SessionTrainProgOverw() {
         const sessionData = await sessionResponse.json();
         setContainerType(sessionData.containerType);
 
-        // Получаем имя собаки
         const dogResponse = await fetch(`/api/Dog/${sessionData.dogId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -41,7 +40,6 @@ function SessionTrainProgOverw() {
           setDogName(dogData.name);
         }
 
-        // Получаем данные о тренировке
         const trainingResponse = await fetch(
           `/api/TrainingProgram/BySession/${sessionId}`,
           {
@@ -163,7 +161,6 @@ function SessionTrainProgOverw() {
               trials.find((t) => t.trainingId === trial.id)?.selectedLocation ||
               null;
 
-            // Распределение контейнеров справа налево
             const containers = ['ביקורת', 'ביקורת', 'ביקורת'];
             if (trial.positiveLocation > 0) {
               containers[3 - trial.positiveLocation] = 'positive';
