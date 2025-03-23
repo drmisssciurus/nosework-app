@@ -173,6 +173,7 @@ function SessionsPage() {
   async function handleDeleteSession() {
     if (!selectedSession) return;
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
     try {
       const response = await fetch(`/api/Session/${selectedSession.id}`, {
         method: 'DELETE',
@@ -192,7 +193,7 @@ function SessionsPage() {
         const updated = prevSessions.filter((s) => s.id !== selectedSession.id);
         localStorage.setItem(
           'cachedSessions',
-          JSON.stringify({ userId, data: validSessions })
+          JSON.stringify({ userId, data: updated })
         );
         return updated;
       });

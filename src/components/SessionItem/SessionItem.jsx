@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SessionItem.module.css';
 
-function SessionItem({ session, onDelete }) {
+function SessionItem({ session, onDelete, index, total }) {
   const navigate = useNavigate();
   const [nextTrialNumber, setNextTrialNumber] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ function SessionItem({ session, onDelete }) {
         </button>
         <div className={styles.nameWrapper}>
           <p className={styles.name}>
-            {dogName || 'Unknown'}: אימון {id}
+            {dogName || 'Unknown'}: אימון {total - index}
           </p>
           <span
             className={`${styles['status-icon']} ${
