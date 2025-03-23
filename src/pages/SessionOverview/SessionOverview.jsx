@@ -90,6 +90,9 @@ function SessionOverview() {
     year: 'numeric',
   });
 
+  const isValidVideoUrl = (url) =>
+    typeof url === 'string' && url.startsWith('https://'); // или 'http://' если нужно
+
   return (
     <div className="container">
       <Header>סקירת אימון</Header>
@@ -129,12 +132,19 @@ function SessionOverview() {
             trials.map((trial, index) => (
               <div key={trial.id} className={styles.trialOverview}>
                 <div className={styles.videoContainer}>
-                  <video
-                    className={styles.video}
-                    src={trial.videoUrl || '#'}
-                    controls
-                  ></video>
+                  {isValidVideoUrl(trial.videoUrl) ? (
+                    <video
+                      className={styles.video}
+                      src={trial.videoUrl}
+                      controls
+                    />
+                  ) : (
+                    <div className={styles.videoPlaceholder}>
+                      הסרטון בטעינה…
+                    </div>
+                  )}
                 </div>
+
                 <div className={styles.trialInfoContainer}>
                   <p className={styles.trialNumber}>שליחה {index + 1}</p>
                   <div className={styles.resultWrapper}>

@@ -8,6 +8,7 @@ import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 import SessionsList from '../../components/SessionsList/SessionsList';
 import Calendar from '../../components/Calendar/Calendar';
+import { handleUnauthorized } from '../../utils/auth';
 
 Modal.setAppElement('#root');
 
@@ -19,6 +20,22 @@ function SessionsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const cached = localStorage.getItem('cachedSessions');
+    if (cached && userId) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed.userId === userId) {
+          setSessions(parsed.data);
+          setLoading(false);
+        } else {
+          localStorage.removeItem('cachedSessions');
+        }
+      } catch (err) {
+        console.warn('Failed to parse cached sessions', err);
+      }
+    }
+
     const fetchSessions = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -81,6 +98,14 @@ function SessionsPage() {
               }),
             ]);
 
+            if (
+              statusResponse.status === 401 ||
+              dPrimeResponse.status === 401
+            ) {
+              handleUnauthorized(navigate);
+              return;
+            }
+
             if (!statusResponse.ok || !dPrimeResponse.ok) {
               console.warn(
                 `Failed to load session details (id: ${session.id})`
@@ -94,6 +119,11 @@ function SessionsPage() {
                 const dogResponse = await fetch(`/api/Dog/${session.dogId}`, {
                   headers: { Authorization: `Bearer ${token}` },
                 });
+                if (dogResponse.status === 401) {
+                  handleUnauthorized(navigate);
+                  return;
+                }
+
                 if (dogResponse.ok) {
                   const { name } = await dogResponse.json();
                   dogName = name;
@@ -117,6 +147,7 @@ function SessionsPage() {
             console.error(`Error processing session ${session.id}:`, error);
           }
         }
+        localStorage.setItem('cachedSessions', JSON.stringify(validSessions));
 
         setSessions(validSessions);
       } catch (error) {
@@ -147,12 +178,25 @@ function SessionsPage() {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (response.status === 401) {
+        handleUnauthorized(navigate);
+        return;
+      }
+
       if (!response.ok) {
         throw new Error('Failed to delete session');
       }
-      setSessions((prevSessions) =>
-        prevSessions.filter((session) => session.id !== selectedSession.id)
-      );
+
+      setSessions((prevSessions) => {
+        const updated = prevSessions.filter((s) => s.id !== selectedSession.id);
+        localStorage.setItem(
+          'cachedSessions',
+          JSON.stringify({ userId, data: validSessions })
+        );
+        return updated;
+      });
+
       closeModal();
     } catch (error) {
       console.error('Error deleting session:', error);

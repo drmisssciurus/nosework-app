@@ -9,6 +9,7 @@ import logo from '../../assets/logo-dog.png';
 import NavBar from '../../components/NavBar/NavBar';
 import Icons from '../../components/Icons';
 import Button from '../../components/Button/Button';
+import { handleUnauthorized } from '../../utils/auth';
 
 const today = new Date().toLocaleDateString('he-IL', {
   day: 'numeric',
@@ -32,7 +33,11 @@ function MainPage() {
     const fetchDogs = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token || !userId) return;
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+        if (!userId) return;
 
         const response = await fetch(`/api/Dog/byUserId/${userId}`, {
           method: 'GET',
@@ -42,6 +47,10 @@ function MainPage() {
           },
         });
 
+        if (response.status === 401) {
+          handleUnauthorized(navigate);
+          return;
+        }
         if (!response.ok) throw new Error('Failed to fetch dogs');
 
         const dogs = await response.json();

@@ -89,6 +89,18 @@
   align-items: center;
 }
 
+.videoPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-light-gray);
+  border: 2px solid var(--color-borGray);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 10px;
+}
+
 .video {
   background-color: var(--color-black);
   width: 120px;

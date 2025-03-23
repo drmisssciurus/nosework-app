@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
@@ -26,6 +26,34 @@ function LogIn() {
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('/api/User', {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          navigate('/mainpage');
+        } else {
+          // Не валидный токен — убираем
+          localStorage.removeItem('token');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('userEmail');
+        }
+      } catch (err) {
+        console.error('Error validating token:', err);
+      }
+    };
+
+    checkToken();
+  }, [navigate]);
 
   async function handleSubmit(event) {
     event.preventDefault();

@@ -78,7 +78,7 @@ function DogAnalysis() {
   }
 
   const { name, breed, dateOfBirth, imageUrl } = dogData;
-  const { numberOfSessions, hitCount, dPrimes } = dogStats;
+  const { numberOfSessions, hitCount, dPrimes, totalTrials } = dogStats;
 
   const averageDPrime =
     dPrimes.length > 0
@@ -157,7 +157,7 @@ function DogAnalysis() {
           <div className={styles.statsItems}>
             <Icons name="dogHits" />
             <div>
-              <p className={styles.statsNumber}>{hitCount}</p>
+              <p className={styles.statsNumber}>{totalTrials}</p>
               <p className={styles.statsDescription}>מספר שליחות</p>
             </div>
           </div>

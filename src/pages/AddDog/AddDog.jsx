@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
 import styles from './AddDog.module.css';
+import { handleUnauthorized } from '../../utils/auth';
 
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
@@ -74,6 +75,10 @@ function AddDog() {
         }
       );
       console.log('Data sent:', JSON.stringify(dogData, null, 2));
+      if (response.status === 401) {
+        handleUnauthorized(navigate);
+        return;
+      }
 
       if (!response.ok) {
         const errorMessage = await response.text();

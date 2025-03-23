@@ -20,6 +20,7 @@ function NewSession({ setTrials, trials }) {
 
   const navigate = useNavigate();
   const userName = localStorage.getItem('userName');
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,7 +38,7 @@ function NewSession({ setTrials, trials }) {
     //   })
     //   .catch((err) => console.error('Error to upload trainers: ', err));
 
-    fetch('/api/Dog', {
+    fetch(`/api/Dog/byUserId/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
