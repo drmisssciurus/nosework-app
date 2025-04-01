@@ -399,6 +399,13 @@ function Trials() {
               );
             })}
         </div>
+        <div className={styles.userMessage}>
+          <p className={styles.userMessageTitle}>
+            {' '}
+            אנא שים לב כי הווידאו יורד ברקע. נא לא לסגור את האפליקציה ולא לנעול
+            את המכשיר במהלך התהליך.
+          </p>
+        </div>
         <div className={styles.videoContainer}>
           <h2 className={styles.videoTitle}>
             {uploadedVideo ? 'הסרטון צורף בהצלחה' : 'העלאה או הקלטה של סרטון'}
