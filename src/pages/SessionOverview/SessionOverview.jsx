@@ -15,6 +15,9 @@ function SessionOverview() {
   const [dogName, setDogName] = useState(null);
   const [DPrimeScore, setDPrimeScore] = useState(null);
   const [trials, setTrials] = useState([]);
+
+  const [allVideosUploaded, setAllVideoUploaded] = useState(false);
+  console.log(allVideosUploaded);
   const navigate = useNavigate();
 
   const resultColors = {
@@ -23,6 +26,17 @@ function SessionOverview() {
     FA: '#ff3b30',
     CR: '#22c55e',
   };
+
+  useEffect(() => {
+    const allUploaded =
+      trials.length > 0 &&
+      trials.every(
+        (trial) =>
+          typeof trial.videoUrl === 'string' &&
+          trial.videoUrl.startsWith('https://')
+      );
+    setAllVideoUploaded(allUploaded);
+  }, [trials]);
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -80,6 +94,39 @@ function SessionOverview() {
     fetchSessionData();
   }, [sessionId]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token || !sessionData?.id || allVideosUploaded) return;
+
+    const intervalId = setInterval(async () => {
+      try {
+        const response = await fetch(`/api/Trial/bySession/${sessionData.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to refetch trials');
+
+        const updatedTrials = await response.json();
+        setTrials(updatedTrials);
+
+        const allUploaded =
+          updatedTrials.length > 0 &&
+          updatedTrials.every(
+            (trial) =>
+              typeof trial.videoUrl === 'string' &&
+              trial.videoUrl.startsWith('https://')
+          );
+        setAllVideoUploaded(allUploaded);
+
+        if (allUploaded) clearInterval(intervalId);
+      } catch (error) {
+        console.error('Error during polling:', error);
+      }
+    }, 15000); // каждые 5 секунд
+
+    return () => clearInterval(intervalId); // очистка на размонтировании
+  }, [sessionData, allVideosUploaded]);
+
   if (loading) return <p className={styles.loader}>🔄 טוען נתונים...</p>;
   if (!sessionData)
     return <p className={styles.error}>❌ שגיאה בטעינת הנתונים</p>;
@@ -125,6 +172,12 @@ function SessionOverview() {
             <p className={styles.dprimeTitle}>די פריים</p>
           </div>
         </div>
+
+        {!allVideosUploaded && (
+          <p className={styles.warningBanner}>
+            שים לב: יציאה מהאתר בזמן העלאת קבצים עשויה לשבש את התהליך
+          </p>
+        )}
 
         {/* Trials */}
         <div className={styles.trialWrapper}>

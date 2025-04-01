@@ -126,10 +126,10 @@ function LogIn() {
         const users = await userResponse.json();
         const storedEmail = localStorage.getItem('userEmail');
         const currentUser = users.find((user) => user.email === storedEmail);
-
+        console.log(currentUser.name);
         if (currentUser) {
           localStorage.setItem('userId', currentUser.id);
-          localStorage.setItem('userName', currentUser.userName);
+          localStorage.setItem('userName', currentUser.name);
         }
       } catch (error) {
         console.error('Error retrieving user data:', error);

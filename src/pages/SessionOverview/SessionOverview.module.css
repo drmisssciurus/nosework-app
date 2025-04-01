@@ -142,3 +142,14 @@
   border-radius: 16px;
   padding: 7px 6px;
 }
+
+.warningBanner {
+  width: 100%;
+  padding: 3px;
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

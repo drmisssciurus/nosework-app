@@ -22,6 +22,17 @@ function TrainingPlan() {
     finalResults,
     dPrimeScore,
   } = location.state || {};
+  console.log(
+    sessionId,
+    containerType,
+    trials,
+    date,
+    dogId,
+    trainer,
+    trialX,
+    finalResults,
+    dPrimeScore
+  );
 
   const arrX =
     containerType === 0 ? ['חיובי', 'ביקורת'] : ['שלילי', 'חיובי', 'ביקורת'];
