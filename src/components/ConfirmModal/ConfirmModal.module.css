@@ -1,0 +1,83 @@
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: var(--color-white);
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid var(--color-black);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  font-weight: 800;
+  line-height: 26px;
+  text-align: right;
+}
+
+.message {
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew';
+  line-height: 21px;
+  text-align: right;
+  color: var(--color-modalGray);
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btnCancel {
+  padding: 8px 13px;
+  cursor: pointer;
+  border: 1px solid #cc0c41;
+  box-sizing: border-box;
+  border-radius: 100px;
+  background-color: transparent;
+  color: #cc0c41;
+  font-size: 13px;
+  font-family: 'Noto Sans Hebrew';
+  line-height: 18px;
+  outline: none;
+}
+.btnConfirm {
+  padding: 8px 13px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 100px;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-size: 13px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+}

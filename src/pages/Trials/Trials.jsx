@@ -7,6 +7,7 @@ import styles from './Trials.module.css';
 import Footer from '../../components/Footer/Footer';
 import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Button from '../../components/Button/Button';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 
 Modal.setAppElement('#root');
 
@@ -30,6 +31,7 @@ function Trials() {
   const [modalBackground, setModalBackground] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
   const currentTrial =
@@ -67,111 +69,34 @@ function Trials() {
   }, []);
 
   useEffect(() => {
-    async function fetchDogName() {
-      if (!trainingId) return;
-
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      try {
-        const sessionResponse = await fetch(`/api/Session/${trainingId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!sessionResponse.ok)
-          throw new Error(`Session fetch error: ${sessionResponse.statusText}`);
-
-        const sessionData = await sessionResponse.json();
-        if (!sessionData.dogId) return;
-        const dogResponse = await fetch(`/api/Dog/${sessionData.dogId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!dogResponse.ok)
-          throw new Error(`Dog fetch error: ${dogResponse.statusText}`);
-
-        const dogData = await dogResponse.json();
-        setDogName(dogData.name);
-      } catch (error) {
-        console.error('Error getting dog name:', error);
-      }
-    }
-
-    fetchDogName();
-  }, [trainingId]);
-
-  useEffect(() => {
-    async function fetchTrainingData() {
-      if (!trainingId) return;
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      try {
-        const response = await fetch(
-          `/api/TrainingProgram/BySession/${trainingId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        fetchDogName(trainingId);
+        fetchTrainingData(trainingId).then((data) => {
+          if (data) {
+            fetchTrials(trainingId, data);
           }
-        );
-
-        if (!response.ok)
-          throw new Error(`Fetching error: ${response.statusText}`);
-        const data = await response.json();
-        setTrainingData(data);
-      } catch (error) {
-        console.error('Error fetching training data: ', error);
+        });
       }
     }
-    fetchTrainingData();
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [trainingId]);
 
   useEffect(() => {
-    async function fetchTrials() {
-      if (!trainingId || trainingData.length === 0) {
-        return;
-      }
+    fetchDogName(trainingId);
+  }, [trainingId]);
 
-      const token = localStorage.getItem('token');
-      if (!token) return;
+  useEffect(() => {
+    fetchTrainingData(trainingId);
+  }, [trainingId]);
 
-      try {
-        const response = await fetch(`/api/Trial`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok)
-          throw new Error(`Fetching error: ${response.statusText}`);
-
-        const trials = await response.json();
-        const matchedTrials = trainingData.map((trial, index) => {
-          const matchedTrial = trials.find(
-            (t) => t.trainingId === trainingId && t.trialNumber === index + 1
-          );
-          return matchedTrial ? { ...trial, id: matchedTrial.id } : trial;
-        });
-
-        setTrialData(matchedTrials);
-      } catch (error) {
-        console.error('Error fetching trials:', error);
-        setTrialData([]);
-      }
-    }
-    fetchTrials();
+  useEffect(() => {
+    fetchTrials(trainingId, trainingData);
   }, [trainingId, trainingData]);
 
   function handleUploadVideo(videoFile) {
@@ -256,6 +181,92 @@ function Trials() {
       }
     } catch (error) {
       console.error('Error loading video:', error);
+    }
+  }
+
+  async function fetchDogName(trainingId) {
+    const token = localStorage.getItem('token');
+    if (!token || !trainingId) return;
+
+    try {
+      const sessionResponse = await fetch(`/api/Session/${trainingId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!sessionResponse.ok) throw new Error('Session fetch failed');
+      const sessionData = await sessionResponse.json();
+      if (!sessionData.dogId) return;
+
+      const dogResponse = await fetch(`/api/Dog/${sessionData.dogId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!dogResponse.ok) throw new Error('Dog fetch failed');
+      const dogData = await dogResponse.json();
+      setDogName(dogData.name);
+    } catch (error) {
+      console.error('Error fetching dog name:', error);
+    }
+  }
+
+  async function fetchTrainingData(trainingId) {
+    const token = localStorage.getItem('token');
+    if (!token || !trainingId) return;
+
+    try {
+      const response = await fetch(
+        `/api/TrainingProgram/BySession/${trainingId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error('Training data fetch failed');
+      const data = await response.json();
+      setTrainingData(data);
+    } catch (error) {
+      console.error('Error fetching training data:', error);
+    }
+  }
+
+  async function fetchTrials(trainingId, trainingData) {
+    const token = localStorage.getItem('token');
+    if (!token || !trainingId || trainingData.length === 0) return;
+
+    try {
+      const response = await fetch(`/api/Trial`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Trials fetch failed');
+      const trials = await response.json();
+
+      const matchedTrials = trainingData.map((trial, index) => {
+        const matchedTrial = trials.find(
+          (t) => t.trainingId === trainingId && t.trialNumber === index + 1
+        );
+        return matchedTrial ? { ...trial, id: matchedTrial.id } : trial;
+      });
+
+      setTrialData(matchedTrials);
+    } catch (error) {
+      console.error('Error fetching trials:', error);
     }
   }
 
@@ -479,7 +490,7 @@ function Trials() {
           <Button className={styles.btn} onClick={handleSubmit}>
             שליחה הבאה
           </Button>
-          <Button className={styles.btn} onClick={() => navigate('/mainpage')}>
+          <Button className={styles.btn} onClick={() => setIsConfirmOpen(true)}>
             חזרה למסך הבית
           </Button>
         </div>
@@ -509,6 +520,12 @@ function Trials() {
             : 'סיים אימון'}
         </Button>
       </Modal>
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onConfirm={() => navigate('/mainpage')}
+        onCancel={() => setIsConfirmOpen(false)}
+        message="האם אתה בטוח שברצונך לצאת מאימון מהאימון הנוכחי? תוכל לחזור לשליחה זו שוב בהמשך ממסך הבית"
+      />
 
       {isLoading && (
         <div className={styles.loaderOverlay}>

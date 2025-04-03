@@ -7,6 +7,7 @@ import Button from '../../components/Button/Button';
 
 function NewSession({ setTrials, trials }) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
   const [dogId, setDogId] = useState('');
   const [dogs, setDogs] = useState([]);
   // const [trainer, setTrainer] = useState('');
@@ -91,10 +92,13 @@ function NewSession({ setTrials, trials }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const currentTime = new Date().toTimeString().split(' ')[0]; // "HH:MM:SS"
+    const fullDateTime = new Date(`${date}T${currentTime}`).toISOString();
+
     navigate('/training_plan', {
       state: {
         sessionId: 0,
-        date: date,
+        date: fullDateTime,
         dogId: Number(dogId),
         trainer: userName,
         trialX: trialX,

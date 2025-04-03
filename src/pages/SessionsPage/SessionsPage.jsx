@@ -20,47 +20,28 @@ function SessionsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    const cached = localStorage.getItem('cachedSessions');
-    if (cached && userId) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (parsed.userId === userId) {
-          setSessions(parsed.data);
-          setLoading(false);
-        } else {
-          localStorage.removeItem('cachedSessions');
-        }
-      } catch (err) {
-        console.warn('Failed to parse cached sessions', err);
-      }
-    }
+    let isMounted = true;
 
     const fetchSessions = async () => {
       const token = localStorage.getItem('token');
-      if (!token) {
+      const userId = localStorage.getItem('userId');
+
+      if (!token || !userId) {
         navigate('/login');
         return;
       }
 
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        console.error('User ID is missing in localStorage');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`/api/Session/byUserId/${userId}`, {
+        const idsResponse = await fetch(`/api/Session/byUserId/${userId}`, {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!response.ok) throw new Error('Failed to fetch sessions');
+        if (!idsResponse.ok) throw new Error('Failed to fetch sessions');
 
-        const sessionsData = await response.json();
-        const validSessions = [];
-
+        const sessionsData = await idsResponse.json();
+        setSessions([]);
+        if (isMounted) setLoading(false);
         for (const session of sessionsData) {
           try {
             if (!session.id) {
@@ -141,23 +122,26 @@ function SessionsPage() {
             }
             const { status } = await statusResponse.json();
             const { dPrime } = await dPrimeResponse.json();
-
-            validSessions.push({ ...session, status, dogName, dPrime });
+            if (isMounted) {
+              setSessions((prev) => [
+                ...prev,
+                { ...session, status, dogName, dPrime },
+              ]);
+            }
           } catch (error) {
             console.error(`Error processing session ${session.id}:`, error);
           }
         }
-        localStorage.setItem('cachedSessions', JSON.stringify(validSessions));
-
-        setSessions(validSessions);
       } catch (error) {
         console.error('Error fetching sessions:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
-
     fetchSessions();
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   function openModal(session) {
@@ -191,10 +175,7 @@ function SessionsPage() {
 
       setSessions((prevSessions) => {
         const updated = prevSessions.filter((s) => s.id !== selectedSession.id);
-        localStorage.setItem(
-          'cachedSessions',
-          JSON.stringify({ userId, data: updated })
-        );
+
         return updated;
       });
 

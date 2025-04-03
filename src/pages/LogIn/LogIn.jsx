@@ -135,6 +135,8 @@ function LogIn() {
         console.error('Error retrieving user data:', error);
       }
 
+      console.log(error);
+
       navigate('/mainpage');
     } catch (err) {
       console.error('Error sending request:', err);
