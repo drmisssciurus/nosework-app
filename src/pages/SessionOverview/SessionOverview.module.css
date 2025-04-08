@@ -141,6 +141,14 @@
 .trialBtn {
   border-radius: 16px;
   padding: 7px 6px;
+  cursor: pointer;
+  width: 100%;
+  border: 2px solid var(--color-gray);
+  background-color: transparent;
+  color: var(--color-gray);
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', serif;
+  font-weight: 500;
 }
 
 .warningBanner {

@@ -209,9 +209,9 @@ function SessionOverview() {
                     </p>
                     <p className={styles.result}>תוצאה</p>
                   </div>
-                  <Button className={styles.trialBtn} disabled>
+                  <button className={styles.trialBtn} disabled>
                     הצג ניתוח
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))
