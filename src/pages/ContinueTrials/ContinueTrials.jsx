@@ -46,11 +46,11 @@ function ContinueTrials() {
     'אין בחירה': 0,
   };
 
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem('currentTrialIndex');
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     localStorage.removeItem('currentTrialIndex');
+  //   };
+  // }, []);
 
   useEffect(() => {
     const savedIndex = localStorage.getItem('currentTrialIndex');
@@ -262,6 +262,7 @@ function ContinueTrials() {
       setCurrentTrialIndex((prevIndex) => prevIndex + 1);
       localStorage.setItem('currentTrialIndex', nextIndex);
     } else {
+      localStorage.removeItem('currentTrialIndex');
       navigate('/end_session', {
         state: { trainingId },
       });
