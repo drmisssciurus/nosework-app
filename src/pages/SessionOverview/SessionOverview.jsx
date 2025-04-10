@@ -162,7 +162,11 @@ function SessionOverview() {
           <div className={styles.infoContainer}>
             <button
               className={styles.forPdf}
-              onClick={() => navigate(`/session_pdf/${sessionId}`)}
+              onClick={() =>
+                navigate(
+                  `/session_pdf/${sessionId}?index=${indexFromTop}&total=${totalSessions}`
+                )
+              }
             >
               תוכנית אימון
             </button>

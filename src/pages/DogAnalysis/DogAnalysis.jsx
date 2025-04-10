@@ -53,6 +53,7 @@ function DogAnalysis() {
 
         const dogData = await dogResponse.json();
         const statsData = await statsResponse.json();
+        console.log(statsData);
 
         setDogData(dogData);
         setDogStats(statsData);
@@ -78,12 +79,13 @@ function DogAnalysis() {
   }
 
   const { name, breed, dateOfBirth, imageUrl } = dogData;
-  const { numberOfSessions, hitCount, dPrimes, totalTrials } = dogStats;
+  const { numberOfSessions, hitCount, dPrimes, totalTrials, lastDPrime } =
+    dogStats;
 
-  const averageDPrime =
-    dPrimes.length > 0
-      ? (dPrimes.reduce((sum, val) => sum + val, 0) / dPrimes.length).toFixed(3)
-      : '0.000';
+  // const averageDPrime =
+  //   dPrimes.length > 0
+  //     ? (dPrimes.reduce((sum, val) => sum + val, 0) / dPrimes.length).toFixed(3)
+  //     : '0.000';
 
   console.log(name, breed, dateOfBirth, imageUrl);
   console.log(numberOfSessions, hitCount, dPrimes);
@@ -147,7 +149,7 @@ function DogAnalysis() {
           <div className={styles.statsItems}>
             <Icons name="dogAnalysis" />
             <div>
-              <p className={styles.statsNumber}>{averageDPrime}</p>
+              <p className={styles.statsNumber}>{lastDPrime}</p>
               <p className={styles.statsDescription}>די-פריים אחרון</p>
             </div>
           </div>

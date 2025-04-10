@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -11,6 +11,12 @@ import Button from '../../components/Button/Button';
 
 function SessionTrainProgOverw() {
   const { sessionId } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const indexFromTop = Number(searchParams.get('index'));
+  const totalSessions = Number(searchParams.get('total'));
+  const sessionNumber = totalSessions - indexFromTop;
   const [trainingProgram, setTrainingProgram] = useState([]);
   const [trials, setTrials] = useState([]);
   const [containerType, setContainerType] = useState();
@@ -138,7 +144,7 @@ function SessionTrainProgOverw() {
         currentPage++;
       }
 
-      pdf.save(`Session_${sessionId}_Training_Program.pdf`);
+      pdf.save(`Session_${sessionNumber}_Dog_${dogName}.pdf`);
     } catch (error) {
       console.error('Ошибка при создании PDF:', error);
     }
@@ -147,7 +153,7 @@ function SessionTrainProgOverw() {
   return (
     <div className="container">
       <Header>
-        תוכנית אימון {dogName}, אימון {sessionId}
+        תוכנית אימון {dogName}, אימון {sessionNumber}
       </Header>
       <div id="pdf-content" className={styles.content}>
         <div className={styles.targetContainers}>
