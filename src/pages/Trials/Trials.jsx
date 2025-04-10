@@ -523,9 +523,12 @@ function Trials() {
       </Modal>
       <ConfirmModal
         isOpen={isConfirmOpen}
-        onConfirm={() => navigate('/mainpage')}
+        onConfirm={() => {
+          localStorage.removeItem('currentTrialIndex');
+          navigate('/mainpage');
+        }}
         onCancel={() => setIsConfirmOpen(false)}
-        message="האם אתה בטוח שברצונך לצאת מאימון מהאימון הנוכחי? תוכל לחזור לשליחה זו שוב בהמשך ממסך הבית"
+        message="האם אתה בטוח שברצונך לצאת מהאימון הנוכחי? תוכל לחזור לשליחה זו שוב בהמשך ממסך הבית"
       />
 
       {isLoading && (

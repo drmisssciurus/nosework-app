@@ -37,7 +37,7 @@ function SessionItem({ session, onDelete, index, total }) {
       <div className={styles.headerWrapper}>
         <button
           className={styles.deleteBtn}
-          onClick={() => onDelete({ id, dogName })}
+          onClick={() => onDelete({ index, dogName })}
         >
           מחק אימון
         </button>
@@ -69,7 +69,9 @@ function SessionItem({ session, onDelete, index, total }) {
         ) : (
           <button
             className={styles.button}
-            onClick={() => navigate(`/session_overview/${id}`)}
+            onClick={() =>
+              navigate(`/session_overview/${id}?index=${index}&total=${total}`)
+            }
           >
             ראה נתונים
           </button>

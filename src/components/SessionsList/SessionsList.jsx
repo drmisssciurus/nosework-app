@@ -9,7 +9,7 @@ function SessionsList({ sessions, onDelete }) {
           session={session}
           key={session.id}
           index={index}
-          onDelete={onDelete}
+          onDelete={() => onDelete(session, index)}
           total={sessions.length}
         />
       ))}

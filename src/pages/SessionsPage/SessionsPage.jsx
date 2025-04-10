@@ -17,6 +17,7 @@ function SessionsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedSession, setSelectedSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSessionIndex, setSelectedSessionIndex] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -144,8 +145,9 @@ function SessionsPage() {
     };
   }, [navigate]);
 
-  function openModal(session) {
+  function openModal(session, index) {
     setSelectedSession(session);
+    setSelectedSessionIndex(index);
     setIsModalOpen(true);
   }
 
@@ -192,7 +194,10 @@ function SessionsPage() {
       {loading ? (
         <div className={styles.loader}>טוען נתונים...</div>
       ) : (
-        <SessionsList sessions={sessions} onDelete={openModal} />
+        <SessionsList
+          sessions={sessions}
+          onDelete={(session, index) => openModal(session, index)}
+        />
       )}
       <NavBar />
       <Modal
@@ -202,7 +207,7 @@ function SessionsPage() {
         overlayClassName={styles.overlay}
       >
         <p className={styles.titleModal}>
-          האם אתה בטוח שברצונך למחוק את {selectedSession?.id}{' '}
+          האם אתה בטוח שברצונך למחוק את {sessions.length - selectedSessionIndex}{' '}
           {selectedSession?.dogName}?
         </p>
         <div className={styles.modalActions}>

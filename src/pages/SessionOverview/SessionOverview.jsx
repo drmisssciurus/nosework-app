@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import styles from './SessionOverview.module.css';
@@ -8,7 +8,14 @@ import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 
 function SessionOverview() {
-  const { sessionId } = useParams();
+  const { sessionId } = useParams(); // sessionId всё ещё нужен!
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const indexFromTop = searchParams.get('index');
+  const totalSessions = Number(searchParams.get('total'));
+
+  const sessionNumber = totalSessions - indexFromTop;
+
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sessionData, setSessionData] = useState(null);
@@ -163,7 +170,7 @@ function SessionOverview() {
               <p className={styles.title}>
                 כלב: {dogName} <br /> שם מאמן: {sessionData.trainer}
               </p>
-              <p className={styles.title}>אימון מספר: {sessionData.id}</p>
+              <p className={styles.title}>אימון מספר: {sessionNumber}</p>
               <p className={styles.title}>תאריך: {formattedData}</p>
             </div>
           </div>

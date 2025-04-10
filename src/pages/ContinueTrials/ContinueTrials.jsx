@@ -7,6 +7,7 @@ import styles from './ContinueTrials.module.css';
 import Footer from '../../components/Footer/Footer';
 import VideoUpload from '../../components/VideoUpload/VideoUpload';
 import Button from '../../components/Button/Button';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 
 Modal.setAppElement('#root');
 
@@ -26,6 +27,7 @@ function ContinueTrials() {
   const [modalMessage, setModalMessage] = useState('');
   const [modalBackground, setModalBackground] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const [currentTrialIndex, setCurrentTrialIndex] = useState(
     location.state?.nextTrialNumber ? location.state.nextTrialNumber - 1 : 0
@@ -462,7 +464,7 @@ function ContinueTrials() {
           <Button className={styles.btn} onClick={handleSubmit}>
             שליחה הבאה
           </Button>
-          <Button className={styles.btn} onClick={() => navigate('/mainpage')}>
+          <Button className={styles.btn} onClick={() => setIsConfirmOpen(true)}>
             חזרה למסך הבית
           </Button>
         </div>
@@ -492,6 +494,15 @@ function ContinueTrials() {
             : 'סיים אימון'}
         </Button>
       </Modal>
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onConfirm={() => {
+          localStorage.removeItem('currentTrialIndex');
+          navigate('/mainpage');
+        }}
+        onCancel={() => setIsConfirmOpen(false)}
+        message="האם אתה בטוח שברצונך לצאת מהאימון הנוכחי? תוכל לחזור לשליחה זו שוב בהמשך ממסך הבית"
+      />
 
       {isLoading && (
         <div className={styles.loaderOverlay}>
