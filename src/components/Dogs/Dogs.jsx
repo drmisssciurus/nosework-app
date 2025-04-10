@@ -4,12 +4,17 @@ import { useNavigate } from 'react-router-dom';
 
 function Dogs({ dogs, onDelete }) {
   const navigate = useNavigate();
+
   return (
     <>
       {dogs.map(({ id, name, breed, age, imageUrl, hasSessions }) => (
         <li key={id} className={styles.item}>
           <div className={styles.imageContainer}>
-            <img className={styles.image} src={imageUrl} alt="" />
+            {imageUrl ? (
+              <img className={styles.image} src={imageUrl} alt={name} />
+            ) : (
+              <span className={styles.fallbackText}>{name}</span>
+            )}
           </div>
           <div className={styles.wrapperDescription}>
             <div>

@@ -24,6 +24,22 @@
   outline: none;
 }
 
+.iteminput[type='date'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-light-gray);
+  border: 1px solid var(--color-gray);
+  border-radius: 12px;
+  padding: 0 8px;
+  font-size: 16px;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  line-height: 43px;
+  height: 43px;
+  text-align: right;
+  outline: none;
+}
+
 .itemwrapper {
   text-align: right;
   width: 100%;
@@ -54,6 +70,7 @@
   font-size: 14px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   outline: none;
+  color: var(--color-black);
 }
 
 .iconUpload {

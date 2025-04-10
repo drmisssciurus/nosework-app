@@ -34,10 +34,20 @@
   background-color: var(--color-gray);
 }
 
-.dogImg {
+.dogImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.fallbackText {
+  font-size: 18px;
+  color: var(--color-black);
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  text-align: center;
+  padding: 4px;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .dogName {
@@ -46,6 +56,12 @@
   font-weight: 500;
   line-height: 24px;
   text-align: center;
+}
+
+.dogInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .dogText {

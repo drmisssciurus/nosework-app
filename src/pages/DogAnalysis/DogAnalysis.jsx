@@ -124,10 +124,14 @@ function DogAnalysis() {
       </button>
       <div className={styles.dogInfo}>
         <div className={styles.imgContainer}>
-          <img className={styles.dogImg} src={imageUrl} alt="" />
+          {imageUrl ? (
+            <img className={styles.dogImage} src={imageUrl} alt={name} />
+          ) : (
+            <span className={styles.fallbackText}>{name}</span>
+          )}
         </div>
-        <p className={styles.dogName}>{name}</p>
-        <div>
+        {imageUrl ? <p className={styles.dogName}>{name}</p> : ''}
+        <div className={styles.dogInfoContainer}>
           <p className={styles.dogText}>
             {formatDogAge(calculateDogAgeInMonths(dateOfBirth))}{' '}
           </p>

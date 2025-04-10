@@ -475,6 +475,7 @@ function Trials() {
               <div className={styles.item} key={value}>
                 <p className={styles.itemName}>{name}</p>
                 <input
+                  className={styles.itemRadio}
                   type="radio"
                   name="finalChoice"
                   value={value}

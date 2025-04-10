@@ -27,6 +27,16 @@
   object-fit: cover;
 }
 
+.fallbackText {
+  font-size: 18px;
+  color: var(--color-black);
+  font-family: 'Noto Sans Hebrew', sans-serif;
+  text-align: center;
+  padding: 4px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
 .text {
   font-family: 'Noto Sans Hebrew', sans-serif;
   text-align: right;
@@ -60,4 +70,13 @@
   cursor: pointer;
   width: 90px;
   border-radius: 16px;
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
+}
+
+.deleteBtn:disabled {
+  cursor: not-allowed;
+  color: var(--color-gray);
+  border: 2px solid var(--color-gray);
+  opacity: 0.6;
 }

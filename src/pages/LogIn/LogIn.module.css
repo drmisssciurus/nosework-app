@@ -97,6 +97,7 @@
   border: none;
   cursor: pointer;
   background-color: inherit;
+  color: var(--color-black);
 }
 
 .modal {

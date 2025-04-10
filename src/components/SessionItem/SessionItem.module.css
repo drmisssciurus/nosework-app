@@ -100,7 +100,7 @@
   box-sizing: border-box;
   border-radius: 12px;
   background-color: var(--color-gray);
-
+  color: var(--color-black);
   font-size: 12px;
   font-family: 'Noto Sans Hebrew', sans-serif;
   font-weight: 500;

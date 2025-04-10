@@ -43,6 +43,7 @@
   border: 2px solid var(--color-black);
   border-radius: 12px;
   padding: 0 10px;
+  color: var(--color-black);
 }
 
 .dprimeWrapper {
