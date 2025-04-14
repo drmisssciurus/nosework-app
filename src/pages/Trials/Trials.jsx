@@ -291,15 +291,15 @@ function Trials() {
   function openResultModal(result) {
     const resultMessages = {
       H: '✅ כל הכבוד',
-      M: '❌ לא נורא, פעם הבאה',
-      FA: '❌ לא נורא, פעם הבאה',
+      M: '⚠️ לא נורא, פעם הבאה',
+      FA: '⚠️ לא נורא, פעם הבאה',
       CR: '✅ כל הכבוד',
     };
 
     const resultColors = {
       H: '#22c55e',
-      M: '#ff3b30',
-      FA: '#ff3b30',
+      M: '#42a4f5',
+      FA: '#42a4f5',
       CR: '#22c55e',
     };
 

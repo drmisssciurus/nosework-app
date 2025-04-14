@@ -18,6 +18,13 @@
   text-align: center;
 }
 
+.container {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .contentWrapper {
   flex: 1;
   display: flex;
@@ -26,6 +33,7 @@
   align-items: center;
   width: 100%;
   padding: 20px;
+  height: 100dvh;
 }
 
 .wrapper {
