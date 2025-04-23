@@ -64,43 +64,43 @@ NoseWork App helps trainers and handlers plan scent‑detection (“nose work”
 
 ## Project Structure
 
-nosework-app/
-├─ public/ # Static assets (favicon, index.html)
-├─ src/
-│ ├─ assets/ # Images, icons
-│ ├─ components/ # Reusable UI components
-│ ├─ pages/ # Route‑level components (see below) :contentReference[oaicite:4]{index=4}
-│ ├─ utils/ # Helper functions & auth handlers
-│ ├─ App.jsx # Root router & layout
-│ ├─ main.jsx # React entrypoint
-│ └─ index.css # Global styles & CSS variables
-├─ .gitignore
-├─ package.json # Dependencies & scripts :contentReference[oaicite:5]{index=5}
-├─ vite.config.js # Dev‑server & proxy config :contentReference[oaicite:6]{index=6}
-└─ README.md # Project documentation
+- nosework-app/
+- ├─ public/ # Static assets (favicon, index.html)
+- ├─ src/
+- │ ├─ assets/ # Images, icons
+- │ ├─ components/ # Reusable UI components
+- │ ├─ pages/ # Route‑level components (see below) :contentReference[oaicite:4]{index=4}
+- │ ├─ utils/ # Helper functions & auth handlers
+- │ ├─ App.jsx # Root router & layout
+- │ ├─ main.jsx # React entrypoint
+- │ └─ index.css # Global styles & CSS variables
+- ├─ .gitignore
+- ├─ package.json # Dependencies & scripts :contentReference[oaicite:5]{index=5}
+- ├─ vite.config.js # Dev‑server & proxy config :contentReference[oaicite:6]{index=6}
+- └─ README.md # Project documentation
 
 ## Styling
 
-Global: CSS variables & resets in src/index.css
-Modules: each page or component uses its own .module.css for scoped styles
-Fonts: Poppins & Noto Sans Hebrew imported via Google Fonts
+- **Global**: CSS variables & resets in src/index.css
+- **Modules**: each page or component uses its own .module.css for scoped styles
+- **Fonts**: Poppins & Noto Sans Hebrew imported via Google Fonts
 
 ## Pages & Components
 
-Welcome: landing page for all users
-LogIn: email/password login with “forgot password” & registration modals
-MainPage: dashboard showing today’s date, session list & navigation
-DogsList / AddDog: manage canine profiles
-NewSession: form to schedule a new training session
-TrainingPlan: select or randomize container placements
-Trials: conduct each trial, upload video to S3, record result
-EndSession: summary & success screen
-SessionOverview: review session details, D′‑prime score & trial videos
-PageNotFound: catch‑all 404 route
+- **Welcome**: landing page for all users
+- **LogIn**: email/password login with “forgot password” & registration modals
+- **MainPage**: dashboard showing today’s date, session list & navigation
+- **DogsList** / AddDog: manage canine profiles
+- **NewSession**: form to schedule a new training session
+- **TrainingPlan**: select or randomize container placements
+- **Trials**: conduct each trial, upload video to S3, record result
+- **EndSession**: summary & success screen
+- **SessionOverview**: review session details, D′‑prime score & trial videos
+- **PageNotFound**: catch‑all 404 route
 
 ## Available Scripts
 
-npm run dev - Start Vite dev‑server (HMR)
-npm run build - Build for production (dist/)
-npm run preview - Preview production build locally
-npm run lint - Run ESLint on all source files
+- **npm run dev** - Start Vite dev‑server (HMR)
+- **npm run build** - Build for production (dist/)
+- **npm run preview** - Preview production build locally
+- **npm run lint** - Run ESLint on all source files
