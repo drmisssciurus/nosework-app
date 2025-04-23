@@ -14,18 +14,26 @@ import Button from '../../components/Button/Button';
 Modal.setAppElement('#root');
 
 function AddDog() {
+  // Form fields state
   const [dogName, setDogName] = useState('');
   const [dogBreed, setDogBreed] = useState('');
   const [dogBirth, setDogBirth] = useState('');
   const [uploadedPhoto, setUploadedPhoto] = useState(null);
+
+  // UI state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
+  // Open the photo-upload modal
   const openModal = () => setIsModalOpen(true);
 
+  /**
+   * Handler for file selection in PhotoUpload component.
+   * Ensures we only accept File objects.
+   */
   function handleUploadPhoto(image) {
     if (image instanceof File) {
       setUploadedPhoto(image);
@@ -34,6 +42,9 @@ function AddDog() {
     }
   }
 
+  /**
+   * Submit new dog profile to the backend, then optionally upload photo.
+   */
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -41,6 +52,7 @@ function AddDog() {
 
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
+    // Validate auth token and userId
     if (!token) {
       setError('Authentication token missing.');
       setLoading(false);
@@ -52,7 +64,7 @@ function AddDog() {
       return;
     }
     console.log(userId);
-
+    // Prepare dog data payload
     const dogData = {
       name: dogName,
       breed: dogBreed,
@@ -62,6 +74,7 @@ function AddDog() {
     };
 
     try {
+      // Create dog profile
       const response = await fetch(
         `/api/Dog?userId=${encodeURIComponent(userId)}`,
         {
@@ -87,7 +100,7 @@ function AddDog() {
 
       const createdDog = await response.json();
       const dogId = createdDog.id;
-
+      // If a photo was uploaded, send it separately
       if (uploadedPhoto && dogId) {
         const formData = new FormData();
         formData.append('file', uploadedPhoto);
@@ -123,6 +136,7 @@ function AddDog() {
       <div>
         <Header>הוספת כלב חדש</Header>
         <form className={styles.wrapper} onSubmit={handleSubmit}>
+          {/* Dog name input */}
           <div className={styles.itemwrapper}>
             <label className={styles.label} htmlFor="dogName">
               שם הכלב
@@ -137,6 +151,7 @@ function AddDog() {
               required
             />
           </div>
+          {/* Dog breed input */}
           <div className={styles.itemwrapper}>
             <label className={styles.label} htmlFor="dogBreed">
               גזע
@@ -151,6 +166,7 @@ function AddDog() {
               required
             />
           </div>
+          {/* Dog birth date input */}
           <div className={styles.itemwrapper}>
             <label className={styles.label} htmlFor="dogBirth">
               תאריך לידה
@@ -165,6 +181,7 @@ function AddDog() {
               required
             />
           </div>
+          {/* Photo upload button */}
           <div className={styles.itemwrapper}>
             <p className={styles.label}>תמונה</p>
             <button
@@ -190,6 +207,7 @@ function AddDog() {
         </form>
         <NavBar />
       </div>
+      {/* Modal for photo upload */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}

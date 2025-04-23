@@ -17,16 +17,19 @@ import styles from './LogIn.module.css';
 Modal.setAppElement('#root');
 
 function LogIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  // Form state variables
+  const [email, setEmail] = useState(''); // User's email input
+  const [password, setPassword] = useState(''); // User's password input
+  const [error, setError] = useState(''); // Error message to display
+  const [showPassword, setShowPassword] = useState(false); // Toggle for password visibility
 
+  // Modal visibility flags
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
   const navigate = useNavigate();
 
+  // On component mount, check if a valid token exists to skip login
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
@@ -55,6 +58,7 @@ function LogIn() {
     checkToken();
   }, [navigate]);
 
+  // Handle form submission for login
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
@@ -109,10 +113,12 @@ function LogIn() {
         return;
       }
 
+      // Store token and email for subsequent requests
       localStorage.setItem('token', data.token);
       localStorage.setItem('userEmail', email);
       console.log('Token:', data.token);
 
+      // Fetch user details to get user ID and name
       try {
         const userResponse = await fetch('/api/User', {
           method: 'GET',
@@ -150,8 +156,11 @@ function LogIn() {
         <img src={logIn} alt="Login" className={styles.loginImg} />
         <p className={styles.title}>NoseWorks</p>
         <p className={styles.description}>התחבר</p>
+
+        {/* Login form */}
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputsContainer}>
+            {/* Email input */}
             <div className={styles.item}>
               <input
                 className={styles.input}
@@ -163,6 +172,7 @@ function LogIn() {
                 required
               />
             </div>
+            {/* Password input with show/hide toggle */}
             <div className={styles.item} style={{ position: 'relative' }}>
               <input
                 className={`${styles.input} ${password ? styles.invalid : ''}`}
@@ -189,6 +199,8 @@ function LogIn() {
 
           <Button type="submit">המשך</Button>
         </form>
+
+        {/* Links to open modals for forgot password and registration */}
         <div className={styles.links}>
           <button
             className={styles.text}
@@ -206,6 +218,7 @@ function LogIn() {
           </button>
         </div>
 
+        {/* Registration modal */}
         <Modal
           isOpen={isRegisterOpen}
           onRequestClose={() => setIsRegisterOpen(false)}
@@ -215,6 +228,7 @@ function LogIn() {
           <Register closeModal={() => setIsRegisterOpen(false)} />
         </Modal>
 
+        {/* Forgot password modal */}
         <Modal
           isOpen={isForgotPasswordOpen}
           onRequestClose={() => setIsForgotPasswordOpen(false)}

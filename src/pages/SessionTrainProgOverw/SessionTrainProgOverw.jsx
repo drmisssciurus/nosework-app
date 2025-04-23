@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -11,12 +11,8 @@ import Button from '../../components/Button/Button';
 
 function SessionTrainProgOverw() {
   const { sessionId } = useParams();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const [sessionNumber, setSessionNumber] = useState(null);
 
-  const indexFromTop = Number(searchParams.get('index'));
-  const totalSessions = Number(searchParams.get('total'));
-  const sessionNumber = totalSessions - indexFromTop;
   const [trainingProgram, setTrainingProgram] = useState([]);
   const [trials, setTrials] = useState([]);
   const [containerType, setContainerType] = useState();
@@ -36,6 +32,7 @@ function SessionTrainProgOverw() {
 
         const sessionData = await sessionResponse.json();
         setContainerType(sessionData.containerType);
+        setSessionNumber(sessionData.dogSessionNumber);
 
         const dogResponse = await fetch(`/api/Dog/${sessionData.dogId}`, {
           headers: { Authorization: `Bearer ${token}` },

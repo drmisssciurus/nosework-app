@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SessionItem.module.css';
 
-function SessionItem({ session, onDelete, index, total }) {
+function SessionItem({ session, onDelete }) {
   const navigate = useNavigate();
   const [nextTrialNumber, setNextTrialNumber] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  const { dogName, id, status, dPrime } = session;
+  console.log(session);
+  const { dogName, id, status, dPrime, dogSessionNumber } = session;
 
   useEffect(() => {
     const fetchTrials = async () => {
@@ -37,13 +37,13 @@ function SessionItem({ session, onDelete, index, total }) {
       <div className={styles.headerWrapper}>
         <button
           className={styles.deleteBtn}
-          onClick={() => onDelete({ index, dogName })}
+          onClick={() => onDelete({ id, dogName })}
         >
           מחק אימון
         </button>
         <div className={styles.nameWrapper}>
           <p className={styles.name}>
-            {dogName || 'Unknown'}: אימון {total - index}
+            {dogName || 'Unknown'}: אימון {dogSessionNumber}
           </p>
           <span
             className={`${styles['status-icon']} ${
@@ -69,9 +69,7 @@ function SessionItem({ session, onDelete, index, total }) {
         ) : (
           <button
             className={styles.button}
-            onClick={() =>
-              navigate(`/session_overview/${id}?index=${index}&total=${total}`)
-            }
+            onClick={() => navigate(`/session_overview/${id}`)}
           >
             ראה נתונים
           </button>

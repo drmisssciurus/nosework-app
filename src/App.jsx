@@ -4,6 +4,7 @@ import { useState, Suspense, lazy } from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 import SpinnerFullPage from './components/SpinnerFullPage/SpinnerFullPage';
 
+// Lazy‑loaded pages and components to split bundles
 const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
 const LogIn = lazy(() => import('./pages/LogIn/LogIn'));
 const MainPage = lazy(() => import('./pages/MainPage/MainPage'));
@@ -33,18 +34,18 @@ const SessionTrainProgOverw = lazy(() =>
 const DogAnalysis = lazy(() => import('./pages/DogAnalysis/DogAnalysis'));
 
 function App() {
-  const [trials, setTrials] = useState(10);
+  const [trials, setTrials] = useState(10); // State for number of trials in a session
 
   return (
     <BrowserRouter>
       <Suspense fallback={<SpinnerFullPage />}>
         <Routes>
-          {/* This pages for all users */}
+          {/* Public routes (no authentication required) */}
           <Route index element={<Welcome />} />
           <Route path="login" element={<LogIn />} />
           <Route path="reset_password" element={<ResetPassword />} />
 
-          {/* For logged in users */}
+          {/* Protected routes (requires login)  */}
           <Route element={<ProtectedRoute />}>
             <Route path="mainpage" element={<MainPage />} />
             <Route

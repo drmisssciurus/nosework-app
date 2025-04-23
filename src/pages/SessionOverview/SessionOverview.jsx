@@ -3,27 +3,23 @@ import { useEffect, useState } from 'react';
 
 import styles from './SessionOverview.module.css';
 
-import Button from '../../components/Button/Button';
 import Header from '../../components/Header/Header';
 import NavBar from '../../components/NavBar/NavBar';
 
 function SessionOverview() {
-  const { sessionId } = useParams(); // sessionId всё ещё нужен!
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const indexFromTop = searchParams.get('index');
-  const totalSessions = Number(searchParams.get('total'));
+  const { sessionId } = useParams(); // sessionId
 
-  const sessionNumber = totalSessions - indexFromTop;
-
+  // Loading indicators for initial and ongoing fetch
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // State to hold fetched session details
   const [sessionData, setSessionData] = useState(null);
   const [dogName, setDogName] = useState(null);
   const [DPrimeScore, setDPrimeScore] = useState(null);
   const [trials, setTrials] = useState([]);
 
-  const [allVideosUploaded, setAllVideoUploaded] = useState(false);
+  const [allVideosUploaded, setAllVideoUploaded] = useState(false); // Flag once all videos have URLs
   console.log(allVideosUploaded);
   const navigate = useNavigate();
 
@@ -34,6 +30,7 @@ function SessionOverview() {
     CR: '#22c55e',
   };
 
+  // Whenever trials change, check if every trial has a valid videoUrl
   useEffect(() => {
     const allUploaded =
       trials.length > 0 &&
@@ -45,6 +42,7 @@ function SessionOverview() {
     setAllVideoUploaded(allUploaded);
   }, [trials]);
 
+  // Fetch session info, dog name, D′ prime, and trial list on mount
   useEffect(() => {
     const fetchSessionData = async () => {
       const token = localStorage.getItem('token');
@@ -61,7 +59,9 @@ function SessionOverview() {
 
         const session = await response.json();
         setSessionData(session);
+        console.log(session);
 
+        // Parallel fetch: dog info, d′ value, trial list
         const [dogResponse, dPrimeResponse, trialsResponse] = await Promise.all(
           [
             fetch(`/api/Dog/${session.dogId}`, {
@@ -101,6 +101,7 @@ function SessionOverview() {
     fetchSessionData();
   }, [sessionId]);
 
+  // Poll for updated trial videos until all are uploaded
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token || !sessionData?.id || allVideosUploaded) return;
@@ -129,9 +130,9 @@ function SessionOverview() {
       } catch (error) {
         console.error('Error during polling:', error);
       }
-    }, 15000); // каждые 5 секунд
+    }, 15000); // Poll every 15 seconds
 
-    return () => clearInterval(intervalId); // очистка на размонтировании
+    return () => clearInterval(intervalId); // Clean up on unmount
   }, [sessionData, allVideosUploaded]);
 
   if (loading) return <p className={styles.loader}>🔄 טוען נתונים...</p>;
@@ -144,8 +145,9 @@ function SessionOverview() {
     year: 'numeric',
   });
 
+  // Helper to verify video URL validity
   const isValidVideoUrl = (url) =>
-    typeof url === 'string' && url.startsWith('https://'); // или 'http://' если нужно
+    typeof url === 'string' && url.startsWith('https://');
 
   return (
     <div className="container">
@@ -162,11 +164,7 @@ function SessionOverview() {
           <div className={styles.infoContainer}>
             <button
               className={styles.forPdf}
-              onClick={() =>
-                navigate(
-                  `/session_pdf/${sessionId}?index=${indexFromTop}&total=${totalSessions}`
-                )
-              }
+              onClick={() => navigate(`/session_pdf/${sessionId}`)}
             >
               תוכנית אימון
             </button>
@@ -174,7 +172,9 @@ function SessionOverview() {
               <p className={styles.title}>
                 כלב: {dogName} <br /> שם מאמן: {sessionData.trainer}
               </p>
-              <p className={styles.title}>אימון מספר: {sessionNumber}</p>
+              <p className={styles.title}>
+                אימון מספר: {sessionData.dogSessionNumber}
+              </p>
               <p className={styles.title}>תאריך: {formattedData}</p>
             </div>
           </div>

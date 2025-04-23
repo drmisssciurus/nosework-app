@@ -4,12 +4,11 @@ import SessionItem from '../SessionItem/SessionItem';
 function SessionsList({ sessions, onDelete }) {
   return (
     <ul className={styles.wrapper}>
-      {sessions.map((session, index) => (
+      {sessions.map((session) => (
         <SessionItem
           session={session}
           key={session.id}
-          index={index}
-          onDelete={() => onDelete(session, index)}
+          onDelete={() => onDelete(session)}
           total={sessions.length}
         />
       ))}

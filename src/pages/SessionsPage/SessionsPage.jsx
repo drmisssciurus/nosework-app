@@ -17,7 +17,7 @@ function SessionsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedSession, setSelectedSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSessionIndex, setSelectedSessionIndex] = useState(null);
+  const [selectedSessionNumber, setSelectedSessionNumber] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +41,7 @@ function SessionsPage() {
         if (!idsResponse.ok) throw new Error('Failed to fetch sessions');
 
         const sessionsData = await idsResponse.json();
+        console.log(sessionsData);
         setSessions([]);
         if (isMounted) setLoading(false);
         for (const session of sessionsData) {
@@ -145,9 +146,9 @@ function SessionsPage() {
     };
   }, [navigate]);
 
-  function openModal(session, index) {
+  function openModal(session) {
     setSelectedSession(session);
-    setSelectedSessionIndex(index);
+    setSelectedSessionNumber(session.dogSessionNumber);
     setIsModalOpen(true);
   }
 
@@ -196,7 +197,7 @@ function SessionsPage() {
       ) : (
         <SessionsList
           sessions={sessions}
-          onDelete={(session, index) => openModal(session, index)}
+          onDelete={(session) => openModal(session)}
         />
       )}
       <NavBar />
@@ -207,7 +208,7 @@ function SessionsPage() {
         overlayClassName={styles.overlay}
       >
         <p className={styles.titleModal}>
-          האם אתה בטוח שברצונך למחוק את {sessions.length - selectedSessionIndex}{' '}
+          האם אתה בטוח שברצונך למחוק את {selectedSessionNumber}{' '}
           {selectedSession?.dogName}?
         </p>
         <div className={styles.modalActions}>

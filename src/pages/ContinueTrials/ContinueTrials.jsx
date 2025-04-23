@@ -12,35 +12,38 @@ import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 Modal.setAppElement('#root');
 
 function ContinueTrials() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation(); // Read passed state (sessionId, nextTrialNumber)
+  const navigate = useNavigate(); // Programmatic navigation
 
-  const [trialData, setTrialData] = useState([]);
-  const [trainingData, setTrainingData] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(0);
-  const [targetScent, setTargetScent] = useState('');
-  const [uploadedVideo, setUploadedVideo] = useState(null);
-  const [uploadedVideoName, setUploadedVideoName] = useState('');
-  const [dogName, setDogName] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [modalBackground, setModalBackground] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  // State variables
+  const [trialData, setTrialData] = useState([]); // Holds trials with IDs to continue
+  const [trainingData, setTrainingData] = useState([]); // Original training plan data
+  const [selectedLocation, setSelectedLocation] = useState(0); // User's final container selection
+  const [targetScent, setTargetScent] = useState(''); // Optional scent name input
+  const [uploadedVideo, setUploadedVideo] = useState(null); // File object for video to upload
+  const [uploadedVideoName, setUploadedVideoName] = useState(''); // Filename for UI
+  const [dogName, setDogName] = useState(''); // Name of the dog in this session
+  const [isLoading, setIsLoading] = useState(false); // Loading indicator for submissions
+  const [modalOpen, setModalOpen] = useState(false); // Result feedback modal
+  const [modalMessage, setModalMessage] = useState(''); // Message shown in result modal
+  const [modalBackground, setModalBackground] = useState(''); // Background color for result modal
+  const [isModalOpen, setIsModalOpen] = useState(false); // Video upload modal
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false); // Confirmation before leaving
 
+  // Determine starting index (zero‑based) from passed nextTrialNumber
   const [currentTrialIndex, setCurrentTrialIndex] = useState(
     location.state?.nextTrialNumber ? location.state.nextTrialNumber - 1 : 0
   );
-  const trainingId = location.state?.sessionId || null;
+  const trainingId = location.state?.sessionId || null; // Session ID for API calls
 
-  const currentTrial = trainingData[currentTrialIndex] || {};
+  const currentTrial = trainingData[currentTrialIndex] || {}; // Data for the active trial
+  // Colors for container display based on positive/negative/empty
   const containersColors = {
     positive: '#22c55e',
     negative: '#ff3b30',
     empty: '#ff9500',
   };
-
+  // Mapping of Hebrew labels to numeric codes
   const choicesMapping = {
     'סניפר 1': 1,
     'סניפר 2': 2,
@@ -54,6 +57,7 @@ function ContinueTrials() {
   //   };
   // }, []);
 
+  // Load saved trial index from localStorage, if any
   useEffect(() => {
     const savedIndex = localStorage.getItem('currentTrialIndex');
     if (savedIndex !== null) {
@@ -61,6 +65,7 @@ function ContinueTrials() {
     }
   }, []);
 
+  // Fetch dog name for display in header
   useEffect(() => {
     async function fetchDogName() {
       if (!trainingId) return;
@@ -69,6 +74,7 @@ function ContinueTrials() {
       if (!token) return;
 
       try {
+        // Get session details to retrieve dogId
         const sessionResponse = await fetch(`/api/Session/${trainingId}`, {
           method: 'GET',
           headers: {
@@ -81,6 +87,8 @@ function ContinueTrials() {
 
         const sessionData = await sessionResponse.json();
         if (!sessionData.dogId) return;
+
+        // Fetch dog profile
         const dogResponse = await fetch(`/api/Dog/${sessionData.dogId}`, {
           method: 'GET',
           headers: {
@@ -102,6 +110,7 @@ function ContinueTrials() {
     fetchDogName();
   }, [trainingId]);
 
+  // Fetch training plan for this session
   useEffect(() => {
     async function fetchTrainingData() {
       if (!trainingId) return;
@@ -131,6 +140,7 @@ function ContinueTrials() {
     fetchTrainingData();
   }, [trainingId]);
 
+  // Fetch existing trials to know which ones are done (to set IDs for continuation)
   useEffect(() => {
     async function fetchTrials() {
       if (!trainingId || trainingData.length === 0) {
@@ -153,6 +163,8 @@ function ContinueTrials() {
           throw new Error(`Fetching error: ${response.statusText}`);
 
         const trials = await response.json();
+
+        // Match training plan entries with any existing trial records
         const matchedTrials = trainingData.map((trial, index) => {
           const matchedTrial = trials.find(
             (t) => t.trainingId === trainingId && t.trialNumber === index + 1
@@ -168,11 +180,13 @@ function ContinueTrials() {
     fetchTrials();
   }, [trainingId, trainingData]);
 
+  // Handle file selected in VideoUpload component
   function handleUploadVideo(videoFile) {
     setUploadedVideo(videoFile);
     setUploadedVideoName(videoFile.name);
   }
 
+  // Upload video file to S3 via presigned URL and update trial record
   async function handleVideoSubmit(trialId) {
     if (!uploadedVideo) {
       console.error('Error: No uploaded video');
@@ -190,6 +204,7 @@ function ContinueTrials() {
     const fileName = uploadedVideo.name;
 
     try {
+      // Request presigned URL
       const presignedUrlResponse = await fetch(
         `/api/Trial/getPresignedUrl/${trialId}?fileName=${encodeURIComponent(
           fileName
@@ -212,6 +227,7 @@ function ContinueTrials() {
 
       const { url: presignedUrl } = await presignedUrlResponse.json();
 
+      // Upload file directly to S3
       const uploadResponse = await fetch(presignedUrl, {
         method: 'PUT',
         headers: {
@@ -232,8 +248,11 @@ function ContinueTrials() {
         new Date().toISOString()
       );
 
+      // Extract final URL (without query params)
       const videoUrl = presignedUrl.split('?')[0];
       console.log('VideoUrl:', videoUrl);
+
+      // Update trial record with video URL
       const updateTrialResponse = await fetch(
         `/api/Trial/updateVideoUrl/${trialId}`,
         {
@@ -253,6 +272,7 @@ function ContinueTrials() {
     }
   }
 
+  // Close feedback modal and advance to next trial or end session
   function closeModal() {
     setModalOpen(false);
     setSelectedLocation(0);
@@ -271,6 +291,7 @@ function ContinueTrials() {
     }
   }
 
+  // Show result message modal with custom text/color based on trial outcome
   function openResultModal(result) {
     const resultMessages = {
       H: '✅ כל הכבוד',
@@ -293,6 +314,7 @@ function ContinueTrials() {
     }
   }
 
+  // Submit trial data, open feedback modal, and trigger video upload if needed
   async function handleSubmit() {
     if (!trainingData.length) {
       console.error('Error: No training data available');
@@ -365,6 +387,8 @@ function ContinueTrials() {
             {dogName ? `${dogName} :כלב` : 'טוען...'}
           </h1>
         </header>
+
+        {/* Container display for positive/negative/empty */}
         <div className={styles.containers}>
           {trainingData &&
             [3, 2, 1].map((containerIndex) => {
@@ -391,6 +415,8 @@ function ContinueTrials() {
               );
             })}
         </div>
+
+        {/* Video upload section */}
         <div className={styles.videoContainer}>
           <h2 className={styles.videoTitle}>
             {uploadedVideo ? 'הסרטון הועלה בהצלחה' : 'העלאה או הקלטה של סרטון'}
@@ -428,6 +454,8 @@ function ContinueTrials() {
             </Link> */}
           </div>
         </div>
+
+        {/* Target scent input */}
         <div className={styles.wrapper}>
           <label className={styles.inputLabel} htmlFor="">
             סוג ריח מטרה
@@ -441,6 +469,8 @@ function ContinueTrials() {
             onChange={(e) => setTargetScent(e.target.value)}
           />
         </div>
+
+        {/* Final choice radio buttons */}
         <div className={styles.checkboxes}>
           <p className={styles.checkbLabel}>הסימון הסופי</p>
           <div className={styles.checkbWrapper}>
@@ -460,6 +490,8 @@ function ContinueTrials() {
             ))}
           </div>
         </div>
+
+        {/* Action buttons */}
         <div className={styles.btnContainer}>
           <Button className={styles.btn} onClick={handleSubmit}>
             שליחה הבאה
@@ -470,6 +502,8 @@ function ContinueTrials() {
         </div>
       </div>
       <Footer />
+
+      {/* Video upload modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
@@ -481,6 +515,8 @@ function ContinueTrials() {
           onUpload={handleUploadVideo}
         />
       </Modal>
+
+      {/* Result feedback modal */}
       <Modal
         className={styles.modal}
         style={{ content: { backgroundColor: modalBackground } }}
@@ -494,6 +530,8 @@ function ContinueTrials() {
             : 'סיים אימון'}
         </Button>
       </Modal>
+
+      {/* Confirmation before leaving session */}
       <ConfirmModal
         isOpen={isConfirmOpen}
         onConfirm={() => {
@@ -504,6 +542,7 @@ function ContinueTrials() {
         message="האם אתה בטוח שברצונך לצאת מהאימון הנוכחי? תוכל לחזור לשליחה זו שוב בהמשך ממסך הבית"
       />
 
+      {/* Loading overlay while submitting */}
       {isLoading && (
         <div className={styles.loaderOverlay}>
           <div className={styles.loader}></div>

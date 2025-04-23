@@ -8,14 +8,16 @@ import Icons from '../../components/Icons';
 import { formatDogAge } from '../../utils/utils';
 
 function DogAnalysis() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams(); // Get dog ID from route parameters
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
-  const [dogData, setDogData] = useState(null);
-  const [dogStats, setDogStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Component state
+  const [dogData, setDogData] = useState(null); // Holds basic dog info
+  const [dogStats, setDogStats] = useState(null); // Holds analysis stats
+  const [loading, setLoading] = useState(true); // Loading indicator
+  const [error, setError] = useState(null); // Error state
 
+  // Fetch dog info and stats on mount or when ID changes
   useEffect(() => {
     async function fetchDogData() {
       if (!id) return;
@@ -26,6 +28,7 @@ function DogAnalysis() {
       setError(null);
 
       try {
+        // Fetch dog profile and analysis stats in parallel
         const [dogResponse, statsResponse] = await Promise.all([
           fetch(`/api/Dog/${id}`, {
             method: 'GET',
@@ -64,22 +67,31 @@ function DogAnalysis() {
     fetchDogData();
   }, [id]);
 
+  // Show loading indicator while fetching
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Show error message if fetch failed
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
+  // If no data available, render nothing
   if (!dogData) {
     return null;
   }
 
+  // Destructure dog profile and stats
   const { name, breed, dateOfBirth, imageUrl } = dogData;
   const { numberOfSessions, hitCount, dPrimes, totalTrials, lastDPrime } =
     dogStats;
 
+  /**
+   * Calculate total age in months from date string.
+   * @param {string} dateString - ISO date of birth.
+   * @returns {number|null} - Age in months or null if invalid.
+   */
   function calculateDogAgeInMonths(dateString) {
     if (!dateString) return null;
 
@@ -90,7 +102,7 @@ function DogAnalysis() {
     let months =
       (now.getFullYear() - birthDate.getFullYear()) * 12 +
       (now.getMonth() - birthDate.getMonth());
-
+    // Adjust if current day is before birth day in month
     if (now.getDate() < birthDate.getDate()) {
       months -= 1;
     }
@@ -98,6 +110,7 @@ function DogAnalysis() {
     return months;
   }
 
+  // Compute success rate as percentage
   const successRate =
     dogStats.totalTrials > 0
       ? Math.round((dogStats.hitCount / dogStats.totalTrials) * 100)
@@ -114,6 +127,7 @@ function DogAnalysis() {
       >
         <Icons name="arrowLeft" />
       </button>
+      {/* Dog profile section */}
       <div className={styles.dogInfo}>
         <div className={styles.imgContainer}>
           {imageUrl ? (
@@ -133,6 +147,8 @@ function DogAnalysis() {
           </div>
         </div>
       </div>
+
+      {/* Stats section */}
       <div className={styles.statsWrapper}>
         <h2 className={styles.statsTitle}>התקדמות האימונים</h2>
         <div className={styles.statsContainer}>

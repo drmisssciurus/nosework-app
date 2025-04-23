@@ -23,12 +23,15 @@ function MainPage() {
   const navigate = useNavigate();
   const userName = localStorage.getItem('userName');
   const userId = localStorage.getItem('userId');
-  const [hasDogs, setHasDogs] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasDogs, setHasDogs] = useState(false); // Flag whether user has any dogs added
+  const [isModalOpen, setIsModalOpen] = useState(false); // Flag for info modal visibility
 
+  // Open the "About" modal
   const openModal = () => setIsModalOpen(true);
+  // Close the "About" modal
   const closeModal = () => setIsModalOpen(false);
 
+  // On mount, fetch user's dogs to determine if they can start sessions
   useEffect(() => {
     const fetchDogs = async () => {
       try {
@@ -63,6 +66,7 @@ function MainPage() {
     fetchDogs();
   }, [userId]);
 
+  // Logout handler: call API then clear local storage and navigate to login
   const handleLogout = async () => {
     try {
       await fetch('/api/User/Logout', { method: 'POST' });
