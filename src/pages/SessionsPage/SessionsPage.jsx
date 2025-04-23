@@ -18,6 +18,7 @@ function SessionsPage() {
   const [selectedSession, setSelectedSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSessionNumber, setSelectedSessionNumber] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,7 +144,7 @@ function SessionsPage() {
     return () => {
       isMounted = false;
     };
-  }, [navigate]);
+  }, [navigate, refresh]);
 
   function openModal(session) {
     setSelectedSession(session);
@@ -182,6 +183,7 @@ function SessionsPage() {
       });
 
       closeModal();
+      setRefresh((r) => !r);
     } catch (error) {
       console.error('Error deleting session:', error);
     }
