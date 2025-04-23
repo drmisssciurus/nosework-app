@@ -27,7 +27,7 @@
 
 .ready {
   background-color: var(--color-green);
-  background-image: url('../../assets/icons/Icon-check.svg');
+  background-image: url('../../assets/icons/icon-check.svg');
 }
 
 .inprocess {

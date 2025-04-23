@@ -1,10 +1,15 @@
+.calendarContainer {
+  width: 100%;
+}
+
 .wrapper {
+  width: 100%;
   display: flex;
   gap: 10px;
   padding-bottom: 20px;
-  padding-inline: 20px;
+  padding-inline: 10px;
   justify-content: space-around;
-  padding-top: 70px;
+  padding-top: 50px;
   border-bottom: 1px solid var(--color-gray);
 }
 

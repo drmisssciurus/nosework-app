@@ -14,7 +14,7 @@ const Calendar = () => {
     .reverse();
 
   return (
-    <div>
+    <div className={styles.calendarContainer}>
       <div className={styles.wrapper}>
         {weekDays.map((day, index) => (
           <div key={index} className={styles.day}>

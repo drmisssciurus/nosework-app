@@ -41,7 +41,6 @@ function SessionsPage() {
         if (!idsResponse.ok) throw new Error('Failed to fetch sessions');
 
         const sessionsData = await idsResponse.json();
-        console.log(sessionsData);
         setSessions([]);
         if (isMounted) setLoading(false);
         for (const session of sessionsData) {
@@ -189,7 +188,7 @@ function SessionsPage() {
   }
 
   return (
-    <div>
+    <div className="container">
       <Header>האימונים שלי</Header>
       <Calendar />
       {loading ? (

@@ -6,7 +6,6 @@ function SessionItem({ session, onDelete }) {
   const navigate = useNavigate();
   const [nextTrialNumber, setNextTrialNumber] = useState(1);
   const [loading, setLoading] = useState(true);
-  console.log(session);
   const { dogName, id, status, dPrime, dogSessionNumber } = session;
 
   useEffect(() => {
