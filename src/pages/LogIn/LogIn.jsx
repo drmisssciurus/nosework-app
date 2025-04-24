@@ -30,33 +30,33 @@ function LogIn() {
   const navigate = useNavigate();
 
   // On component mount, check if a valid token exists to skip login
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     const token = localStorage.getItem('token');
+  //     if (!token) return;
 
-      try {
-        const response = await fetch('/api/User', {
-          method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  //     try {
+  //       const response = await fetch('/api/User', {
+  //         method: 'GET',
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
 
-        if (response.ok) {
-          navigate('/mainpage');
-        } else {
-          // Не валидный токен — убираем
-          localStorage.removeItem('token');
-          localStorage.removeItem('userId');
-          localStorage.removeItem('userName');
-          localStorage.removeItem('userEmail');
-        }
-      } catch (err) {
-        console.error('Error validating token:', err);
-      }
-    };
+  //       if (response.ok) {
+  //         navigate('/mainpage');
+  //       } else {
+  //         // Не валидный токен — убираем
+  //         localStorage.removeItem('token');
+  //         localStorage.removeItem('userId');
+  //         localStorage.removeItem('userName');
+  //         localStorage.removeItem('userEmail');
+  //       }
+  //     } catch (err) {
+  //       console.error('Error validating token:', err);
+  //     }
+  //   };
 
-    checkToken();
-  }, [navigate]);
+  //   checkToken();
+  // }, [navigate]);
 
   // Handle form submission for login
   async function handleSubmit(event) {
